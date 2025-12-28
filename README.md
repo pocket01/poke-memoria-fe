@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ポケメモリア
 
-## Getting Started
+ポケモンの思い出を記録・共有するWebアプリケーション
 
-First, run the development server:
+## 🚀 技術スタック
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework**: Next.js 16 (App Router) + React 19
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4 + shadcn/ui
+- **Design**: Neumorphism (Custom utility classes)
+- **Icons**: Lucide React
+- **Formatter**: Biome
+- **Testing**: Vitest + Testing Library
+- **Package Manager**: pnpm (Volta managed)
+
+## 🎨 デザインコンセプト
+
+本プロジェクトは**ニューモフィズム（Neumorphism）**を採用しています。
+
+### カラーシステム
+- **Base Color**: oklch(0.97 0.003 264) - 柔らかいニュートラル
+- **Primary Color**: oklch(0.55 0.18 264) - 紫系
+- **Light Source**: 左上から照射
+
+### ユーティリティクラス
+
+| クラス名 | 用途 |
+|---------|------|
+| `neu-flat` | 通常の浮き上がり効果（凸） |
+| `neu-raised` | より強い浮き上がり効果 |
+| `neu-pressed` | 押し込まれた効果（凹） |
+| `neu-hover` | ホバー時のトランジション |
+| `neu-bg` | ニューモフィズム用グラデーション背景 |
+
+### 使用例
+
+```tsx
+<div className="neu-flat neu-hover rounded-3xl p-12">
+  <h1 className="text-2xl font-bold">カードタイトル</h1>
+</div>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 セットアップ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. 依存関係のインストール
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm install
+```
 
-## Learn More
+### 2. 開発サーバーの起動
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開きます。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. その他のコマンド
 
-## Deploy on Vercel
+```bash
+pnpm build      # プロダクションビルド
+pnpm start      # プロダクションサーバー起動
+pnpm lint       # ESLint実行
+pnpm test       # テスト実行
+pnpm test:ui    # テストUI起動
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 フォルダ構成
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+├── app/                 # アプリケーション
+│   ├── globals.css      # グローバルスタイル（ニューモフィズム含む）
+│   ├── layout.tsx       # ルートレイアウト
+│   └── page.tsx         # トップページ
+├── components/          # コンポーネント
+│   └── ui/              # shadcn/uiコンポーネント
+├── lib/                 # ユーティリティ関数など
+└── public/              # 静的ファイル
+```
+
+## 📝 環境要件
+
+- Node.js: 22.12.0
+- pnpm: 10.26.2
+
+※ Voltaによる自動バージョン管理に対応しています。
+
+http://localhost:3000 でアプリケーションが起動します。
+
+### テストの実行
+
+```bash
+# テストを実行
+pnpm test
+
+# テストUIを起動
+pnpm test:ui
+```
+
+### ビルド
+
+```bash
+pnpm build
+```
+
+### プロダクションサーバーの起動
+
+```bash
+pnpm start
+```
+
+## shadcn/ui コンポーネントの追加
+
+新しいコンポーネントを追加する場合：
+
+```bash
+pnpm dlx shadcn@latest add button
+pnpm dlx shadcn@latest add card
+pnpm dlx shadcn@latest add input
+```
+
+## ディレクトリ構造
+
+```
+poke-memoria-fe/
+├── app/                    # Next.js App Router
+│   ├── page.tsx           # ホームページ
+│   ├── page.test.tsx      # ホームページのテスト
+│   ├── layout.tsx         # ルートレイアウト
+│   └── globals.css        # グローバルスタイル（ニューモフィズムユーティリティ含む）
+├── components/            # Reactコンポーネント
+│   └── ui/               # shadcn/ui コンポーネント
+├── lib/                  # ユーティリティ関数
+│   └── utils.ts          # cn() などのヘルパー
+├── hooks/                # カスタムフック
+├── vitest.config.ts      # Vitest設定
+├── vitest.setup.ts       # Vitestセットアップ
+├── components.json       # shadcn/ui設定
+└── package.json          # 依存関係とVolta設定
+```
+
+## カラーパレット
+
+プロジェクトはニューモフィズムに適した柔らかいブルー系のカラーパレットを使用しています。
+ライトモードとダークモードの両方に対応しています。
+
+詳細は [app/globals.css](app/globals.css) を参照してください。
+
