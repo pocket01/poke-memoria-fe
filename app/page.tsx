@@ -42,6 +42,12 @@ export default function Home() {
 							width={96}
 							height={96}
 						/>
+						<Image
+							src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"
+							alt="リザードン"
+							width={96}
+							height={96}
+						/>
 					</div>
 				</div>
 			</div>
