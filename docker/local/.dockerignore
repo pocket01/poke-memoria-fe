@@ -1,0 +1,56 @@
+# 依存関係とビルド成果物
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Git関連（ディレクトリとして明示的に除外）
+.git/
+.gitignore
+.gitattributes
+
+# Docker関連（docker/配下のファイルは除外するが、Dockerfileビルドには影響しない）
+**/docker-compose*.yml
+**/.dockerignore
+# Dockerfile自体は除外しない（ビルドに必要）
+
+# 環境変数ファイル
+.env*
+!.env.example
+
+# テスト・カバレッジ
+coverage/
+.nyc_output/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+vitest.config.ts
+vitest.setup.ts
+
+# ログとデバッグ
+logs/
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# エディタ・IDE
+.vscode/
+.idea/
+**/*.swp
+**/*.swo
+**/*~
+.DS_Store
+Thumbs.db
+
+# ドキュメント
+README.md
+LICENSE
+doc/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
