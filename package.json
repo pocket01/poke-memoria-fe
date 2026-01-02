@@ -10,7 +10,22 @@
 		"lint": "eslint",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
-		"docker:local": "docker-compose -f ./docker/local/docker-compose.yml up -d"
+		"docker:local": "docker-compose -f ./docker/local/docker-compose.yml up -d",
+		"docker:dev:build": "bash ./scripts/docker.sh dev build",
+		"docker:dev:push": "bash ./scripts/docker.sh dev push",
+		"docker:dev:deploy": "bash ./scripts/docker.sh dev deploy",
+		"docker:dev": "pnpm docker:dev:build && pnpm docker:dev:push && pnpm docker:dev:deploy",
+		"docker:dev:create-repo": "bash ./scripts/docker.sh dev create-repo",
+		"docker:stg:build": "bash ./scripts/docker.sh stg build",
+		"docker:stg:push": "bash ./scripts/docker.sh stg push",
+		"docker:stg:deploy": "bash ./scripts/docker.sh stg deploy",
+		"docker:stg:create-repo": "bash ./scripts/docker.sh stg create-repo",
+		"docker:stg": "pnpm docker:stg:build && pnpm docker:stg:push && pnpm docker:stg:deploy",
+		"docker:prod:build": "bash ./scripts/docker.sh prod build",
+		"docker:prod:push": "bash ./scripts/docker.sh prod push",
+		"docker:prod:deploy": "bash ./scripts/docker.sh prod deploy",
+		"docker:prod:create-repo": "bash ./scripts/docker.sh prod create-repo",
+		"docker:prod": "pnpm docker:prod:build && pnpm docker:prod:push && pnpm docker:prod:deploy"
 	},
 	"dependencies": {
 		"@radix-ui/react-slot": "^1.2.4",

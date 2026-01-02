@@ -1,10 +1,10 @@
 services:
-  pokememoria-fe:
+  poke-memoria-fe:
     build:
       context: ../..
       dockerfile: docker/local/Dockerfile
       target: deps
-    container_name: pokememoria-fe
+    container_name: poke-memoria-fe
     restart: no
     ports:
       - "3000:3000"
@@ -18,7 +18,7 @@ services:
       # NEXT_PUBLIC_API_URL: http://localhost:8000  # TODO 将来のバックエンド連携用
     command: pnpm run dev
     # networks:
-    #   - pokememoria
+    #   - poke-memoria
 
 # 名前付きボリューム（パフォーマンス向上）
 volumes:
@@ -27,5 +27,5 @@ volumes:
 
 # 将来のバックエンド・DB連携用ネットワーク
 # networks:
-#   pokememoria:
+#   poke-memoria:
 #     driver: bridge
