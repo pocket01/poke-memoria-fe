@@ -1,0 +1,23 @@
+services:
+  poke-memoria-fe:
+    build:
+      context: ../..
+      dockerfile: docker/dev/Dockerfile
+      target: runner
+    container_name: poke-memoria-fe-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HOSTNAME: "0.0.0.0"
+      # NEXT_PUBLIC_API_URL: https://api-dev.poke-memoria.example.com  # TODO 将来のバックエンド連携用
+    # command は不要（DockerfileのCMDを使用）
+    # networks:
+    #   - poke-memoria
+
+# 将来のバックエンド・DB連携用ネットワーク
+# networks:
+#   poke-memoria:
+#     driver: bridge
