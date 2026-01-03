@@ -1,6 +1,7 @@
 # 1. 依存関係のインストール（開発用）
-FROM node:20-alpine AS deps
-RUN corepack enable && corepack prepare pnpm@latest --activate
+FROM node:22.21.1-alpine AS deps
+RUN npm install -g pnpm@10.27.0
+
 WORKDIR /app
 
 # pnpmのワークスペース設定と依存関係ファイルのみコピー（キャッシュ効率化）
@@ -8,8 +9,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # 2. ビルド
-FROM node:20-alpine AS builder
-RUN corepack enable && corepack prepare pnpm@latest --activate
+FROM node:22.21.1-alpine AS builder
+RUN npm install -g pnpm@10.27.0
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -18,7 +19,7 @@ COPY . .
 RUN pnpm run build
 
 # 3. 実行用
-FROM node:20-alpine AS runner
+FROM node:22.21.1-alpine AS runner
 WORKDIR /app
 
 COPY --from=builder /app/public ./public
