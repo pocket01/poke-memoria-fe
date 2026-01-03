@@ -47,7 +47,7 @@
 		"@types/react-dom": "^19",
 		"@vitejs/plugin-react": "^4.3.4",
 		"babel-plugin-react-compiler": "1.0.0",
-		"eslint": "^9",
+		"eslint": "^9.39.2",
 		"eslint-config-next": "16.1.1",
 		"jsdom": "^26.0.0",
 		"prettier": "^3.7.4",
@@ -58,7 +58,7 @@
 		"vitest": "^3.0.6"
 	},
 	"volta": {
-		"node": "22.12.0",
-		"pnpm": "10.26.2"
+		"node": "22.21.1",
+		"pnpm": "10.27.0"
 	}
 }
