@@ -66,18 +66,56 @@ pnpm test       # テスト実行
 pnpm test:ui    # テストUI起動
 ```
 
-## 📁 フォルダ構成
+## 📁 ディレクトリ構成
+
+本プロジェクトは、**Atomic Design**の考え方と、共通で使うものを一箇所に集約するシンプルさを取り入れた構成になっています。
 
 ```
-├── app/                 # アプリケーション
-│   ├── globals.css      # グローバルスタイル（ニューモフィズム含む）
-│   ├── layout.tsx       # ルートレイアウト
-│   └── page.tsx         # トップページ
-├── components/          # コンポーネント
-│   └── ui/              # shadcn/uiコンポーネント
-├── lib/                 # ユーティリティ関数など
-└── public/              # 静的ファイル
+src/
+├── app/                      # エントリーポイント・ルーティング
+│   ├── actions/              # サーバーアクション（将来的なデータ保存用）
+│   ├── api/                  # APIルート
+│   ├── (auth)/               # 認証関連（Group化して管理）
+│   ├── create/               # 履歴書作成ウィザード
+│   │   ├── [step]/           # 動的ルーティングでステップを管理
+│   │   ├── layout.tsx        # ウィザード共通デザイン（進捗バー等）
+│   │   └── page.tsx          # /create の初期画面
+│   ├── layout.tsx            # 全体共通レイアウト
+│   ├── page.tsx              # トップページ（LP）
+│   └── globals.css           # グローバルスタイル（ニューモフィズム含む）
+├── components/               # 再利用可能な部品（Atomic Design）
+│   ├── atoms/                # ボタン、入力欄、アイコン、ポケモンバッジ
+│   ├── molecules/            # 入力フォームの1行、ポケモンカード（小）
+│   ├── organisms/            # 作品選択グリッド、手持ち6匹リスト
+│   ├── templates/            # 履歴書の各スタイル（Paper/NeoGB/RetroRG）
+│   └── ui/                   # shadcn/ui コンポーネント
+├── hooks/                    # カスタムフック（useResume, useMobile 等）
+├── lib/                      # ライブラリ設定（Gorm連携の定義や設定等）
+├── utils/                    # ユーティリティ関数（日付整形、タグ生成 等）
+├── styles/                   # テーマ設定、グローバルCSS
+├── types/                    # TypeScript型定義（Resume, Pokemon, Title 等）
+├── stores/                   # グローバルステート（Zustand等での状態保持）
+├── constants/                # 固定値（ポケモン作品リスト、属性データ 等）
+└── public/                   # 静的アセット（画像、フォント、ドット絵）
 ```
+
+### ディレクトリ設計のポイント
+
+1. **Atomic Designによるコンポーネント管理**
+   - `atoms/` から `templates/` までの4層でコンポーネントを整理
+   - 「ボタンのデザインを直したい」→ `atoms` を見る、という直感的な作業が可能
+
+2. **`stores/` によるステート管理**
+   - ウィザード形式の「ページをまたぐデータ保持」にZustand等を使用
+   - Context APIよりもシンプルな記述で開発スピードを維持
+
+3. **動的ルーティング `app/create/[step]`**
+   - 各ステップを `/create/origin`, `/create/history` と個別に作らず動的セグメントで管理
+   - ステップの追加や順序入れ替えが容易
+
+4. **`templates/` に履歴書スタイルを配置**
+   - Authentic Paper、Neo GameBoy、Retro RG等のスタイルを配置
+   - Atomic Designにおける「データの入れ物」として定義
 
 ## 📝 環境要件
 
@@ -118,26 +156,6 @@ pnpm start
 pnpm dlx shadcn@latest add button
 pnpm dlx shadcn@latest add card
 pnpm dlx shadcn@latest add input
-```
-
-## ディレクトリ構造
-
-```
-poke-memoria-fe/
-├── app/                    # Next.js App Router
-│   ├── page.tsx           # ホームページ
-│   ├── page.test.tsx      # ホームページのテスト
-│   ├── layout.tsx         # ルートレイアウト
-│   └── globals.css        # グローバルスタイル（ニューモフィズムユーティリティ含む）
-├── components/            # Reactコンポーネント
-│   └── ui/               # shadcn/ui コンポーネント
-├── lib/                  # ユーティリティ関数
-│   └── utils.ts          # cn() などのヘルパー
-├── hooks/                # カスタムフック
-├── vitest.config.ts      # Vitest設定
-├── vitest.setup.ts       # Vitestセットアップ
-├── components.json       # shadcn/ui設定
-└── package.json          # 依存関係とVolta設定
 ```
 
 ## カラーパレット
