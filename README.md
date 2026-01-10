@@ -89,14 +89,13 @@ src/
 │   ├── organisms/            # 作品選択グリッド、手持ち6匹リスト
 │   ├── templates/            # 履歴書の各スタイル（Paper/NeoGB/RetroRG）
 │   └── ui/                   # shadcn/ui コンポーネント
-├── hooks/                    # カスタムフック（useResume, useMobile 等）
 ├── lib/                      # ライブラリ設定（Gorm連携の定義や設定等）
 ├── utils/                    # ユーティリティ関数（日付整形、タグ生成 等）
 ├── styles/                   # テーマ設定、グローバルCSS
 ├── types/                    # TypeScript型定義（Resume, Pokemon, Title 等）
 ├── stores/                   # グローバルステート（Zustand等での状態保持）
-├── constants/                # 固定値（ポケモン作品リスト、属性データ 等）
-└── public/                   # 静的アセット（画像、フォント、ドット絵）
+└── constants/                # 固定値（ポケモン作品リスト、属性データ 等）
+public/                       # 静的アセット（画像、フォント、ドット絵）※Next.jsの仕様上ルート配置
 ```
 
 ### ディレクトリ設計のポイント

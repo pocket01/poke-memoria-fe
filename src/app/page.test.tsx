@@ -6,7 +6,7 @@ describe("Home Page", () => {
 	it("ポケメモリア ホームページが正しくレンダリングされること", () => {
 		render(<Home />);
 		const heading = screen.getByRole("heading", {
-			name: /Hello, Pokememoria World!/i,
+			name: /ポケメモリア/i,
 		});
 		expect(heading).toBeInTheDocument();
 	});
