@@ -14,7 +14,10 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
-  output: "standalone",
+	output: "standalone",
+	experimental: {
+		typedRoutes: true,
+	},
 };
 
 export default nextConfig;
