@@ -1,11 +1,18 @@
-export default function CreateLayout({
+import type { Metadata } from "next";
+import SingleColumnLayout from "@/components/templates/SingleColumnLayout";
+import { CreateSteps } from "@/constants/routes";
+import "../globals.css";
+
+export const metadata: Metadata = {
+	title: "ポケメモリア",
+	description: "ポケメモリアは、ポケモンとあなたの思い出を記録するアプリです。",
+};
+
+const pages = CreateSteps.map((s) => s.page);
+export default async function RootLayout({
 	children,
-}: {
+}: Readonly<{
 	children: React.ReactNode;
-}) {
-	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-			{children}
-		</div>
-	);
+}>) {
+	return <SingleColumnLayout pages={pages}>{children}</SingleColumnLayout>;
 }
