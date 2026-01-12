@@ -1,21 +1,29 @@
-import type { PropsWithChildren } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 import Footer from "@/components/organisms/Footer";
 import { Header } from "@/components/organisms/Header";
 
-type Props<T> = PropsWithChildren<T>;
+type Props<T> = {
+	header?: ComponentProps<typeof Header>;
+	footer?: ComponentProps<typeof Footer>;
+} & PropsWithChildren<T>;
 
 /**
  * シングルカラムレイアウトコンポーネント
- * @param props.pages ページ配列
+ * @param props.header ヘッダーコンテンツ
+ * @param props.footer フッターコンテンツ
  * @param props.children 子コンポーネント
  * @returns
  */
-export default async function SingleColumnLayout<T>({ children }: Props<T>) {
+export default function SingleColumnLayout<T>({
+	header,
+	footer,
+	children,
+}: Props<T>) {
 	return (
 		<>
-			<Header />
+			<Header {...header} />
 			{children}
-			<Footer />
+			<Footer {...footer} />
 		</>
 	);
 }
