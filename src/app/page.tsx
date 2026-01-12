@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/atoms/button";
 
 export default function Home() {
 	return (
@@ -48,12 +49,7 @@ export default function Home() {
 							</div>
 						</div>
 						<Link href="/create">
-							<button
-								type="button"
-								className="bg-gradient-to-r from-red-500 to-pink-500 hover:opacity-90 text-white px-12 py-6 text-xl rounded-full shadow-xl transition-opacity"
-							>
-								履歴書を作成する
-							</button>
+							<Button type="button">はじめる</Button>
 						</Link>
 					</div>
 
@@ -81,10 +77,6 @@ export default function Home() {
 						</div>
 					</div>
 				</main>
-
-				<footer className="text-center text-sm text-gray-500">
-					<p>Next.js 16 + React 19 + Tailwind CSS 4</p>
-				</footer>
 			</div>
 		</div>
 	);

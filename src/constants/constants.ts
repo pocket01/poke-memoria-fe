@@ -1,4 +1,4 @@
-import type { PlayStatus, VisualStyle } from "@/types/types";
+import type { Memories, PlayStatus, VisualStyle } from "@/types/schema";
 
 /**
  * ポケモン歴代タイトルマスターデータ
@@ -133,4 +133,4 @@ export const DEFAULT_MEMORIES = {
 		.map(() => ({ ...DEFAULT_PARTNER })),
 	tags: [],
 	freeMessage: "",
-} as const;
+} as const satisfies Memories;

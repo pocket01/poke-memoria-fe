@@ -98,3 +98,14 @@ export const VALIDATION_LIMITS = {
 	/** 相棒ポケモンの最大数 */
 	MAX_PARTNERS: 6,
 } as const;
+
+/**
+ * ポケモン世代データの型定義
+ */
+export type PokemonGenerations = {
+	id: string;
+	name: string;
+	generation: string;
+	year: string;
+	bgColor: string;
+};
