@@ -1,4 +1,5 @@
 import { Calendar, Gamepad2, Tag, User } from "lucide-react";
+import { Button } from "../atoms/button";
 
 // const tags = [
 // 	"#対戦勢",
@@ -112,7 +113,7 @@ export async function Profile() {
 								</div>
 								<div className="flex flex-wrap gap-2 mb-4">
 									{/* {tags.map((tag) => (
-										<button
+										<Button
 											type="button"
 											key={tag}
 											onClick={() => toggleTag(tag)}
@@ -123,7 +124,7 @@ export async function Profile() {
 											}`}
 										>
 											{tag}
-										</button>
+										</Button>
 									))} */}
 								</div>
 								<div className="bg-purple-50 rounded-lg p-3">
@@ -155,7 +156,7 @@ export async function Profile() {
 
 							{/* プレビューボタン */}
 							<div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-6 shadow-xl">
-								<button type="button" className="w-full text-center">
+								<Button type="button">
 									<span className="text-white font-bold text-lg block mb-2">
 										プレビュー
 									</span>
@@ -180,7 +181,7 @@ export async function Profile() {
 											))} */}
 										</div>
 									</div>
-								</button>
+								</Button>
 							</div>
 						</div>
 					</div>

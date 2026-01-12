@@ -67,13 +67,12 @@ export async function Partners() {
 								key={partner.id}
 								className="bg-white border-4 border-pink-400 rounded-2xl p-6 shadow-lg relative"
 							>
-								<button
+								<Button
 									type="button"
 									onClick={() => removePartner(partner.id)}
-									className="absolute top-3 right-3 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors"
 								>
 									<X size={16} />
-								</button>
+								</Button>
 								<div className="flex flex-col items-center gap-4 mb-4">
 									<div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full shadow-lg"></div>
 									<input
@@ -99,10 +98,9 @@ export async function Partners() {
 
 						{/* 追加ボタン */}
 						{/* {partners.length < 6 && (
-							<button
+							<Button
 								type="button"
 								onClick={addPartner}
-								className="bg-gradient-to-br from-gray-100 to-gray-200 border-4 border-dashed border-gray-400 rounded-2xl p-6 hover:border-gray-500 transition-colors flex flex-col items-center justify-center gap-4 min-h-[300px]"
 							>
 								<div className="w-20 h-20 border-4 border-dashed border-gray-400 rounded-full flex items-center justify-center">
 									<Plus size={32} className="text-gray-500" />
@@ -113,7 +111,7 @@ export async function Partners() {
 									</p>
 									<p className="text-sm text-gray-600 mt-1">クリックして追加</p>
 								</div>
-							</button>
+							</Button>
 						)} */}
 					</div>
 				</div>

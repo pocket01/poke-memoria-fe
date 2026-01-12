@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SingleColumnLayout from "@/components/templates/SingleColumnLayout";
 import { CreateSteps } from "@/constants/routes";
-import "../globals.css";
 
 export const metadata: Metadata = {
 	title: "ポケメモリア",

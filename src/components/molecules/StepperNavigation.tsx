@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "../atoms/button";
 import type { StepperType } from "./types/StepperTypes";
 
 type Props<TStep extends StepperType> = {
@@ -38,14 +39,14 @@ export default function StepperNavigation<TStep extends StepperType>({
 		<footer className="bg-white border-t-2 border-gray-300 shadow-lg px-6 py-6">
 			<div className="max-w-5xl mx-auto flex items-center justify-between">
 				{backVisible ? (
-					<button
+					<Button
 						type="button"
 						onClick={() => handleBack?.(steps[activeStep - 1])}
-						className="px-6 py-3 bg-gray-200 rounded-[14px] flex items-center gap-2 text-gray-600 hover:bg-gray-300 transition-colors"
+						variant="secondary"
 					>
 						<ChevronLeft size={20} />
 						<span>戻る</span>
-					</button>
+					</Button>
 				) : (
 					<div />
 				)}
@@ -58,15 +59,13 @@ export default function StepperNavigation<TStep extends StepperType>({
 				</div>
 
 				{nextVisible && (
-					<button
+					<Button
 						type="button"
 						onClick={() => handleNext?.(steps[activeStep + 1])}
-						// onClick={() => router.push(next ?? "/create/abc")}
-						className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl flex items-center gap-2 hover:opacity-90 transition-opacity"
 					>
-						<span>次へ</span>
+						次へ
 						<ChevronRight size={20} />
-					</button>
+					</Button>
 				)}
 			</div>
 		</footer>

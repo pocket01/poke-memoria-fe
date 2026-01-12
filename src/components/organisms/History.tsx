@@ -1,4 +1,5 @@
 import { Clock, RotateCcw, Zap } from "lucide-react";
+import { Button } from "../atoms/button";
 
 // ポケモン作品データ
 const titles = [
@@ -123,42 +124,18 @@ export default function History() {
 
 				{/* スタンプ選択 */}
 				<div className="flex gap-4 justify-center mb-8">
-					<button
-						type="button"
-						// onClick={() => setStampMode("release")}
-						// className={`px-4 py-2 rounded-full flex items-center gap-2 transition-all ${
-						// 	stampMode === "release"
-						// 		? "bg-red-500 text-white shadow-lg"
-						// 		: "bg-gray-200 text-gray-700"
-						// }`}
-					>
+					<Button type="button">
 						<Clock size={16} />
 						<span>発売時</span>
-					</button>
-					<button
-						type="button"
-						// onClick={() => setStampMode("later")}
-						// className={`px-4 py-2 rounded-full flex items-center gap-2 transition-all ${
-						// 	stampMode === "later"
-						// 		? "bg-blue-500 text-white shadow-lg"
-						// 		: "bg-gray-200 text-gray-700"
-						// }`}
-					>
+					</Button>
+					<Button type="button">
 						<Zap size={16} />
 						<span>後から</span>
-					</button>
-					<button
-						type="button"
-						// onClick={() => setStampMode("remake")}
-						// className={`px-4 py-2 rounded-full flex items-center gap-2 transition-all ${
-						// 	stampMode === "remake"
-						// 		? "bg-purple-500 text-white shadow-lg"
-						// 		: "bg-gray-200 text-gray-700"
-						// }`}
-					>
+					</Button>
+					<Button type="button">
 						<RotateCcw size={16} />
 						<span>リメイク</span>
-					</button>
+					</Button>
 				</div>
 
 				{/* 作品リスト */}
@@ -169,15 +146,7 @@ export default function History() {
 							<div className="w-12 h-12 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-gray-500 font-mono">
 								{title.year}
 							</div>
-							<button
-								type="button"
-								// onClick={() => toggleTitle(title.id)}
-								// className={`flex-1 bg-white border-2 rounded-2xl p-4 hover:shadow-lg transition-all ${
-								// 	selectedTitles.has(title.id)
-								// 		? "border-red-400 shadow-lg"
-								// 		: "border-gray-300"
-								// }`}
-							>
+							<Button type="button">
 								<div className="flex items-center justify-between">
 									<div className="text-left">
 										<h3 className="text-lg font-bold">{title.name}</h3>
@@ -197,7 +166,7 @@ export default function History() {
 										</div>
 									)} */}
 								</div>
-							</button>
+							</Button>
 						</div>
 					))}
 				</div>
