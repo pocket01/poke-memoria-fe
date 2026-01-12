@@ -25,7 +25,8 @@
 		"docker:prod:push": "bash ./scripts/docker.sh prod push",
 		"docker:prod:deploy": "bash ./scripts/docker.sh prod deploy",
 		"docker:prod:create-repo": "bash ./scripts/docker.sh prod create-repo",
-		"docker:prod": "pnpm docker:prod:build && pnpm docker:prod:push && pnpm docker:prod:deploy"
+		"docker:prod": "pnpm docker:prod:build && pnpm docker:prod:push && pnpm docker:prod:deploy",
+		"shadcn:add": "npx shadcn@latest add"
 	},
 	"dependencies": {
 		"@radix-ui/react-slot": "^1.2.4",
