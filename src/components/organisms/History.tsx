@@ -1,176 +1,161 @@
-import { Clock, RotateCcw, Zap } from "lucide-react";
+import { Clock, Sparkles, Star } from "lucide-react";
+import type { JSX } from "react";
 import { Button } from "../atoms/button";
 
-// ポケモン作品データ
-const titles = [
+type StampType = {
+	id: "release" | "later" | "remake";
+	label: string;
+	icon: JSX.Element;
+	color: string;
+};
+
+export type GameEntry = {
+	id: string;
+	title: string;
+	region: string;
+	year: number;
+	generation: number;
+};
+
+type Props = {
+	timeline: GameEntry[];
+	// playedGames: Record<string, "release" | "later" | "remake" | null>;
+	// onToggleGame: (
+	// 	gameId: string,
+	// 	stampType: "release" | "later" | "remake",
+	// ) => void;
+};
+
+const stamps: StampType[] = [
 	{
-		id: 1,
-		name: "赤・緑・青・ピカチュウ",
-		region: "カントー地方",
-		year: "1996",
-	},
-	{ id: 2, name: "金・銀・クリスタル", region: "ジョウト地方", year: "1999" },
-	{
-		id: 3,
-		name: "ルビー・サファイア・エメラルド",
-		region: "ホウエン地方",
-		year: "2002",
-	},
-	{
-		id: 4,
-		name: "ファイアレッド・リーフグリーン",
-		region: "カントー地方",
-		year: "2004",
-	},
-	{
-		id: 5,
-		name: "ダイヤモンド・パール・プラチナ",
-		region: "シンオウ地方",
-		year: "2006",
-	},
-	{
-		id: 6,
-		name: "ハートゴールド・ソウルシルバー",
-		region: "ジョウト地方",
-		year: "2009",
-	},
-	{ id: 7, name: "ブラック・ホワイト", region: "イッシュ地方", year: "2010" },
-	{ id: 8, name: "ブラック2・ホワイト2", region: "イッシュ地方", year: "2012" },
-	{ id: 9, name: "X・Y", region: "カロス地方", year: "2013" },
-	{
-		id: 10,
-		name: "オメガルビー・アルファサファイア",
-		region: "ホウエン地方",
-		year: "2014",
-	},
-	{ id: 11, name: "サン・ムーン", region: "アローラ地方", year: "2016" },
-	{
-		id: 12,
-		name: "ウルトラサン・ウルトラムーン",
-		region: "アローラ地方",
-		year: "2017",
-	},
-	{ id: 13, name: "ソード・シールド", region: "ガラル地方", year: "2019" },
-	{
-		id: 14,
-		name: "ブリリアントダイヤモンド・シャイニングパール",
-		region: "シンオウ地方",
-		year: "2021",
+		id: "release",
+		label: "発売時",
+		icon: <Star className="w-4 h-4" />,
+		color: "#EF4444",
 	},
 	{
-		id: 15,
-		name: "Pokémon LEGENDS アルセウス",
-		region: "ヒスイ地方",
-		year: "2022",
+		id: "later",
+		label: "後から",
+		icon: <Clock className="w-4 h-4" />,
+		color: "#3B82F6",
 	},
 	{
-		id: 16,
-		name: "スカーレット・バイオレット",
-		region: "パルデア地方",
-		year: "2022",
+		id: "remake",
+		label: "リメイク",
+		icon: <Sparkles className="w-4 h-4" />,
+		color: "#8B5CF6",
 	},
 ];
 
-// type StampType = "release" | "later" | "remake";
-
-/**
- * 【軌跡】コンポーネント
- * @returns
- */
-export default function History() {
-	// const [selectedTitles, setSelectedTitles] = useState<Map<number, StampType>>(
-	// 	new Map(),
-	// );
-	// const [stampMode, setStampMode] = useState<StampType>("release");
-
-	// const toggleTitle = (titleId: number) => {
-	// 	const newSelected = new Map(selectedTitles);
-	// 	if (newSelected.get(titleId) === stampMode) {
-	// 		newSelected.delete(titleId);
-	// 	} else {
-	// 		newSelected.set(titleId, stampMode);
-	// 	}
-	// 	setSelectedTitles(newSelected);
-	// };
-
-	// const getStampIcon = (type: StampType) => {
-	// 	switch (type) {
-	// 		case "release":
-	// 			return <Clock size={16} />;
-	// 		case "later":
-	// 			return <Zap size={16} />;
-	// 		case "remake":
-	// 			return <RotateCcw size={16} />;
-	// 	}
-	// };
+export function History({ timeline }: Props) {
+	const playedCount = 0;
 
 	return (
-		<main className="flex-1 px-4 py-8">
-			<div className="max-w-4xl mx-auto">
-				<div className="mb-8">
-					<h2 className="text-4xl font-normal mb-2 text-center">
-						あなたが旅した地方と作品
-					</h2>
-					<p className="text-gray-600 text-center mb-6">
-						プレイした作品にスタンプを押してください
-					</p>
-					<div className="bg-blue-50 rounded-full py-3 px-6 inline-flex items-center gap-3 mx-auto block w-fit">
-						<span className="text-2xl font-bold text-blue-600">
-							{/* {selectedTitles.size} */}
-						</span>
-						<span className="text-gray-600">作品プレイ済み</span>
+		<div
+			// initial={{ opacity: 0, y: 20 }}
+			// animate={{ opacity: 1, y: 0 }}
+			// exit={{ opacity: 0, y: -20 }}
+			className="w-full max-w-4xl mx-auto px-4 py-8"
+		>
+			<div className="text-center mb-12">
+				<h1 className="text-4xl mb-4">あなたが旅した地方と作品</h1>
+				<p className="text-gray-600">
+					プレイした作品にスタンプを押してください
+				</p>
+				<div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full">
+					<span className="font-bold text-blue-600 text-xl">{playedCount}</span>
+					<span className="text-gray-600">作品プレイ済み</span>
+				</div>
+			</div>
+
+			{/* Stamp Legend */}
+			<div className="flex justify-center gap-4 mb-8 flex-wrap">
+				{stamps.map((stamp) => (
+					<div
+						key={stamp.id}
+						className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full"
+					>
+						<div style={{ color: stamp.color }}>{stamp.icon}</div>
+						<span className="text-sm">{stamp.label}</span>
 					</div>
-				</div>
+				))}
+			</div>
 
-				{/* スタンプ選択 */}
-				<div className="flex gap-4 justify-center mb-8">
-					<Button type="button">
-						<Clock size={16} />
-						<span>発売時</span>
-					</Button>
-					<Button type="button">
-						<Zap size={16} />
-						<span>後から</span>
-					</Button>
-					<Button type="button">
-						<RotateCcw size={16} />
-						<span>リメイク</span>
-					</Button>
-				</div>
+			<div className="relative">
+				{/* Vertical line */}
+				<div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200" />
 
-				{/* 作品リスト */}
 				<div className="space-y-6">
-					<div className="w-1 h-full bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200 absolute left-8"></div>
-					{titles.map((title) => (
-						<div key={title.id} className="relative flex items-center gap-4">
-							<div className="w-12 h-12 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-gray-500 font-mono">
-								{title.year}
-							</div>
-							<Button type="button">
-								<div className="flex items-center justify-between">
-									<div className="text-left">
-										<h3 className="text-lg font-bold">{title.name}</h3>
-										<p className="text-sm text-gray-600">{title.region}</p>
+					{timeline.map((game) => {
+						// const selectedStamp = playedGames[game.id];
+						// const stampInfo = stamps.find((s) => s.id === selectedStamp);
+
+						return (
+							<div key={game.id} className="relative pl-20">
+								{/* Year marker */}
+								<div className="absolute left-0 top-0 w-16 text-center">
+									<div
+										className={`
+                    w-12 h-12 mx-auto rounded-full flex items-center justify-center text-xs
+                    bg-white border-2 border-gray-300 text-gray-600
+                  `}
+									>
+										{game.year}
 									</div>
-									{/* {selectedTitles.has(title.id) && (
-										<div
-											className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
-												selectedTitles.get(title.id) === "release"
-													? "bg-red-500"
-													: selectedTitles.get(title.id) === "later"
-														? "bg-blue-500"
-														: "bg-purple-500"
-											}`}
-										>
-											{getStampIcon(selectedTitles.get(title.id) ?? "release")}
+								</div>
+
+								{/* Game card */}
+								<div
+									className={`
+                  p-4 rounded-xl border-2 transition-all duration-300
+                  bg-gray-50 border-gray-200
+                `}
+								>
+									<div className="flex items-start justify-between gap-4">
+										<div className="flex-1">
+											<h3 className="font-bold mb-1">{game.title}</h3>
+											<p className="text-sm text-gray-600">{game.region}地方</p>
+										</div>
+
+										{/* Stamp buttons */}
+										<div className="flex gap-2">
+											{stamps.map((stamp) => (
+												<Button
+													key={stamp.id}
+													className={`
+                            p-2 rounded-lg transition-all duration-200`}
+													style={{
+														backgroundColor: undefined,
+														color: "#9CA3AF",
+													}}
+													title={stamp.label}
+												>
+													{stamp.icon}
+												</Button>
+											))}
+										</div>
+									</div>
+
+									{/* {selectedStamp && (
+										<div className="mt-3 pt-3 border-t border-gray-200">
+											<span
+												className="text-xs px-3 py-1 rounded-full inline-flex items-center gap-1"
+												style={{
+													backgroundColor: `${stampInfo?.color}20`,
+													color: stampInfo?.color,
+												}}
+											>
+												{stampInfo?.icon}
+												{stampInfo?.label}でプレイ
+											</span>
 										</div>
 									)} */}
 								</div>
-							</Button>
-						</div>
-					))}
+							</div>
+						);
+					})}
 				</div>
 			</div>
-		</main>
+		</div>
 	);
 }

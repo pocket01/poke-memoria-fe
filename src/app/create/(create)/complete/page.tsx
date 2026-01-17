@@ -1,3 +1,5 @@
+import { Complete } from "@/components/organisms/Complete";
+
 export default async function CompletePage() {
-	return "完成！";
+	return <Complete />;
 }
