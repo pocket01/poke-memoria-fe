@@ -1,7 +1,9 @@
 "use client";
-import { Circle, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../atoms/button";
+import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
+import PageHeader from "@/components/molecules/PageHeader";
+import { PokemonGrid } from "@/components/organisms/PokemonGrid";
 
 export type Pokemon = {
 	name: string;
@@ -24,7 +26,7 @@ export function Partners({
 	// onRemovePokemon,
 	// onUpdateComment,
 }: Props) {
-	const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+	const [selectedSlot] = useState<number | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [editingComment, setEditingComment] = useState<number | null>(null);
 
@@ -32,89 +34,35 @@ export function Partners({
 		name.toLowerCase().includes(searchQuery.toLowerCase()),
 	);
 
-	const handleSelectPokemon = (name: string) => {
-		if (selectedSlot !== null) {
-			// onAddPokemon(selectedSlot, { name, type: "ノーマル" });
-			setSelectedSlot(null);
-			setSearchQuery("");
-		}
-	};
+	// const handleSelectPokemon = (name: string) => {
+	// 	if (selectedSlot !== null) {
+	// 		// onAddPokemon(selectedSlot, { name, type: "ノーマル" });
+	// 		setSelectedSlot(null);
+	// 		setSearchQuery("");
+	// 	}
+	// };
 
 	const filledCount = team.filter((p) => p !== null).length;
 
 	return (
 		<div className="w-full max-w-5xl mx-auto px-4 py-8">
-			<div className="text-center mb-12">
-				<h1 className="text-4xl mb-4">手持ちの6匹</h1>
-				<p className="text-gray-600">あなたの最高の相棒たちを選んでください</p>
-				<div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full">
-					<span className="font-bold text-green-600 text-xl">
-						{filledCount}
-					</span>
-					<span className="text-gray-600">/ 6匹</span>
-				</div>
-			</div>
+			<PageHeader
+				title="手持ちの6匹"
+				description="あなたの最高の相棒たちを選んでください"
+				playedCount={filledCount}
+				countLabel="/ 6匹"
+			/>
 
-			{/* Team Grid */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-				{team.map((pokemon, index) => (
-					<div
-						key={`partners-${index.toString()}`}
-						// whileHover={{ scale: pokemon ? 1.02 : 1.05 }}
-						className={
-							"relative p-6 rounded-2xl border-4 transition-all duration-300 cursor-pointer bg-gradient-to-br from-gray-50 to-gray-100 border-dashed border-gray-300 hover:border-red-300"
-						}
-						// onClick={() => {
-						// 	if (!pokemon) {
-						// 		setSelectedSlot(index);
-						// 	}
-						// }}
-					>
-						{pokemon ? (
-							<>
-								{/* Remove button */}
-								<Button className="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors">
-									<X className="w-4 h-4" />
-								</Button>
-
-								{/* Pokemon display */}
-								<div className="text-center mb-4">
-									<div className="w-20 h-20 mx-auto mb-3 bg-gradient-to-br from-red-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
-										<Circle className="w-10 h-10 text-white fill-current" />
-									</div>
-									<h3 className="font-bold text-xl">{pokemon.name}</h3>
-								</div>
-
-								{/* Comment section */}
-								<div className="mt-4">
-									{editingComment === index ? (
-										<textarea
-											value={pokemon.comment || ""}
-											// onChange={(e) => onUpdateComment(index, e.target.value)}
-											onBlur={() => setEditingComment(null)}
-											placeholder="思い出を書く..."
-											className="w-full p-2 text-sm border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-red-500"
-											rows={3}
-											onClick={(e) => e.stopPropagation()}
-										/>
-									) : (
-										<div className="min-h-[60px] p-2 text-sm text-gray-600 bg-gray-50 rounded-lg cursor-text hover:bg-gray-100 transition-colors">
-											{pokemon.comment || "思い出を記入..."}
-										</div>
-									)}
-								</div>
-							</>
-						) : (
-							<div className="text-center py-8">
-								<div className="w-20 h-20 mx-auto mb-3 border-4 border-dashed border-gray-300 rounded-full flex items-center justify-center">
-									<Circle className="w-10 h-10 text-gray-300" />
-								</div>
-								<p className="text-gray-400">スロット {index + 1}</p>
-								<p className="text-xs text-gray-400 mt-1">クリックして追加</p>
-							</div>
-						)}
-					</div>
-				))}
+			<div className="mb-8">
+				<PokemonGrid
+					team={team}
+					editingComment={editingComment}
+					// onSlotClick={(index) => setSelectedSlot(index)}
+					// onRemovePokemon={onRemovePokemon}
+					onCommentClick={(index) => setEditingComment(index)}
+					// onCommentChange={onUpdateComment}
+					onCommentBlur={() => setEditingComment(null)}
+				/>
 			</div>
 
 			{/* Pokemon Selection Modal */}
@@ -152,8 +100,8 @@ export function Partners({
 										type="button"
 										className="p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-center"
 									>
-										<div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-red-400 to-pink-400 rounded-full flex items-center justify-center">
-											<Circle className="w-6 h-6 text-white fill-current" />
+										<div className="mx-auto mb-2">
+											<PokemonAvatar variant="filled" size="sm" />
 										</div>
 										<p className="font-medium text-sm">{name}</p>
 									</button>
