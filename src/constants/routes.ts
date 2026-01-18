@@ -3,14 +3,14 @@ import type { Route } from "next";
 /**
  * 履歴書作成ルート一覧
  */
-const CreateRoutes = [
-	"/create/origin",
-	"/create/history",
-	"/create/partners",
-	"/create/profile",
-	"/create/preview",
-	"/create/complete",
-] as const satisfies Route[];
+type CreateRoute = Route<
+	| "/create/origin"
+	| "/create/history"
+	| "/create/partners"
+	| "/create/profile"
+	| "/create/preview"
+	| "/create/complete"
+>;
 
 /**
  * 履歴書作成ステップ定義。
@@ -39,6 +39,6 @@ export const CreateSteps = [
 	// ステップ６．完成
 	{ page: "/create/complete", label: "完成" },
 ] as const satisfies Array<{
-	page: (typeof CreateRoutes)[number];
+	page: CreateRoute;
 	label: string;
 }>;

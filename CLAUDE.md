@@ -14,6 +14,7 @@
   - `README.md`
 - 参照Figma
   - `プロンプトの指示にしたがってください`
+  - 一度参照したFigmaデザインは、次の指示があるまで参照し続けてください
 - 備考
   - Figmaのキー情報など、機密情報を回答内に表示しないこと。
 
@@ -40,3 +41,81 @@
 ## 開発フローの指示
 1. 実装前に必ず既存の `components` 配下を確認し、再利用可能なパーツを特定すること。
 2. 新規コンポーネント作成時は、どの階層（Atom/Molecule/Organism）に属すべきか検討し、その理由を簡潔に述べてから実装に移れ。
+
+---
+
+# Atomicコンポーネント作成の標準手順
+
+## Atoms作成の3ステップ
+
+### ステップ1: shadcn/uiからコンポーネントをダウンロード
+```bash
+# 例: badgeコンポーネントの場合
+pnpm shadcn:add badge
+```
+- 既存のUIライブラリを活用し、デザインシステムの一貫性を保つ
+- `src/components/atoms/` 配下に自動配置される
+
+### ステップ2: Figmaデザインに基づくスタイル編集
+1. **Figmaデータの取得と確認**
+   - `mcp_figma-mcp_get_figma_data` ツールでデザイン仕様を確認
+   - レイアウト、色、サイズ、フォントスタイルなどを把握
+
+2. **variantの追加・編集**
+   ```tsx
+   // 例: badge.tsx に year variant を追加
+   const badgeVariants = cva(
+     "...", // 基本スタイル
+     {
+       variants: {
+         variant: {
+           default: "...",
+           year: "w-12 h-12 bg-white border-2 border-gray-300 text-gray-600 text-xs font-normal px-0 py-0",
+         },
+       },
+     },
+   );
+   ```
+
+3. **Figmaデザインとの対応付け**
+   - `width`, `height`: Figmaの dimensions
+   - `backgroundColor`: Figmaの fills
+   - `borderColor`, `borderWidth`: Figmaの strokes
+   - `fontSize`, `fontWeight`: Figmaの textStyle
+   - `borderRadius`: Figmaの borderRadius
+
+### ステップ3: 画面への適用
+1. **対象コンポーネントへのimport**
+   ```tsx
+   import { Badge } from "@/components/atoms/badge";
+   ```
+
+2. **既存コードの置き換え**
+   - 手動で実装されたスタイルを削除
+   - 新しいAtomコンポーネントを配置
+   ```tsx
+   // Before
+   <div className="w-12 h-12 rounded-full bg-white border-2 border-gray-300 text-gray-600">
+     {year}
+   </div>
+   
+   // After
+   <Badge variant="year">{year}</Badge>
+   ```
+
+3. **動作確認**
+   - 開発サーバーで表示を確認
+   - Figmaデザインとの整合性をチェック
+
+## 実装時の注意点
+- **段階的な実装**: 1つのAtomを完成させてから次へ進む
+- **再利用性の考慮**: 特定の画面に依存しない汎用的なpropsインターフェースを設計
+- **型安全性**: TypeScriptの型定義を活用し、propsの型を明確にする
+- **命名規則**: コンポーネント名とファイル名を一致させる
+- **コメント**: 複雑なvariantや特殊な用途には説明コメントを追加
+
+## 作成順序の推奨
+1. **Atoms**: Badge → Icon → Button → Input → その他
+2. **Molecules**: 複数のAtomsを組み合わせた機能単位
+3. **Organisms**: ドメイン知識を持つ複雑なUI
+4. **全体のリファクタリング**: 既存コードを新しいAtomic構造に移行

@@ -1,121 +1,173 @@
-// interface Partner {
-// 	id: number;
-// 	name: string;
-// 	memory: string;
-// }
+"use client";
+import { Search } from "lucide-react";
+import { useState } from "react";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/atoms/dialog";
+import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
+import PageHeader from "@/components/molecules/PageHeader";
+import { PokemonGrid } from "@/components/organisms/PokemonGrid";
 
-/**
- * 【相棒】コンポーネント
- * @returns
- */
-export async function Partners() {
-	// const router = useRouter();
-	// const [partners, setPartners] = useState<Partner[]>([
-	// 	{ id: 1, name: "ピカチュウ", memory: "" },
-	// 	{ id: 2, name: "リザードン", memory: "" },
-	// 	{ id: 3, name: "イーブイ", memory: "" },
-	// ]);
+export type Pokemon = {
+	name: string;
+	type: string;
+	comment?: string;
+};
 
-	// const addPartner = () => {
-	// 	if (partners.length < 6) {
-	// 		setPartners([...partners, { id: Date.now(), name: "", memory: "" }]);
-	// 	}
-	// };
+type Props = {
+	popularPokemon: string[];
+	defaultTeam: (Pokemon | null)[];
+};
 
-	// const removePartner = (id: number) => {
-	// 	setPartners(partners.filter((p) => p.id !== id));
-	// };
+function Partners({ popularPokemon, defaultTeam }: Props) {
+	// 選択中のスロット管理
+	const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
 
-	// const updatePartner = (
-	// 	id: number,
-	// 	field: "name" | "memory",
-	// 	value: string,
-	// ) => {
-	// 	setPartners(
-	// 		partners.map((p) => (p.id === id ? { ...p, [field]: value } : p)),
-	// 	);
-	// };
+	// チームの状態管理
+	const [team, setTeam] = useState<(Pokemon | null)[]>(defaultTeam);
 
-	// const handleNext = () => {
-	// 	router.push("/create/identity");
-	// };
+	// コメント編集中のスロット管理
+	const [editingComment, setEditingComment] = useState<number | null>(null);
+
+	// 検索クエリの状態管理
+	const [searchQuery, setSearchQuery] = useState("");
+	const filteredPokemon = popularPokemon.filter((name) =>
+		name.toLowerCase().includes(searchQuery.toLowerCase()),
+	);
+
+	// モーダルを開くハンドラー
+	const handleOpenModal = (index: number) => {
+		setSelectedSlot(index);
+	};
+
+	// モーダルを閉じるハンドラー
+	const handleCloseModal = () => {
+		setSelectedSlot(null);
+		setSearchQuery("");
+	};
+
+	// ポケモンをチームに追加するハンドラー
+	const handleAddPokemon = (slotIndex: number, pokemon: Pokemon) => {
+		setTeam((prev) => {
+			const newTeam = [...prev];
+			newTeam[slotIndex] = pokemon;
+			return newTeam;
+		});
+		handleCloseModal();
+	};
+
+	// ポケモンをチームから削除するハンドラー
+	const handleRemovePokemon = (slotIndex: number) => {
+		setTeam((prev) => {
+			const newTeam = [...prev];
+			newTeam[slotIndex] = null;
+			return newTeam;
+		});
+	};
+
+	// コメント編集のハンドラー
+	const handleCommentClick = (index: number) => {
+		setEditingComment(index);
+	};
+
+	const handleCommentChange = (slotIndex: number, comment: string) => {
+		setTeam((prev) => {
+			const newTeam = [...prev];
+			const pokemon = newTeam[slotIndex];
+			if (pokemon) {
+				newTeam[slotIndex] = { ...pokemon, comment };
+			}
+			return newTeam;
+		});
+	};
+
+	const handleCommentBlur = () => {
+		setEditingComment(null);
+	};
+
+	// ポケモン選択時のハンドラー
+	const handleSelectPokemon = (name: string) => {
+		if (selectedSlot !== null) {
+			handleAddPokemon(selectedSlot, { name, type: "ノーマル" });
+			// setSelectedSlot(null);
+			setSearchQuery("");
+		}
+	};
+
+	const filledCount = team.filter((p) => p !== null).length;
 
 	return (
-		<div className="min-h-screen flex flex-col">
-			{/* メインコンテンツ */}
-			<main className="flex-1 px-4 py-8">
-				<div className="max-w-5xl mx-auto">
-					<div className="mb-8">
-						<h2 className="text-4xl font-normal mb-2 text-center">
-							手持ちの6匹
-						</h2>
-						<p className="text-gray-600 text-center mb-6">
-							あなたの最高の相棒たちを選んでください
-						</p>
-						<div className="bg-green-50 rounded-full py-3 px-6 inline-flex items-center gap-3 mx-auto block w-fit">
-							{/* <span className="text-2xl font-bold text-green-600">
-								{partners.length}
-							</span> */}
-							<span className="text-gray-600">/ 6匹</span>
-						</div>
+		<div className="w-full max-w-5xl mx-auto px-4 py-8">
+			<PageHeader
+				title="手持ちの6匹"
+				description="あなたの最高の相棒たちを選んでください"
+				playedCount={filledCount}
+				countLabel="/ 6匹"
+			/>
+
+			<div className="mb-8">
+				<PokemonGrid
+					team={team}
+					editingComment={editingComment}
+					onSlotClick={(index) => handleOpenModal(index)}
+					onRemovePokemon={handleRemovePokemon}
+					onCommentClick={handleCommentClick}
+					onCommentChange={handleCommentChange}
+					onCommentBlur={handleCommentBlur}
+				/>
+			</div>
+
+			{/* Pokemon Selection Dialog */}
+			<Dialog
+				open={selectedSlot !== null}
+				onOpenChange={(open) => !open && handleCloseModal()}
+			>
+				<DialogContent className="max-w-2xl max-h-[80vh] flex flex-col p-6">
+					<DialogHeader>
+						<DialogTitle>ポケモンを選択</DialogTitle>
+					</DialogHeader>
+
+					{/* Search input */}
+					<div className="relative mb-4">
+						<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+						<input
+							type="text"
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							placeholder="ポケモン名で検索..."
+							className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+						/>
 					</div>
 
-					{/* パートナーリスト */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-						{/* {partners.map((partner) => (
-							<div
-								key={partner.id}
-								className="bg-white border-4 border-pink-400 rounded-2xl p-6 shadow-lg relative"
-							>
-								<Button
+					{/* Pokemon list */}
+					<div className="flex-1 overflow-y-auto">
+						<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+							{filteredPokemon.map((name) => (
+								<button
+									key={name}
 									type="button"
-									onClick={() => removePartner(partner.id)}
+									onClick={() => handleSelectPokemon(name)}
+									className="flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
 								>
-									<X size={16} />
-								</Button>
-								<div className="flex flex-col items-center gap-4 mb-4">
-									<div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full shadow-lg"></div>
-									<input
-										type="text"
-										value={partner.name}
-										onChange={(e) =>
-											updatePartner(partner.id, "name", e.target.value)
-										}
-										placeholder="ポケモン名"
-										className="text-xl font-bold text-center w-full bg-transparent border-b-2 border-gray-300 focus:border-pink-500 outline-none py-1"
-									/>
-								</div>
-								<textarea
-									value={partner.memory}
-									onChange={(e) =>
-										updatePartner(partner.id, "memory", e.target.value)
-									}
-									placeholder="思い出を記入..."
-									className="w-full bg-gray-100 rounded-lg p-3 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-pink-500"
-								/>
-							</div>
-						))} */}
+									<PokemonAvatar variant="filled" size="sm" />
+									<p className="font-medium text-sm">{name}</p>
+								</button>
+							))}
+						</div>
 
-						{/* 追加ボタン */}
-						{/* {partners.length < 6 && (
-							<Button
-								type="button"
-								onClick={addPartner}
-							>
-								<div className="w-20 h-20 border-4 border-dashed border-gray-400 rounded-full flex items-center justify-center">
-									<Plus size={32} className="text-gray-500" />
-								</div>
-								<div className="text-center">
-									<p className="text-gray-500">
-										スロット {partners.length + 1}
-									</p>
-									<p className="text-sm text-gray-600 mt-1">クリックして追加</p>
-								</div>
-							</Button>
-						)} */}
+						{filteredPokemon.length === 0 && (
+							<div className="text-center py-12 text-gray-400">
+								<p>該当するポケモンが見つかりません</p>
+							</div>
+						)}
 					</div>
-				</div>
-			</main>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 }
+
+export default Partners;

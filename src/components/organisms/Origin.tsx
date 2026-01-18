@@ -1,25 +1,31 @@
 "use client";
-import type { FC } from "react";
+import { useState } from "react";
 import { GenerationCard } from "@/components/molecules/GenerationCard";
 import type { PokemonGenerations } from "@/types/schema";
 import PageHeader from "../molecules/PageHeader";
 
-export type OriginProps = {
-	/** 世代データ配列 */
+type Props = {
+	// 世代データ配列
 	data: PokemonGenerations[];
-	/** 選択された世代ID */
+	// 選択された世代ID
 	selectedId?: string;
-	/** 世代選択時のイベントハンドラ */
-	onSelectGeneration?: (id: string) => void;
 };
 
 /**
- * 【原点】コンポーネント（Organisms層）
+ * 【原点】コンポーネント
  * ポケモンの最初の冒険を選択する画面
- * @param props OriginProps
+ * @param props Props
  * @returns JSX.Element
  */
-const Origin: FC<OriginProps> = ({ data, selectedId, onSelectGeneration }) => {
+function Origin({ data, selectedId }: Props) {
+	// 選択された世代IDを管理する状態
+	const [selectedGame, setSelectedGame] = useState<string>(selectedId ?? "");
+
+	// 世代選択時のハンドラ
+	const onSelectGeneration = (id: string) => {
+		setSelectedGame(id);
+	};
+
 	return (
 		<main className="flex-1 px-4 py-8">
 			<div className="max-w-[1024px] mx-auto">
@@ -38,7 +44,7 @@ const Origin: FC<OriginProps> = ({ data, selectedId, onSelectGeneration }) => {
 							generation={gen.generation}
 							year={gen.year}
 							bgColor={gen.bgColor}
-							selected={selectedId === gen.id}
+							selected={selectedGame === gen.id}
 							onClick={onSelectGeneration}
 						/>
 					))}
@@ -46,7 +52,7 @@ const Origin: FC<OriginProps> = ({ data, selectedId, onSelectGeneration }) => {
 			</div>
 		</main>
 	);
-};
+}
 
 Origin.displayName = "Origin";
 

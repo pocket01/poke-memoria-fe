@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import type { PokemonGenerations } from "@/types/schema";
 import { Button } from "../atoms/button";
 
@@ -33,14 +34,20 @@ export function GenerationCard({
 }: GenerationCardProps) {
 	return (
 		<Button
-			type="button"
 			onClick={() => onClick?.(id)}
-			className={`bg-white border-4 rounded-2xl p-7 transition-all hover:shadow-lg focus:outline-none focus:shadow-xl ${
+			className={`relative border-4 rounded-2xl p-7 transition-all focus:outline-none ${
 				selected
-					? "border-[#FB2C36] shadow-xl"
-					: "border-[#E5E7EB] hover:border-[#FB2C36]"
+					? "bg-red-50 border-[#FB2C36] shadow-xl"
+					: "bg-white border-[#E5E7EB] hover:border-[#FB2C36] hover:shadow-lg hover:bg-red-50/30"
 			} ${className}`}
 		>
+			{/* チェックマーク */}
+			{selected && (
+				<div className="absolute top-3 right-3 w-8 h-8 bg-[#FB2C36] rounded-full flex items-center justify-center shadow-lg">
+					<Check className="w-5 h-5 text-white" strokeWidth={3} />
+				</div>
+			)}
+
 			<div className="flex flex-col items-center gap-4">
 				{/* アイコン */}
 				<div

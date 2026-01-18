@@ -1,3 +1,5 @@
+import Preview from "@/components/organisms/Preview";
+
 export default async function PreviewPage() {
-	return "確認";
+	return <Preview />;
 }
