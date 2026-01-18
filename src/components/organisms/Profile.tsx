@@ -11,31 +11,16 @@ export type TrainerData = {
 
 type Props = {
 	data: TrainerData;
+	availableTags: string[];
 	// onUpdateData: (data: Partial<TrainerData>) => void;
 };
 
-const availableTags = [
-	"#対戦勢",
-	"#色違い厳選",
-	"#図鑑コンプ",
-	"#考察勢",
-	"#ストーリー重視",
-	"#色違い所持",
-	"#伝説ポケモン好き",
-	"#御三家派",
-	"#マイナーポケモン愛好家",
-	"#ダブルバトル",
-	"#シングルバトル",
-	"#ポケモンGO",
-	"#アニメファン",
-	"#カードゲーム",
-];
-
-export function Profile({ data }: Props) {
+export function Profile({ data, availableTags }: Props) {
 	const toggleTag = (tag: string) => {
 		const newTags = data.tags.includes(tag)
 			? data.tags.filter((t) => t !== tag)
 			: [...data.tags, tag];
+		return newTags;
 	};
 
 	return (

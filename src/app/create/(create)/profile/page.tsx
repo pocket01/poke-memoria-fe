@@ -27,5 +27,5 @@ const availableTags = [
 ];
 
 export default async function ProfilePage() {
-	return <Profile data={trainerData} />;
+	return <Profile data={trainerData} availableTags={availableTags} />;
 }
