@@ -20,7 +20,7 @@ type Props = {
 	// ) => void;
 };
 
-export function History({ timeline }: Props) {
+function History({ timeline }: Props) {
 	const playedCount = 0;
 
 	return (
@@ -59,3 +59,5 @@ export function History({ timeline }: Props) {
 		</div>
 	);
 }
+
+export default History;

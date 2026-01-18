@@ -1,4 +1,4 @@
-import { Partners, type Pokemon } from "@/components/organisms/Partners";
+import Partners, { type Pokemon } from "@/components/organisms/Partners";
 
 // サンプルのポケモンデータ
 const popularPokemon = [

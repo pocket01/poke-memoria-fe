@@ -1,10 +1,9 @@
 "use client";
-import type { FC } from "react";
 import { GenerationCard } from "@/components/molecules/GenerationCard";
 import type { PokemonGenerations } from "@/types/schema";
 import PageHeader from "../molecules/PageHeader";
 
-export type OriginProps = {
+type Props = {
 	/** 世代データ配列 */
 	data: PokemonGenerations[];
 	/** 選択された世代ID */
@@ -16,10 +15,10 @@ export type OriginProps = {
 /**
  * 【原点】コンポーネント（Organisms層）
  * ポケモンの最初の冒険を選択する画面
- * @param props OriginProps
+ * @param props Props
  * @returns JSX.Element
  */
-const Origin: FC<OriginProps> = ({ data, selectedId, onSelectGeneration }) => {
+function Origin({ data, selectedId, onSelectGeneration }: Props) {
 	return (
 		<main className="flex-1 px-4 py-8">
 			<div className="max-w-[1024px] mx-auto">
@@ -46,7 +45,7 @@ const Origin: FC<OriginProps> = ({ data, selectedId, onSelectGeneration }) => {
 			</div>
 		</main>
 	);
-};
+}
 
 Origin.displayName = "Origin";
 

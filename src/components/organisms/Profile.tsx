@@ -15,7 +15,7 @@ type Props = {
 	// onUpdateData: (data: Partial<TrainerData>) => void;
 };
 
-export function Profile({ data, availableTags }: Props) {
+function Profile({ data, availableTags }: Props) {
 	const toggleTag = (tag: string) => {
 		const newTags = data.tags.includes(tag)
 			? data.tags.filter((t) => t !== tag)
@@ -165,3 +165,5 @@ export function Profile({ data, availableTags }: Props) {
 		</div>
 	);
 }
+
+export default Profile;

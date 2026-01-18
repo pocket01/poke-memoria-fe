@@ -1,4 +1,4 @@
-import { type GameEntry, History } from "@/components/organisms/History";
+import History, { type GameEntry } from "@/components/organisms/History";
 
 const timeline: GameEntry[] = [
 	{

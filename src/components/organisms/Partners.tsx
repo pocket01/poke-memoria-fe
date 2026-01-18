@@ -19,7 +19,7 @@ type Props = {
 	// onUpdateComment: (slotIndex: number, comment: string) => void;
 };
 
-export function Partners({
+function Partners({
 	popularPokemon,
 	team,
 	// onAddPokemon,
@@ -120,3 +120,5 @@ export function Partners({
 		</div>
 	);
 }
+
+export default Partners;

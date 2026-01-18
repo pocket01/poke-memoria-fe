@@ -1,4 +1,4 @@
-import { Profile, type TrainerData } from "@/components/organisms/Profile";
+import Profile, { type TrainerData } from "@/components/organisms/Profile";
 
 const trainerData: TrainerData = {
 	name: "ポケット",
