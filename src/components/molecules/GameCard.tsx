@@ -24,18 +24,18 @@ export function GameCard({
 	className,
 }: GameCardProps) {
 	const getBorderColor = () => {
-		if (!selectedStamp) return "border-gray-200";
+		if (!selectedStamp) return "border-gray-300";
 		const colors = {
-			release: "border-red-500",
-			later: "border-blue-500",
-			remake: "border-purple-500",
+			release: "border-red-400",
+			later: "border-blue-400",
+			remake: "border-purple-400",
 		};
 		return colors[selectedStamp];
 	};
 
 	return (
 		<div
-			className={`p-4 rounded-2xl border-2 transition-all duration-300 bg-gray-50 ${getBorderColor()} ${className || ""}`}
+			className={`p-5 rounded-2xl border-4 transition-all duration-300 bg-white shadow-md ${getBorderColor()} ${className || ""}`}
 		>
 			<div className="flex items-start justify-between gap-4">
 				<div className="flex-1">

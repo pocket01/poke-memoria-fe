@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import PageHeader from "../molecules/PageHeader";
 import { StampLegend } from "../molecules/StampLegend";
 import { TimelineItem } from "../molecules/TimelineItem";
@@ -21,19 +22,31 @@ type Props = {
 };
 
 function History({ timeline }: Props) {
-	const playedCount = 0;
+	const [playedGames, setPlayedGames] = useState<
+		Record<string, "release" | "later" | "remake" | null>
+	>({});
+
+	const playedCount = Object.values(playedGames).filter(
+		(stamp) => stamp !== null,
+	).length;
+
+	const handleToggleGame = (
+		gameId: string,
+		stampType: "release" | "later" | "remake",
+	) => {
+		setPlayedGames((prev) => ({
+			...prev,
+			[gameId]: prev[gameId] === stampType ? null : stampType,
+		}));
+	};
 
 	return (
-		<div
-			// initial={{ opacity: 0, y: 20 }}
-			// animate={{ opacity: 1, y: 0 }}
-			// exit={{ opacity: 0, y: -20 }}
-			className="w-full max-w-4xl mx-auto px-4 py-8"
-		>
+		<div className="w-full max-w-4xl mx-auto px-4 py-8">
 			<PageHeader
 				title="あなたが旅した地方と作品"
 				description="プレイした作品にスタンプを押してください"
 				playedCount={playedCount}
+				countLabel="作品プレイ済み"
 				className="mb-12"
 			/>
 
@@ -41,7 +54,7 @@ function History({ timeline }: Props) {
 			<StampLegend className="mb-8" />
 			<div className="relative">
 				{/* Vertical line */}
-				<div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200" />
+				<div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200" />
 
 				<div className="space-y-6">
 					{timeline.map((game) => (
@@ -50,8 +63,8 @@ function History({ timeline }: Props) {
 							year={game.year}
 							title={game.title}
 							region={game.region}
-							// selectedStamp={playedGames?.[game.id]}
-							// onStampClick={(type) => onToggleGame?.(game.id, type)}
+							selectedStamp={playedGames[game.id] || undefined}
+							onStampClick={(type) => handleToggleGame(game.id, type)}
 						/>
 					))}
 				</div>
