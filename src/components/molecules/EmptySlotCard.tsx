@@ -22,7 +22,7 @@ export function EmptySlotCard({
 			onClick={onClick}
 		>
 			<div className="text-center py-8">
-				<div className="mx-auto mb-3">
+				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="empty" size="default" />
 				</div>
 				<p className="text-gray-400 text-base">スロット {slotNumber}</p>

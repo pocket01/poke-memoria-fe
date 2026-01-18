@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
 import { RemoveButton } from "@/components/atoms/remove-button";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,14 @@ export function PokemonCard({
 	onClick,
 	className,
 }: PokemonCardProps) {
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+	useEffect(() => {
+		if (isEditingComment && textareaRef.current) {
+			textareaRef.current.focus();
+		}
+	}, [isEditingComment]);
+
 	const containerClass = cn(
 		"relative p-7 rounded-2xl border-4 border-[#FFA2A2] bg-white shadow-lg transition-all duration-300 text-left",
 		className,
@@ -42,7 +51,7 @@ export function PokemonCard({
 
 			{/* Pokemon display */}
 			<div className="text-center mb-4">
-				<div className="mx-auto mb-3">
+				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="filled" size="default" />
 				</div>
 				<h3 className="font-bold text-xl">{name}</h3>
@@ -52,7 +61,8 @@ export function PokemonCard({
 			<div className="mt-4">
 				{isEditingComment ? (
 					<textarea
-						value={comment || ""}
+						ref={textareaRef}
+						defaultValue={comment || ""}
 						onChange={(e) => onCommentChange?.(e.target.value)}
 						onBlur={onCommentBlur}
 						placeholder="思い出を記入..."

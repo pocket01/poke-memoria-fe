@@ -22,16 +22,11 @@ const pokemonAvatarVariants = cva(
 	},
 );
 
-export interface PokemonAvatarProps
-	extends VariantProps<typeof pokemonAvatarVariants> {
+type Props = VariantProps<typeof pokemonAvatarVariants> & {
 	className?: string;
-}
+};
 
-export function PokemonAvatar({
-	variant,
-	size,
-	className,
-}: PokemonAvatarProps) {
+export function PokemonAvatar({ variant, size, className }: Props) {
 	const iconSize = size === "sm" ? "w-6 h-6" : "w-10 h-10";
 	const iconColor =
 		variant === "filled" ? "text-white fill-current" : "text-gray-300";

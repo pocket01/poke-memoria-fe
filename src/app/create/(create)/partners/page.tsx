@@ -32,5 +32,5 @@ const popularPokemon = [
 const team: (Pokemon | null)[] = [null, null, null, null, null, null];
 
 export default async function PartnersPage() {
-	return <Partners popularPokemon={popularPokemon} team={team} />;
+	return <Partners popularPokemon={popularPokemon} defaultTeam={team} />;
 }
