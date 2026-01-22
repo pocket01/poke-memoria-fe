@@ -8,6 +8,8 @@ import {
 	useMemo,
 } from "react";
 import { CreateSteps } from "@/constants/routes";
+import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { useMemoriesStore } from "@/stores/memoriesStore";
 import Stepper from "../molecules/Stepper";
 import StepperNavigation from "../molecules/StepperNavigation";
 
@@ -20,6 +22,8 @@ type Props<T> = PropsWithChildren<T>;
 export default function CreateStepper<T>({ children }: Props<T>) {
 	const path = usePathname();
 	const router = useRouter();
+	const { trigger, getValues } = useGlobalForm();
+	const updateMemories = useMemoriesStore((state) => state.updateMemories);
 
 	const stepperProps = useMemo(() => {
 		// ステッパーのpropsを生成
@@ -46,10 +50,37 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 	const backVisible = stepperProps.activeStep > 0;
 
 	// 次へボタンのイベントハンドラ
-	const handleNext = useCallback(() => {
-		console.log(CreateSteps[stepperProps.activeStep + 1].page);
-		router.push(CreateSteps[stepperProps.activeStep + 1].page);
-	}, [router, stepperProps.activeStep]);
+	const handleNext = useCallback(async () => {
+		// 現在のページに応じたバリデーション
+		let fieldsToValidate: string[] = [];
+		const currentPath = CreateSteps[stepperProps.activeStep].page;
+
+		if (currentPath.includes("/origin")) {
+			fieldsToValidate = ["originTitleId"];
+		}
+		// 他のステップのバリデーションは今後追加
+
+		// バリデーション実行
+		const isValid =
+			fieldsToValidate.length > 0
+				? await trigger(
+						fieldsToValidate as (keyof import("@/lib/formSchema").FormData)[],
+					)
+				: true;
+
+		if (isValid) {
+			// バリデーション成功時、フォームの値を保存
+			const formValues = getValues();
+			if (currentPath.includes("/origin") && formValues.originTitleId) {
+				updateMemories({
+					originTitleId: formValues.originTitleId,
+				});
+			}
+			// 他のステップの保存処理は今後追加
+
+			router.push(CreateSteps[stepperProps.activeStep + 1].page);
+		}
+	}, [router, stepperProps.activeStep, trigger, getValues, updateMemories]);
 
 	// 次へボタンの表示可否
 	const nextVisible = stepperProps.activeStep < stepperProps.steps.length - 1;

@@ -1,14 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useWatch } from "react-hook-form";
 import { GenerationCard } from "@/components/molecules/GenerationCard";
+import { useGlobalForm } from "@/context/GlobalFormProvider";
 import type { PokemonGenerations } from "@/types/schema";
 import PageHeader from "../molecules/PageHeader";
 
 type Props = {
 	// 世代データ配列
 	data: PokemonGenerations[];
-	// 選択された世代ID
-	selectedId?: string;
 };
 
 /**
@@ -17,13 +16,24 @@ type Props = {
  * @param props Props
  * @returns JSX.Element
  */
-function Origin({ data, selectedId }: Props) {
-	// 選択された世代IDを管理する状態
-	const [selectedGame, setSelectedGame] = useState<string>(selectedId ?? "");
+function Origin({ data }: Props) {
+	// グローバルフォームの状態を取得
+	const { setValue, control } = useGlobalForm();
+	const selectedGame =
+		useWatch({
+			control,
+			name: "originTitleId",
+			defaultValue: null,
+		}) ?? "";
 
 	// 世代選択時のハンドラ
 	const onSelectGeneration = (id: string) => {
-		setSelectedGame(id);
+		console.log("Selected:", id);
+		setValue("originTitleId", id, {
+			shouldValidate: true,
+			shouldDirty: true,
+			shouldTouch: true,
+		});
 	};
 
 	return (
