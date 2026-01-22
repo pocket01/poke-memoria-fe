@@ -47,7 +47,6 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 
 	// 次へボタンのイベントハンドラ
 	const handleNext = useCallback(() => {
-		console.log(CreateSteps[stepperProps.activeStep + 1].page);
 		router.push(CreateSteps[stepperProps.activeStep + 1].page);
 	}, [router, stepperProps.activeStep]);
 
