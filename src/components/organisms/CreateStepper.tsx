@@ -8,6 +8,7 @@ import {
 	useMemo,
 } from "react";
 import { CreateSteps } from "@/constants/routes";
+import { useGlobalForm } from "@/context/GlobalFormProvider";
 import Stepper from "../molecules/Stepper";
 import StepperNavigation from "../molecules/StepperNavigation";
 
@@ -20,6 +21,7 @@ type Props<T> = PropsWithChildren<T>;
 export default function CreateStepper<T>({ children }: Props<T>) {
 	const path = usePathname();
 	const router = useRouter();
+	const { trigger } = useGlobalForm();
 
 	const stepperProps = useMemo(() => {
 		// ステッパーのpropsを生成
@@ -46,9 +48,28 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 	const backVisible = stepperProps.activeStep > 0;
 
 	// 次へボタンのイベントハンドラ
-	const handleNext = useCallback(() => {
-		router.push(CreateSteps[stepperProps.activeStep + 1].page);
-	}, [router, stepperProps.activeStep]);
+	const handleNext = useCallback(async () => {
+		// 現在のページに応じたバリデーション
+		let fieldsToValidate: string[] = [];
+		const currentPath = CreateSteps[stepperProps.activeStep].page;
+
+		if (currentPath.includes("/origin")) {
+			fieldsToValidate = ["originTitleId"];
+		}
+		// 他のステップのバリデーションは今後追加
+
+		// バリデーション実行
+		const isValid =
+			fieldsToValidate.length > 0
+				? await trigger(
+						fieldsToValidate as (keyof import("@/lib/formSchema").FormData)[],
+					)
+				: true;
+
+		if (isValid) {
+			router.push(CreateSteps[stepperProps.activeStep + 1].page);
+		}
+	}, [router, stepperProps.activeStep, trigger]);
 
 	// 次へボタンの表示可否
 	const nextVisible = stepperProps.activeStep < stepperProps.steps.length - 1;
