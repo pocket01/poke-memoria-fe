@@ -122,8 +122,8 @@ export const DEFAULT_PARTNER = {
 /**
  * デフォルトのMemoriesデータ
  */
-export const DEFAULT_MEMORIES = {
-	style: "paper" as const,
+export const DEFAULT_MEMORIES: Memories = {
+	style: "paper",
 	trainerName: "",
 	startedYear: "",
 	originTitleId: "",
@@ -133,4 +133,4 @@ export const DEFAULT_MEMORIES = {
 		.map(() => ({ ...DEFAULT_PARTNER })),
 	tags: [],
 	freeMessage: "",
-} as const satisfies Memories;
+};

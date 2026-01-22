@@ -5,6 +5,7 @@ import type { PropsWithChildren } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import type { FormData } from "@/lib/formSchema";
 import { formSchema } from "@/lib/formSchema";
+import { useMemoriesStore } from "@/stores/memoriesStore";
 
 /**
  * GlobalFormProviderのProps
@@ -16,17 +17,19 @@ type GlobalFormProviderProps = PropsWithChildren;
  * 全ステップのフォームデータを管理
  */
 export function GlobalFormProvider({ children }: GlobalFormProviderProps) {
+	const memories = useMemoriesStore((state) => state.memories);
+
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			style: null,
-			trainerName: null,
-			startedYear: null,
-			originTitleId: null,
-			history: [],
-			partners: [],
-			tags: [],
-			freeMessage: "",
+			style: memories.style || null,
+			trainerName: memories.trainerName || null,
+			startedYear: memories.startedYear || null,
+			originTitleId: memories.originTitleId || null,
+			history: memories.history,
+			partners: memories.partners,
+			tags: memories.tags,
+			freeMessage: memories.freeMessage,
 		},
 		mode: "onChange",
 	});

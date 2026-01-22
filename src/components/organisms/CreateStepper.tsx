@@ -9,6 +9,7 @@ import {
 } from "react";
 import { CreateSteps } from "@/constants/routes";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { useMemoriesStore } from "@/stores/memoriesStore";
 import Stepper from "../molecules/Stepper";
 import StepperNavigation from "../molecules/StepperNavigation";
 
@@ -21,7 +22,8 @@ type Props<T> = PropsWithChildren<T>;
 export default function CreateStepper<T>({ children }: Props<T>) {
 	const path = usePathname();
 	const router = useRouter();
-	const { trigger } = useGlobalForm();
+	const { trigger, getValues } = useGlobalForm();
+	const updateMemories = useMemoriesStore((state) => state.updateMemories);
 
 	const stepperProps = useMemo(() => {
 		// ステッパーのpropsを生成
@@ -67,9 +69,18 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 				: true;
 
 		if (isValid) {
+			// バリデーション成功時、フォームの値を保存
+			const formValues = getValues();
+			if (currentPath.includes("/origin") && formValues.originTitleId) {
+				updateMemories({
+					originTitleId: formValues.originTitleId,
+				});
+			}
+			// 他のステップの保存処理は今後追加
+
 			router.push(CreateSteps[stepperProps.activeStep + 1].page);
 		}
-	}, [router, stepperProps.activeStep, trigger]);
+	}, [router, stepperProps.activeStep, trigger, getValues, updateMemories]);
 
 	// 次へボタンの表示可否
 	const nextVisible = stepperProps.activeStep < stepperProps.steps.length - 1;
