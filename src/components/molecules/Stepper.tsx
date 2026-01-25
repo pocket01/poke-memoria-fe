@@ -25,7 +25,7 @@ export default function Stepper<
 	},
 >({ steps, activeStep: currentStep }: Props<TStep>) {
 	return (
-		<div className="bg-white px-6 py-4">
+		<div className="px-6 py-4">
 			<div className="max-w-4xl mx-auto flex items-center justify-center gap-4">
 				{steps.map((step, index) => (
 					<div key={`step-${step.id}`} className="flex items-center gap-4">

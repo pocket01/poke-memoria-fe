@@ -7,7 +7,7 @@ import type { Memories } from "@/types/schema";
 type MemoriesStore = {
 	memories: Memories;
 	updateMemories: (partial: Partial<Memories>) => void;
-	setOrigin: (titleId: string) => void;
+	setOrigin: (titleId: number) => void;
 	reset: () => void;
 };
 

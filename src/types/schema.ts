@@ -50,7 +50,7 @@ export type Memories = {
 	/** 冒険を始めた年 */
 	startedYear: string;
 	/** 原点の作品ID */
-	originTitleId: string;
+	originTitleId: number;
 	/** プレイ歴の配列 */
 	history: TitleHistory[];
 	/** 相棒ポケモンの配列（最大6匹） */
@@ -103,9 +103,8 @@ export const VALIDATION_LIMITS = {
  * ポケモン世代データの型定義
  */
 export type PokemonGenerations = {
-	id: string;
+	gen: number;
 	name: string;
 	generation: string;
 	year: string;
-	bgColor: string;
 };

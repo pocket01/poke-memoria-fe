@@ -24,11 +24,11 @@ export default function Origin({ data }: Props) {
 			control,
 			name: "originTitleId",
 			defaultValue: null,
-		}) ?? "";
+		}) ?? 0;
 
 	// 世代選択時のハンドラ
-	const onSelectGeneration = (id: string) => {
-		setValue("originTitleId", id, {
+	const onSelectGeneration = (gen: number) => {
+		setValue("originTitleId", gen, {
 			shouldValidate: true,
 			shouldDirty: true,
 			shouldTouch: true,
@@ -47,13 +47,12 @@ export default function Origin({ data }: Props) {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{data.map((gen) => (
 						<GenerationCard
-							key={gen.id}
-							id={gen.id}
+							key={gen.gen}
+							gen={gen.gen}
 							name={gen.name}
 							generation={gen.generation}
 							year={gen.year}
-							bgColor={gen.bgColor}
-							selected={selectedGame === gen.id}
+							selected={selectedGame === gen.gen}
 							onClick={onSelectGeneration}
 						/>
 					))}

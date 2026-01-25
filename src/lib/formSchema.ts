@@ -32,7 +32,7 @@ export const formSchema = z.object({
 	/** 冒険を始めた年 */
 	startedYear: z.string().nullable(),
 	/** 原点の作品ID */
-	originTitleId: z.string().nullable(),
+	originTitleId: z.number().min(1).max(9).nullable(),
 	/** プレイ歴の配列 */
 	history: z.array(titleHistorySchema),
 	/** 相棒ポケモンの配列（最大6匹） */
