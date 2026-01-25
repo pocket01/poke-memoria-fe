@@ -16,7 +16,7 @@ type Props = {
  * @param props Props
  * @returns JSX.Element
  */
-function Origin({ data }: Props) {
+export default function Origin({ data }: Props) {
 	// グローバルフォームの状態を取得
 	const { setValue, control } = useGlobalForm();
 	const selectedGame =
@@ -28,7 +28,6 @@ function Origin({ data }: Props) {
 
 	// 世代選択時のハンドラ
 	const onSelectGeneration = (id: string) => {
-		console.log("Selected:", id);
 		setValue("originTitleId", id, {
 			shouldValidate: true,
 			shouldDirty: true,
@@ -63,7 +62,3 @@ function Origin({ data }: Props) {
 		</main>
 	);
 }
-
-Origin.displayName = "Origin";
-
-export default Origin;

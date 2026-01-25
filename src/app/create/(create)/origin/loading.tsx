@@ -1,6 +1,9 @@
+import { Progress } from "@/components/atoms/progress";
+
 /**
- * @todo 共通ローディングコンポーネントの作成
+ * @todo 進捗を可視化する（現状は100%固定）
+ * @returns
  */
-export default function Loading() {
-	return <p>Loading...</p>;
+export default async function Loading() {
+	return <Progress value={100} className="w-full mt-4" />;
 }
