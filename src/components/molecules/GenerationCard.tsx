@@ -140,7 +140,8 @@ export function GenerationCard({
 				aria-hidden="true"
 			/>
 
-			<CardContent className="px-2 grow">
+			<CardContent className="mx-4 grow flex flex-col items-start gap-4 py-8 px-0 flex-1">
+				{/* テキスト情報 */}
 				{/* チェックマーク */}
 				{selected && (
 					<Check
@@ -148,14 +149,9 @@ export function GenerationCard({
 						strokeWidth={3}
 					/>
 				)}
-
-				{/* テキスト情報 */}
-				<CardContent className="flex flex-col items-start gap-4 py-8 px-0 flex-1">
-					<CardTitle className="text-2xl font-bold">{name}</CardTitle>
-					<CardDescription>{generation}</CardDescription>
-					<CardDescription>{year}</CardDescription>
-				</CardContent>
-
+				<CardTitle className="text-2xl font-bold">{name}</CardTitle>
+				<CardDescription>{generation}</CardDescription>
+				<CardDescription>{year}</CardDescription>
 				{genInfo?.icon1 && (
 					<genInfo.icon1
 						className="absolute bottom-3 right-16"
