@@ -124,20 +124,13 @@ export function GenerationCard({
 		<Card
 			onClick={() => onClick?.(gen)}
 			className={`p-0 flex flex-row items-center gap-0 relative overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer ${
-				selected && "transition-all duration-300 scale-105 bg-red-50"
+				selected && `duration-300 scale-105 neu-pressed`
 			} ${className}`}
+			// style={{
+			// 	background: `linear-gradient(180deg, ${genInfo?.color1}, ${genInfo?.color2})`,
+			// 	opacity: selected ? 1 : 0.8,
+			// }}
 		>
-			{/* 左側のグラデーションバー */}
-			<div
-				className="ml-8 w-8 h-full"
-				style={{
-					background: genInfo
-						? `linear-gradient(180deg, ${genInfo.color1}, ${genInfo.color2})`
-						: undefined,
-				}}
-				aria-hidden="true"
-			/>
-
 			<CardContent className="mx-4 grow flex flex-col items-start gap-4 py-8 px-0 flex-1">
 				{/* テキスト情報 */}
 				{/* チェックマーク */}
@@ -147,31 +140,31 @@ export function GenerationCard({
 						strokeWidth={3}
 					/>
 				)}
-				<CardTitle className="text-2xl font-bold">{name}</CardTitle>
+				<CardTitle className="flex items-center gap-4 transition-all duration-300 flex text-2xl font-bold">
+					{name}
+					{genInfo?.icon1 && (
+						<genInfo.icon1
+							style={{
+								color: genInfo.color1,
+								borderColor: genInfo.color2,
+							}}
+							size={28}
+							fill={genInfo.color1}
+						/>
+					)}
+					{genInfo?.icon2 && (
+						<genInfo.icon2
+							style={{
+								color: genInfo.color2,
+								borderColor: genInfo.color1,
+							}}
+							size={28}
+							fill={genInfo.color2}
+						/>
+					)}
+				</CardTitle>
 				<CardDescription>{generation}</CardDescription>
 				<CardDescription>{year}</CardDescription>
-				{genInfo?.icon1 && (
-					<genInfo.icon1
-						className="absolute bottom-3 right-16"
-						style={{
-							color: genInfo.color1,
-							borderColor: genInfo.color2,
-						}}
-						size={28}
-						fill={genInfo.color1}
-					/>
-				)}
-				{genInfo?.icon2 && (
-					<genInfo.icon2
-						className="absolute bottom-3 right-4"
-						style={{
-							color: genInfo.color2,
-							borderColor: genInfo.color1,
-						}}
-						size={28}
-						fill={genInfo.color2}
-					/>
-				)}
 			</CardContent>
 		</Card>
 	);

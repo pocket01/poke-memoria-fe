@@ -23,7 +23,7 @@ export function StampButton({
 			type="button"
 			onClick={onClick}
 			className={cn(
-				"w-8 h-8 rounded flex items-center justify-center border border-gray-300 transition-all duration-200",
+				"neu-flat w-8 h-8 rounded flex items-center justify-center border border-gray-300 transition-all duration-200",
 				"hover:border-gray-400 hover:bg-gray-50",
 				isSelected && "border-gray-400 bg-gray-100",
 				className,

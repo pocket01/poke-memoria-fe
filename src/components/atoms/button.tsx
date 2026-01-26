@@ -4,14 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-	"flex items-center justify-center rounded-full text-lg transition-all disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+	"neu-flat neu-hover bg-primary text-white flex items-center justify-center rounded-full text-lg transition-all disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
 	{
 		variants: {
 			variant: {
-				default:
-					"bg-gradient-to-r from-red-500 to-pink-500 hover:opacity-90 text-white shadow-xl transition-opacity",
+				default: "shadow-xl transition-opacity",
 				destructive:
-					"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+					"bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
 				outline:
 					"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
 				secondary:

@@ -21,9 +21,5 @@ const DefaultHeader = () => (
  * @returns
  */
 export function Header<T>({ children = <DefaultHeader /> }: Props<T>) {
-	return (
-		<header className="border-b-2 border-primary shadow-sm px-6 py-6">
-			{children}
-		</header>
-	);
+	return <header className="shadow-sm px-6 py-6">{children}</header>;
 }

@@ -15,7 +15,7 @@ export function RemoveButton({ onClick, className }: RemoveButtonProps) {
 				onClick?.();
 			}}
 			className={cn(
-				"w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors shadow-lg",
+				"neu-flat w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors shadow-lg",
 				className,
 			)}
 		>

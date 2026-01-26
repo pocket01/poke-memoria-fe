@@ -42,7 +42,7 @@ export function StampIcon({ type, size = 16, className }: StampIconProps) {
 	return (
 		<Icon
 			size={size}
-			className={cn(className)}
+			className={`neu-flat ${cn(className)}`}
 			style={{ color: config.color }}
 			aria-label={config.label}
 		/>
