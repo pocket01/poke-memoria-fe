@@ -26,7 +26,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body
 				/** @todo 背景色後ほど変更できるようにする */
-				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				{children}
 			</body>

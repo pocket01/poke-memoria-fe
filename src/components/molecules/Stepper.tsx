@@ -31,12 +31,12 @@ export default function Stepper<
 					<div key={`step-${step.id}`} className="flex items-center gap-4">
 						<div className="flex flex-col items-center gap-2">
 							<div
-								className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all ${
+								className={`neu-flat w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all ${
 									index === currentStep
-										? "bg-yellow-400 text-red-600 shadow-lg opacity-[0.58]"
+										? "bg-primary text-primary-foreground shadow-lg opacity-[0.58]"
 										: index >= currentStep
-											? "bg-gray-300 text-gray-600"
-											: " bg-red-500 text-white shadow-lg"
+											? "neu-bg text-gray-600"
+											: " bg-secondary text-white shadow-lg"
 								}`}
 							>
 								{index >= currentStep ? index + 1 : "✓"}

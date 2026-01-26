@@ -124,9 +124,7 @@ export function GenerationCard({
 		<Card
 			onClick={() => onClick?.(gen)}
 			className={`p-0 flex flex-row items-center gap-0 relative overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer ${
-				selected
-					? "transition-all duration-300 scale-105 bg-red-50 border-[#FB2C36]"
-					: "border-[#E5E7EB]"
+				selected && "transition-all duration-300 scale-105 bg-red-50"
 			} ${className}`}
 		>
 			{/* 左側のグラデーションバー */}
