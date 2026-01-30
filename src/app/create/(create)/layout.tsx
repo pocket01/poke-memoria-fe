@@ -1,4 +1,5 @@
 import CreateStepper from "@/components/organisms/CreateStepper";
+import { Header } from "@/components/organisms/Header";
 import { GlobalFormProvider } from "@/context/GlobalFormProvider";
 
 export default async function RootLayout({
@@ -7,8 +8,11 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<GlobalFormProvider>
-			<CreateStepper>{children}</CreateStepper>
-		</GlobalFormProvider>
+		<div className="min-h-screen flex flex-col">
+			<Header />
+			<GlobalFormProvider>
+				<CreateStepper>{children}</CreateStepper>
+			</GlobalFormProvider>
+		</div>
 	);
 }

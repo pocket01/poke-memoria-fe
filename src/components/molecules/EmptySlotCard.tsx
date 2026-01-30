@@ -16,7 +16,7 @@ export function EmptySlotCard({
 		<button
 			type="button"
 			className={cn(
-				"p-7 pt-7 pb-1 rounded-2xl border-4 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 transition-all duration-300 hover:border-red-300 text-left",
+				"p-7 pt-7 pb-1 rounded-2xl border-4 border-dashed border-[#C9DAEB] bg-[#E3E8EE] transition-all duration-300 hover:border-[#284CAC] text-left",
 				className,
 			)}
 			onClick={onClick}
@@ -25,8 +25,10 @@ export function EmptySlotCard({
 				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="empty" size="default" />
 				</div>
-				<p className="text-gray-400 text-base">スロット {slotNumber}</p>
-				<p className="text-xs text-gray-400 mt-1">クリックして追加</p>
+				<p className="text-[#4A5565] text-base font-medium">
+					スロット {slotNumber}
+				</p>
+				<p className="text-xs text-[#9CA3AF] mt-1">クリックして追加</p>
 			</div>
 		</button>
 	);

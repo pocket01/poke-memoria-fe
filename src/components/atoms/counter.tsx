@@ -17,12 +17,14 @@ export function Counter({ count, label, className }: CounterProps) {
 	return (
 		<div
 			className={cn(
-				"neu-flat inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full",
+				"inline-flex items-center gap-2 px-4 py-3 bg-[#E3E8EE] rounded-full shadow-md border-2 border-[#E3E8EE]",
 				className,
 			)}
 		>
-			<span className="font-bold text-blue-600 text-xl leading-7">{count}</span>
-			<span className="text-gray-600 text-base leading-6">{label}</span>
+			<span className="font-bold text-[#284CAC] text-lg leading-7">
+				{count}
+			</span>
+			<span className="text-[#4A5565] text-base leading-6">{label}</span>
 		</div>
 	);
 }

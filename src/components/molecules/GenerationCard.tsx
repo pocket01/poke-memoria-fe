@@ -1,6 +1,5 @@
 import {
 	BookOpen,
-	Check,
 	Circle,
 	Diamond,
 	Dna,
@@ -13,7 +12,7 @@ import {
 	Sword,
 } from "lucide-react";
 import type { PokemonGenerations } from "@/types/schema";
-import { Card, CardContent, CardDescription, CardTitle } from "../atoms/card";
+import { Card, CardDescription, CardTitle } from "../atoms/card";
 
 type GenerationCardProps = Pick<
 	PokemonGenerations,
@@ -123,49 +122,59 @@ export function GenerationCard({
 	return (
 		<Card
 			onClick={() => onClick?.(gen)}
-			className={`p-0 flex flex-row items-center gap-0 relative overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer ${
-				selected && `duration-300 scale-105 neu-pressed`
-			} ${className}`}
-			// style={{
-			// 	background: `linear-gradient(180deg, ${genInfo?.color1}, ${genInfo?.color2})`,
-			// 	opacity: selected ? 1 : 0.8,
-			// }}
+			className={`p-7 flex flex-col gap-4 relative overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer border-2 ${
+				selected
+					? "bg-[#E3E8EE] border-[#EF4444] shadow-lg"
+					: "bg-[#E3E8EE] border-[#E3E8EE]"
+			} rounded-2xl ${className}`}
 		>
-			<CardContent className="mx-4 grow flex flex-col items-start gap-4 py-8 px-0 flex-1">
-				{/* テキスト情報 */}
-				{/* チェックマーク */}
-				{selected && (
-					<Check
-						className="absolute top-3 right-3 w-8 h-8 bg-[#FB2C36] rounded-full flex items-center justify-center shadow-lg text-white p-1 z-10"
-						strokeWidth={3}
-					/>
-				)}
-				<CardTitle className="flex items-center gap-4 transition-all duration-300 flex text-2xl font-bold">
-					{name}
-					{genInfo?.icon1 && (
+			{/* チェックマーク */}
+			{selected && (
+				<div className="absolute top-4 right-4 w-8 h-8 bg-[#EF4444] rounded-full flex items-center justify-center shadow-lg text-white font-bold z-10 text-base">
+					✓
+				</div>
+			)}
+			
+			{/* ポケモンアイコン */}
+			<div className="flex gap-4 items-center justify-center">
+				{genInfo?.icon1 && (
+					<div
+						className="w-14 h-14 rounded-full flex items-center justify-center shadow-md"
+						style={{ backgroundColor: genInfo.color1 + "30" }}
+					>
 						<genInfo.icon1
-							style={{
-								color: genInfo.color1,
-								borderColor: genInfo.color2,
-							}}
+							style={{ color: genInfo.color1 }}
 							size={28}
 							fill={genInfo.color1}
 						/>
-					)}
-					{genInfo?.icon2 && (
+					</div>
+				)}
+				{genInfo?.icon2 && (
+					<div
+						className="w-14 h-14 rounded-full flex items-center justify-center shadow-md"
+						style={{ backgroundColor: genInfo.color2 + "30" }}
+					>
 						<genInfo.icon2
-							style={{
-								color: genInfo.color2,
-								borderColor: genInfo.color1,
-							}}
+							style={{ color: genInfo.color2 }}
 							size={28}
 							fill={genInfo.color2}
 						/>
-					)}
+					</div>
+				)}
+			</div>
+
+			{/* テキスト情報 */}
+			<div className="text-center">
+				<CardTitle className="text-lg font-bold text-[#0A0A0A] mb-2">
+					{name}
 				</CardTitle>
-				<CardDescription>{generation}</CardDescription>
-				<CardDescription>{year}</CardDescription>
-			</CardContent>
+				<CardDescription className="text-sm text-[#4A5565] mb-1">
+					{generation}
+				</CardDescription>
+				<CardDescription className="text-xs text-[#6A7282]">
+					{year}
+				</CardDescription>
+			</div>
 		</Card>
 	);
 }

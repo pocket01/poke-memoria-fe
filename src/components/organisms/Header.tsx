@@ -7,11 +7,11 @@ type Props<T> = PropsWithChildren<T>;
  * @returns
  */
 const DefaultHeader = () => (
-	<div className="max-w-7xl mx-auto">
-		<h1 className="text-[30px] font-bold leading-[1.2em] bg-gradient-to-r from-[#FB2C36] to-[#F6339A] bg-clip-text text-transparent">
+	<div className="flex flex-col gap-1">
+		<h1 className="text-3xl font-bold leading-tight text-[#284CAC]">
 			ポケメモリア
 		</h1>
-		<p className="text-sm text-[#4A5565] mt-1">ポケモン履歴書作成ツール</p>
+		<p className="text-sm text-[#4A5565]">ポケモン履歴書作成ツール</p>
 	</div>
 );
 
@@ -21,5 +21,9 @@ const DefaultHeader = () => (
  * @returns
  */
 export function Header<T>({ children = <DefaultHeader /> }: Props<T>) {
-	return <header className="shadow-sm px-6 py-6">{children}</header>;
+	return (
+		<header className="px-8 py-6 bg-[#E3E8EE] border-b border-[#C9DAEB]">
+			{children}
+		</header>
+	);
 }

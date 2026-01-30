@@ -35,7 +35,7 @@ export function PokemonCard({
 	}, [isEditingComment]);
 
 	const containerClass = cn(
-		"relative p-7 rounded-2xl border-4 border-[#FFA2A2] bg-white shadow-lg transition-all duration-300 text-left",
+		"relative p-7 rounded-2xl border-4 border-[#EF4444] bg-[#E3E8EE] shadow-lg transition-all duration-300 text-left",
 		className,
 	);
 
@@ -54,7 +54,7 @@ export function PokemonCard({
 				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="filled" size="default" />
 				</div>
-				<h3 className="font-bold text-xl">{name}</h3>
+				<h3 className="font-bold text-xl text-[#0A0A0A]">{name}</h3>
 			</div>
 
 			{/* Comment section */}
@@ -66,14 +66,14 @@ export function PokemonCard({
 						onChange={(e) => onCommentChange?.(e.target.value)}
 						onBlur={onCommentBlur}
 						placeholder="思い出を記入..."
-						className="w-full p-2 text-sm border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-50"
+						className="w-full p-2 text-sm border border-[#C9DAEB] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#284CAC] bg-white text-[#0A0A0A]"
 						rows={3}
 						onClick={(e) => e.stopPropagation()}
 					/>
 				) : (
 					<button
 						type="button"
-						className="w-full text-left min-h-[60px] p-2 text-sm text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+						className="w-full text-left min-h-[60px] p-2 text-sm text-[#4A5565] bg-white rounded-lg hover:bg-[#F0F2F5] transition-colors border border-[#C9DAEB]"
 						onClick={(e) => {
 							e.stopPropagation();
 							onCommentClick?.();

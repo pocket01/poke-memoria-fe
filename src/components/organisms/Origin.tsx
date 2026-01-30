@@ -36,8 +36,8 @@ export default function Origin({ data }: Props) {
 	};
 
 	return (
-		<main className="flex-1 px-4 py-8">
-			<div className="max-w-[1024px] mx-auto">
+		<main className="flex-1 flex flex-col px-6 py-8">
+			<div className="max-w-6xl mx-auto w-full flex-1">
 				<PageHeader
 					title="あなたの冒険はどこから始まりましたか？"
 					description="最初に出会ったポケモンの世界を選択してください"
@@ -57,6 +57,14 @@ export default function Origin({ data }: Props) {
 						/>
 					))}
 				</div>
+
+				{selectedGame > 0 && (
+					<div className="mt-12 text-center text-[#4A5565]">
+						<p className="text-sm">
+							素敵な選択です！この作品から冒険が始まったのですね。
+						</p>
+					</div>
+				)}
 			</div>
 		</main>
 	);

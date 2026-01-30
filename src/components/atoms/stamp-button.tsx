@@ -23,9 +23,9 @@ export function StampButton({
 			type="button"
 			onClick={onClick}
 			className={cn(
-				"neu-flat w-8 h-8 rounded flex items-center justify-center border border-gray-300 transition-all duration-200",
-				"hover:border-gray-400 hover:bg-gray-50",
-				isSelected && "border-gray-400 bg-gray-100",
+				"neu-flat w-8 h-8 rounded flex items-center justify-center border border-[#C9DAEB] transition-all duration-200",
+				"hover:border-[#284CAC] hover:bg-[#E3E8EE]",
+				isSelected && "border-[#284CAC] bg-[#E3E8EE]",
 				className,
 			)}
 			aria-label={`${type}スタンプ`}

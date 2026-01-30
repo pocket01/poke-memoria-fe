@@ -4,20 +4,18 @@ import Link from "next/link";
 
 export default function CreateIntroPage() {
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4">
+		<div className="flex-1 flex items-center justify-center p-8">
 			<div className="max-w-2xl w-full text-center">
-				<h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
-					ポケメモリア
-				</h1>
-				<p className="text-gray-600 mb-8">ポケモン履歴書作成ツール</p>
-				<p className="text-lg mb-12">
+				<h1 className="text-5xl font-bold mb-6 text-[#0A0A0A]">ポケメモリア</h1>
+				<p className="text-xl text-[#4A5565] mb-8">ポケモン履歴書作成ツール</p>
+				<p className="text-lg text-[#4A5565] mb-16 leading-relaxed">
 					あなたのポケモンとの思い出を
 					<br />
 					素敵な履歴書にまとめましょう
 				</p>
 				<Link
 					href="/create/origin"
-					className="inline-block px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full font-bold hover:opacity-90 transition-opacity"
+					className="inline-block px-12 py-4 bg-[#284CAC] text-white rounded-3xl font-bold hover:bg-[#1E3A7F] transition-colors shadow-lg"
 				>
 					はじめる
 				</Link>

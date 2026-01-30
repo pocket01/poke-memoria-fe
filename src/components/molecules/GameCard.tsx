@@ -24,23 +24,23 @@ export function GameCard({
 	className,
 }: GameCardProps) {
 	const getBorderColor = () => {
-		if (!selectedStamp) return "border-gray-300";
+		if (!selectedStamp) return "border-[#C9DAEB]";
 		const colors = {
-			release: "border-red-400",
-			later: "border-blue-400",
-			remake: "border-purple-400",
+			release: "border-[#EF4444]",
+			later: "border-[#284CAC]",
+			remake: "border-[#B8E3D2]",
 		};
 		return colors[selectedStamp];
 	};
 
 	return (
 		<div
-			className={`p-5 rounded-2xl border-4 transition-all duration-300 bg-white shadow-md ${getBorderColor()} ${className || ""}`}
+			className={`p-5 rounded-2xl border-4 transition-all duration-300 bg-[#E3E8EE] shadow-md ${getBorderColor()} ${className || ""}`}
 		>
 			<div className="flex items-start justify-between gap-4">
 				<div className="flex-1">
-					<h3 className="text-lg font-bold text-black mb-1">{title}</h3>
-					<p className="text-sm text-gray-600">{region}地方</p>
+					<h3 className="text-lg font-bold text-[#0A0A0A] mb-1">{title}</h3>
+					<p className="text-sm text-[#4A5565]">{region}地方</p>
 				</div>
 
 				{/* Stamp buttons */}
@@ -58,7 +58,7 @@ export function GameCard({
 
 			{/* Selected stamp display */}
 			{selectedStamp && (
-				<div className="mt-3 pt-3 border-t border-gray-200">
+				<div className="mt-3 pt-3 border-t border-[#C9DAEB]">
 					<div
 						className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-opacity-10"
 						style={{

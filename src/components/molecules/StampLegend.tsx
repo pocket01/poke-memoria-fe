@@ -20,10 +20,10 @@ export function StampLegend({ className }: StampLegendProps) {
 			{stampTypes.map((type) => (
 				<div
 					key={type}
-					className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full"
+					className="flex items-center gap-2 px-4 py-2 bg-[#E3E8EE] rounded-full border-2 border-[#C9DAEB]"
 				>
 					<StampIcon type={type} />
-					<span className="text-sm text-black">
+					<span className="text-sm text-[#0A0A0A] font-medium">
 						{stampIconConfig[type].label}
 					</span>
 				</div>

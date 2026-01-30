@@ -48,71 +48,71 @@
 
 :root {
   --radius: 1.25rem;
-  --background: oklch(0.93 0.01 250);
-  --foreground: oklch(0.3 0.02 250);
+  --background: #E3E8EE;
+  --foreground: #0A0A0A;
   --card: var(--background);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.98 0.002 264);
-  --popover-foreground: oklch(0.25 0.015 264);
-  --primary: oklch(0.45 0.16 265);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.88 0.05 170);
-  --secondary-foreground: oklch(0.25 0.015 264);
-  --muted: oklch(0.95 0.005 264);
-  --muted-foreground: oklch(0.50 0.01 264);
-  --accent: oklch(0.92 0.01 264);
-  --accent-foreground: oklch(0.25 0.015 264);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.90 0.005 264);
-  --input: oklch(0.90 0.005 264);
-  --ring: oklch(0.55 0.18 264);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.97 0.003 264);
-  --sidebar-foreground: oklch(0.25 0.015 264);
-  --sidebar-primary: oklch(0.55 0.18 264);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.93 0.01 264);
-  --sidebar-accent-foreground: oklch(0.25 0.015 264);
-  --sidebar-border: oklch(0.90 0.005 264);
-  --sidebar-ring: oklch(0.55 0.18 264);
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0A0A;
+  --primary: #284CAC;
+  --primary-foreground: #FFFFFF;
+  --secondary: #B8E3D2;
+  --secondary-foreground: #0A0A0A;
+  --muted: #E3E8EE;
+  --muted-foreground: #4A5565;
+  --accent: #E3E8EE;
+  --accent-foreground: #0A0A0A;
+  --destructive: #EF4444;
+  --border: #C9DAEB;
+  --input: #E3E8EE;
+  --ring: #284CAC;
+  --chart-1: #284CAC;
+  --chart-2: #B8E3D2;
+  --chart-3: #EF4444;
+  --chart-4: #C9DAEB;
+  --chart-5: #4A5565;
+  --sidebar: #E3E8EE;
+  --sidebar-foreground: #0A0A0A;
+  --sidebar-primary: #284CAC;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #B8E3D2;
+  --sidebar-accent-foreground: #0A0A0A;
+  --sidebar-border: #C9DAEB;
+  --sidebar-ring: #284CAC;
 }
 
 .dark {
-  --background: oklch(0.20 0.01 264);
-  --foreground: oklch(0.95 0.005 264);
-  --card: oklch(0.22 0.012 264);
-  --card-foreground: oklch(0.95 0.005 264);
-  --popover: oklch(0.22 0.012 264);
-  --popover-foreground: oklch(0.95 0.005 264);
-  --primary: oklch(0.65 0.20 264);
-  --primary-foreground: oklch(0.15 0.01 264);
-  --secondary: oklch(0.28 0.015 264);
-  --secondary-foreground: oklch(0.95 0.005 264);
-  --muted: oklch(0.25 0.012 264);
-  --muted-foreground: oklch(0.65 0.01 264);
-  --accent: oklch(0.30 0.018 264);
-  --accent-foreground: oklch(0.95 0.005 264);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.30 0.015 264);
-  --input: oklch(0.30 0.015 264);
-  --ring: oklch(0.65 0.20 264);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.22 0.012 264);
-  --sidebar-foreground: oklch(0.95 0.005 264);
-  --sidebar-primary: oklch(0.65 0.20 264);
-  --sidebar-primary-foreground: oklch(0.15 0.01 264);
-  --sidebar-accent: oklch(0.28 0.015 264);
-  --sidebar-accent-foreground: oklch(0.95 0.005 264);
-  --sidebar-border: oklch(0.30 0.015 264);
-  --sidebar-ring: oklch(0.65 0.20 264);
+  --background: #1A202C;
+  --foreground: #F8FAFC;
+  --card: #2D3748;
+  --card-foreground: #F8FAFC;
+  --popover: #2D3748;
+  --popover-foreground: #F8FAFC;
+  --primary: #60A5FA;
+  --primary-foreground: #0F172A;
+  --secondary: #34D399;
+  --secondary-foreground: #F8FAFC;
+  --muted: #475569;
+  --muted-foreground: #CBD5E1;
+  --accent: #3B82F6;
+  --accent-foreground: #F8FAFC;
+  --destructive: #F87171;
+  --border: #404D63;
+  --input: #404D63;
+  --ring: #60A5FA;
+  --chart-1: #60A5FA;
+  --chart-2: #34D399;
+  --chart-3: #F87171;
+  --chart-4: #FBBF24;
+  --chart-5: #8B5CF6;
+  --sidebar: #2D3748;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #60A5FA;
+  --sidebar-primary-foreground: #0F172A;
+  --sidebar-accent: #34D399;
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: #404D63;
+  --sidebar-ring: #60A5FA;
 }
 
 @layer base {
@@ -147,7 +147,25 @@
   .neu-hover {
     transition: all 0.3s ease;
   }
+
+  /* Game Boy Colors */
+  .gb-bg {
+    @apply bg-[#9BBC0F];
+  }
+
+  .gb-primary {
+    @apply bg-[#284CAC];
+  }
+
+  .gb-secondary {
+    @apply bg-[#C9DAEB];
+  }
+
+  .gb-accent {
+    @apply bg-[#B8E3D2];
+  }
   
+
   .neu-hover:hover {
     box-shadow: 
       10px 10px 20px rgba(0, 0, 0, 0.15),

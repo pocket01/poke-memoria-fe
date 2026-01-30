@@ -87,19 +87,23 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 
 	return (
 		<>
-			<Stepper
-				steps={stepperProps.steps}
-				activeStep={stepperProps.activeStep}
-			/>
-			{children}
-			<StepperNavigation
-				steps={stepperProps.steps}
-				activeStep={stepperProps.activeStep}
-				handleBack={handleBack}
-				backVisible={backVisible}
-				handleNext={handleNext}
-				nextVisible={nextVisible}
-			/>
+			<div className="max-w-6xl mx-auto px-4 w-full">
+				<Stepper
+					steps={stepperProps.steps}
+					activeStep={stepperProps.activeStep}
+				/>
+			</div>
+			<div className="flex-1 flex flex-col">{children}</div>
+			<div className="max-w-6xl mx-auto px-4 w-full">
+				<StepperNavigation
+					steps={stepperProps.steps}
+					activeStep={stepperProps.activeStep}
+					handleBack={handleBack}
+					backVisible={backVisible}
+					handleNext={handleNext}
+					nextVisible={nextVisible}
+				/>
+			</div>
 		</>
 	);
 }

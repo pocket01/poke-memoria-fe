@@ -30,7 +30,7 @@ export function parseUrlParams(
 	// 原点作品ID
 	const originTitleId = searchParams.get(URL_PARAM_KEYS.ORIGIN_TITLE_ID);
 	if (originTitleId) {
-		memories.originTitleId = originTitleId;
+		memories.originTitleId = Number(originTitleId);
 	}
 
 	// プレイ歴
@@ -105,7 +105,7 @@ export function createUrlParams(memories: Memories): URLSearchParams {
 
 	// 原点作品ID
 	if (memories.originTitleId) {
-		params.set(URL_PARAM_KEYS.ORIGIN_TITLE_ID, memories.originTitleId);
+		params.set(URL_PARAM_KEYS.ORIGIN_TITLE_ID, String(memories.originTitleId));
 	}
 
 	// プレイ歴

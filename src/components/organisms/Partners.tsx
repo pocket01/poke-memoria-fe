@@ -100,24 +100,27 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 	const filledCount = team.filter((p) => p !== null).length;
 
 	return (
-		<div className="w-full max-w-5xl mx-auto px-4 py-8">
-			<PageHeader
-				title="手持ちの6匹"
-				description="あなたの最高の相棒たちを選んでください"
-				playedCount={filledCount}
-				countLabel="/ 6匹"
-			/>
-
-			<div className="mb-8">
-				<PokemonGrid
-					team={team}
-					editingComment={editingComment}
-					onSlotClick={(index) => handleOpenModal(index)}
-					onRemovePokemon={handleRemovePokemon}
-					onCommentClick={handleCommentClick}
-					onCommentChange={handleCommentChange}
-					onCommentBlur={handleCommentBlur}
+		<main className="w-full flex-1 flex flex-col px-6 py-8">
+			<div className="max-w-6xl mx-auto w-full flex-1">
+				<PageHeader
+					title="手持ちの6匹"
+					description="あなたの最高の相棒たちを選んでください"
+					playedCount={filledCount}
+					countLabel="/ 6匹"
+					className="mb-12"
 				/>
+
+				<div className="mb-8">
+					<PokemonGrid
+						team={team}
+						editingComment={editingComment}
+						onSlotClick={(index) => handleOpenModal(index)}
+						onRemovePokemon={handleRemovePokemon}
+						onCommentClick={handleCommentClick}
+						onCommentChange={handleCommentChange}
+						onCommentBlur={handleCommentBlur}
+					/>
+				</div>
 			</div>
 
 			{/* Pokemon Selection Dialog */}
@@ -166,7 +169,7 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 					</div>
 				</DialogContent>
 			</Dialog>
-		</div>
+		</main>
 	);
 }
 
