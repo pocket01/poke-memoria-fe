@@ -1,12 +1,15 @@
 import type { PropsWithChildren } from "react";
+import { cn } from "@/lib/utils";
 
-type Props<T> = PropsWithChildren<T>;
+type Props<T> = PropsWithChildren<T> & {
+	className?: string;
+};
 
 /**
  * デフォルトのヘッダーコンテンツ
  * @returns
  */
-const DefaultHeader = () => (
+export const DefaultHeader = () => (
 	<div className="flex flex-col gap-1">
 		<h1 className="text-3xl font-bold leading-tight text-[#284CAC]">
 			ポケメモリア
@@ -20,10 +23,6 @@ const DefaultHeader = () => (
  * @param props.children ヘッダーコンテンツ
  * @returns
  */
-export function Header<T>({ children = <DefaultHeader /> }: Props<T>) {
-	return (
-		<header className="px-8 py-6 bg-[#E3E8EE] border-b border-[#C9DAEB]">
-			{children}
-		</header>
-	);
+export function Header<T>({ children, className }: Props<T>) {
+	return children && <header className={cn(className)}>{children}</header>;
 }

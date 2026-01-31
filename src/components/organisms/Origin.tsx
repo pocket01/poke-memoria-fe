@@ -36,36 +36,26 @@ export default function Origin({ data }: Props) {
 	};
 
 	return (
-		<main className="flex-1 flex flex-col px-6 py-8">
-			<div className="max-w-6xl mx-auto w-full flex-1">
-				<PageHeader
-					title="あなたの冒険はどこから始まりましたか？"
-					description="最初に出会ったポケモンの世界を選択してください"
-					className="mb-12"
-				/>
+		<div className="max-w-6xl mx-auto w-full flex-1">
+			<PageHeader
+				title="あなたの冒険はどこから始まりましたか？"
+				description="最初に出会ったポケモンの世界を選択してください"
+				className="py-8"
+			/>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{data.map((gen) => (
-						<GenerationCard
-							key={gen.gen}
-							gen={gen.gen}
-							name={gen.name}
-							generation={gen.generation}
-							year={gen.year}
-							selected={selectedGame === gen.gen}
-							onClick={onSelectGeneration}
-						/>
-					))}
-				</div>
-
-				{selectedGame > 0 && (
-					<div className="mt-12 text-center text-[#4A5565]">
-						<p className="text-sm">
-							素敵な選択です！この作品から冒険が始まったのですね。
-						</p>
-					</div>
-				)}
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{data.map((gen) => (
+					<GenerationCard
+						key={gen.gen}
+						gen={gen.gen}
+						name={gen.name}
+						generation={gen.generation}
+						year={gen.year}
+						selected={selectedGame === gen.gen}
+						onClick={onSelectGeneration}
+					/>
+				))}
 			</div>
-		</main>
+		</div>
 	);
 }

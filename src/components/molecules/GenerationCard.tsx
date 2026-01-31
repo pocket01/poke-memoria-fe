@@ -1,5 +1,6 @@
 import {
 	BookOpen,
+	Check,
 	Circle,
 	Diamond,
 	Dna,
@@ -122,44 +123,32 @@ export function GenerationCard({
 	return (
 		<Card
 			onClick={() => onClick?.(gen)}
-			className={`p-7 flex flex-col gap-4 relative overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer border-2 ${
+			className={`hp-7 flex flex-col gap-4 relative overflow-hidden transition-all duration-300 cursor-pointer ${
 				selected
-					? "bg-[#E3E8EE] border-[#EF4444] shadow-lg"
-					: "bg-[#E3E8EE] border-[#E3E8EE]"
+					? `neu-pressed border-2 [border-${genInfo?.color1}]`
+					: "hover:scale-105 neu-hover"
 			} rounded-2xl ${className}`}
 		>
 			{/* チェックマーク */}
 			{selected && (
-				<div className="absolute top-4 right-4 w-8 h-8 bg-[#EF4444] rounded-full flex items-center justify-center shadow-lg text-white font-bold z-10 text-base">
-					✓
-				</div>
+				<Check className="neu-flat absolute top-4 right-4 w-8 h-8 bg-[#EF4444] rounded-full flex items-center justify-center text-white font-bold z-10 text-base" />
 			)}
-			
+
 			{/* ポケモンアイコン */}
 			<div className="flex gap-4 items-center justify-center">
 				{genInfo?.icon1 && (
-					<div
-						className="w-14 h-14 rounded-full flex items-center justify-center shadow-md"
-						style={{ backgroundColor: genInfo.color1 + "30" }}
-					>
-						<genInfo.icon1
-							style={{ color: genInfo.color1 }}
-							size={28}
-							fill={genInfo.color1}
-						/>
-					</div>
+					<genInfo.icon1
+						style={{ color: genInfo.color1 }}
+						size={28}
+						fill={genInfo.color1}
+					/>
 				)}
 				{genInfo?.icon2 && (
-					<div
-						className="w-14 h-14 rounded-full flex items-center justify-center shadow-md"
-						style={{ backgroundColor: genInfo.color2 + "30" }}
-					>
-						<genInfo.icon2
-							style={{ color: genInfo.color2 }}
-							size={28}
-							fill={genInfo.color2}
-						/>
-					</div>
+					<genInfo.icon2
+						style={{ color: genInfo.color2 }}
+						size={28}
+						fill={genInfo.color2}
+					/>
 				)}
 			</div>
 
