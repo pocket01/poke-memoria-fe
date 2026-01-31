@@ -1,74 +1,81 @@
 "use client";
-import { useState } from "react";
-import PageHeader from "../molecules/PageHeader";
-import { StampLegend } from "../molecules/StampLegend";
+import { useWatch } from "react-hook-form";
+import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { Badge } from "../atoms/badge";
 import { TimelineItem } from "../molecules/TimelineItem";
 
-export type GameEntry = {
-	id: string;
-	title: string;
-	region: string;
+/**
+ * ゲームリリースデータ型
+ */
+export type GameRelease = {
 	year: number;
 	generation: number;
+	titles: GameTitle[];
+};
+
+/**
+ * ゲームタイトルデータ型
+ */
+export type GameTitle = {
+	id: string;
+	name: string;
+	region: string;
 };
 
 type Props = {
-	timeline: GameEntry[];
-	// playedGames: Record<string, "release" | "later" | "remake" | null>;
-	// onToggleGame: (
-	// 	gameId: string,
-	// 	stampType: "release" | "later" | "remake",
-	// ) => void;
+	titles: GameRelease[];
 };
 
-function History({ timeline }: Props) {
-	const [playedGames, setPlayedGames] = useState<
-		Record<string, "release" | "later" | "remake" | null>
-	>({});
+function History({ titles }: Props) {
+	// // プレイ済みタイトルの状態管理
+	// const [playedGames, setPlayedGames] = useState<
+	// 	Record<string, "release" | "later" | "remake" | null>
+	// >({});
+	// グローバルフォームの状態を取得
+	const { setValue, control } = useGlobalForm();
+	const selectedHistory =
+		useWatch({
+			control,
+			name: "history",
+			defaultValue: [],
+		}) ?? [];
 
-	const playedCount = Object.values(playedGames).filter(
-		(stamp) => stamp !== null,
-	).length;
-
-	const handleToggleGame = (
-		gameId: string,
-		stampType: "release" | "later" | "remake",
-	) => {
-		setPlayedGames((prev) => ({
-			...prev,
-			[gameId]: prev[gameId] === stampType ? null : stampType,
-		}));
+	// タイトル選択時のハンドラー
+	const onSelectTitle = (id: string) => {
+		if (selectedHistory.find((item) => item.titleId === id)) {
+			// すでに選択されている場合は解除
+			setValue(
+				"history",
+				[...selectedHistory].filter((item) => item.titleId !== id),
+			);
+		} else {
+			// 選択されていない場合は追加
+			setValue("history", [...selectedHistory, { titleId: id }]);
+		}
 	};
 
 	return (
-		<div className="w-full max-w-4xl mx-auto px-4 py-8">
-			<PageHeader
-				title="あなたが旅した地方と作品"
-				description="プレイした作品にスタンプを押してください"
-				playedCount={playedCount}
-				countLabel="作品プレイ済み"
-				className="mb-12"
-			/>
+		<div className="max-w-6xl mx-auto w-full flex-1">
+			{titles.map((release, i) => (
+				<div key={`release-${i.toString()}`} className="flex items-start pb-8">
+					{/* 年バッヂ */}
+					<Badge variant="year">{release.year}</Badge>
 
-			{/* Stamp Legend */}
-			<StampLegend className="mb-8" />
-			<div className="relative">
-				{/* Vertical line */}
-				<div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200" />
-
-				<div className="space-y-6">
-					{timeline.map((game) => (
-						<TimelineItem
-							key={game.id}
-							year={game.year}
-							title={game.title}
-							region={game.region}
-							selectedStamp={playedGames[game.id] || undefined}
-							onStampClick={(type) => handleToggleGame(game.id, type)}
-						/>
-					))}
+					<div className="flex flex-col md:flex-row gap-8">
+						{release.titles.map((title, i) => (
+							<TimelineItem
+								key={`title-${i.toString()}`}
+								title={title.name}
+								region={title.region}
+								selected={
+									!!selectedHistory.find((item) => item.titleId === title.id)
+								}
+								onClickCard={() => onSelectTitle(title.id)}
+							/>
+						))}
+					</div>
 				</div>
-			</div>
+			))}
 		</div>
 	);
 }

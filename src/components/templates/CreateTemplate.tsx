@@ -10,23 +10,26 @@ import {
 import { CreateSteps } from "@/constants/routes";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
 import { useMemoriesStore } from "@/stores/memoriesStore";
+import PageHeader from "../molecules/PageHeader";
 import Stepper from "../molecules/Stepper";
 import StepperNavigation from "../molecules/StepperNavigation";
 
 type Props<T> = PropsWithChildren<T>;
 
 /**
- * 履歴書作成ステッパーコンポーネント
+ * 履歴書作成テンプレートコンポーネント
  * @returns
  */
-export default function CreateStepper<T>({ children }: Props<T>) {
+export default function CreateTemplate<T>({ children }: Props<T>) {
 	const path = usePathname();
 	const router = useRouter();
 	const { trigger, getValues } = useGlobalForm();
 	const updateMemories = useMemoriesStore((state) => state.updateMemories);
 
+	/**
+	 * ステッパーのpropsを生成
+	 */
 	const stepperProps = useMemo(() => {
-		// ステッパーのpropsを生成
 		const stepperProps: ComponentProps<typeof Stepper> = {
 			steps: [],
 			activeStep: -1,
@@ -40,6 +43,9 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 		});
 		return stepperProps;
 	}, [path]);
+
+	// 現在のステップ情報
+	const currentStep = CreateSteps[stepperProps.activeStep];
 
 	// 戻るボタンのイベントハンドラ
 	const handleBack = useCallback(() => {
@@ -71,12 +77,22 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 		if (isValid) {
 			// バリデーション成功時、フォームの値を保存
 			const formValues = getValues();
-			if (currentPath.includes("/origin") && formValues.originTitleId) {
-				updateMemories({
-					originTitleId: formValues.originTitleId,
-				});
+			switch (currentPath) {
+				case "/create/origin":
+					if (formValues.originTitleId)
+						updateMemories({
+							originTitleId: formValues.originTitleId,
+						});
+					break;
+				case "/create/history":
+					updateMemories({
+						history: formValues.history,
+					});
+					break;
+				default:
+					// 他のステップの保存処理は今後追加
+					break;
 			}
-			// 他のステップの保存処理は今後追加
 
 			router.push(CreateSteps[stepperProps.activeStep + 1].page);
 		}
@@ -91,6 +107,7 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 				steps={stepperProps.steps}
 				activeStep={stepperProps.activeStep}
 			/>
+			<PageHeader {...currentStep} />
 			{children}
 			<StepperNavigation
 				steps={stepperProps.steps}

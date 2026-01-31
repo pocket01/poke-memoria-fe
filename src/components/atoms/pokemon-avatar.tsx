@@ -3,7 +3,7 @@ import { Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const pokemonAvatarVariants = cva(
-	"flex items-center justify-center rounded-full shadow-lg transition-all",
+	"neu-flat flex items-center justify-center rounded-full shadow-lg transition-all",
 	{
 		variants: {
 			variant: {

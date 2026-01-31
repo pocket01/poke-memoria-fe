@@ -27,11 +27,21 @@ export default function PageHeader({
 	className = "",
 }: PageHeaderProps) {
 	return (
-		<div className={`text-center ${className}`}>
-			<h1 className="text-4xl font-normal mb-4 text-[#0A0A0A]">{title}</h1>
-			{description && <p className="text-base text-[#4A5565]">{description}</p>}
+		<div className={`text-center py-8 ${className}`}>
+			<h1 className="text-4xl font-normal mb-4 text-[#0A0A0A] leading-relaxed">
+				{title}
+			</h1>
+			{description && (
+				<p className="text-base text-[#4A5565] leading-relaxed">
+					{description}
+				</p>
+			)}
 			{playedCount !== undefined && (
-				<Counter count={playedCount} label={countLabel} className="mt-4" />
+				<Counter
+					count={playedCount}
+					label={countLabel}
+					className="mt-6 justify-center"
+				/>
 			)}
 		</div>
 	);

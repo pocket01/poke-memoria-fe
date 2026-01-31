@@ -13,5 +13,9 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return <SingleColumnLayout pages={pages}>{children}</SingleColumnLayout>;
+	return (
+		<SingleColumnLayout header={undefined} pages={pages}>
+			{children}
+		</SingleColumnLayout>
+	);
 }

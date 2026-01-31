@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/button";
 
 export default function Home() {
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+		<div className="min-h-screen">
 			<div className="flex flex-col gap-12 items-center justify-center min-h-screen p-8">
 				<header className="text-center">
 					<h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">

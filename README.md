@@ -82,7 +82,6 @@ src/
 │   │   └── page.tsx          # /create の初期画面
 │   ├── layout.tsx            # 全体共通レイアウト
 │   ├── page.tsx              # トップページ（LP）
-│   └── globals.css           # グローバルスタイル（ニューモフィズム含む）
 ├── components/               # 再利用可能な部品（Atomic Design）
 │   ├── atoms/                # ボタン、入力欄、アイコン、ポケモンバッジ
 │   ├── molecules/            # 入力フォームの1行、ポケモンカード（小）
@@ -92,6 +91,7 @@ src/
 ├── lib/                      # ライブラリ設定（Gorm連携の定義や設定等）
 ├── utils/                    # ユーティリティ関数（日付整形、タグ生成 等）
 ├── styles/                   # テーマ設定、グローバルCSS
+│   └── tailwind.css          # グローバルTailwindスタイル（ニューモフィズム含む）
 ├── types/                    # TypeScript型定義（Resume, Pokemon, Title 等）
 ├── stores/                   # グローバルステート（Zustand等での状態保持）
 └── constants/                # 固定値（ポケモン作品リスト、属性データ 等）
@@ -162,5 +162,5 @@ pnpm dlx shadcn@latest add input
 プロジェクトはニューモフィズムに適した柔らかいブルー系のカラーパレットを使用しています。
 ライトモードとダークモードの両方に対応しています。
 
-詳細は [app/globals.css](app/globals.css) を参照してください。
+詳細は [src/styles/tailwind.css](src/styles/tailwind.css) を参照してください。
 

@@ -126,7 +126,7 @@ export const DEFAULT_MEMORIES: Memories = {
 	style: "paper",
 	trainerName: "",
 	startedYear: "",
-	originTitleId: "",
+	originTitleId: 0,
 	history: [],
 	partners: Array(6)
 		.fill(null)

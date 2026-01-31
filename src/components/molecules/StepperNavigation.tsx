@@ -36,35 +36,42 @@ export default function StepperNavigation<TStep extends StepperType>({
 	nextVisible = true,
 }: Props<TStep>) {
 	return (
-		<footer className="bg-white border-t-2 border-gray-300 shadow-lg px-6 py-6">
-			<div className="max-w-5xl mx-auto flex items-center justify-between">
+		<footer className="px-8 py-6">
+			<div className="max-w-6xl mx-auto flex items-center justify-between gap-6">
 				{backVisible ? (
 					<Button
 						type="button"
 						onClick={() => handleBack?.(steps[activeStep - 1])}
-						variant="secondary"
+						className="bg-[#E3E8EE] text-[#364153] hover:bg-[#D4DDE6] rounded-2xl h-12 px-8 flex items-center gap-2 shadow-md border border-[#C9DAEB] transition-all"
 					>
 						<ChevronLeft size={20} />
-						<span>戻る</span>
+						<span className="font-medium text-sm">戻る</span>
 					</Button>
 				) : (
 					<div />
 				)}
 
-				<div className="text-center">
-					<p className="text-sm text-[#4A5565]">
-						ステップ {activeStep} / {steps.length}
+				<div className="text-center flex-shrink-0">
+					<p className="text-sm text-[#4A5565] font-medium">
+						ステップ {activeStep + 1} / {steps.length}
 					</p>
-					<p className="text-xs text-[#FB2C36]">必須項目を入力してください</p>
 				</div>
 
-				{nextVisible && (
+				{nextVisible ? (
 					<Button
 						type="button"
 						onClick={() => handleNext?.(steps[activeStep + 1])}
+						className="bg-[#284CAC] text-white hover:bg-[#1E3A7F] rounded-2xl h-12 px-8 flex items-center gap-2 shadow-lg transition-all"
 					>
-						次へ
+						<span className="font-medium text-sm">次へ</span>
 						<ChevronRight size={20} />
+					</Button>
+				) : (
+					<Button
+						type="button"
+						className="bg-[#284CAC] text-white rounded-2xl h-12 px-12 shadow-lg font-bold text-sm hover:bg-[#1E3A7F] transition-all"
+					>
+						<span>完成！ 🎉</span>
 					</Button>
 				)}
 			</div>

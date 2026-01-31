@@ -3,7 +3,6 @@ import { useWatch } from "react-hook-form";
 import { GenerationCard } from "@/components/molecules/GenerationCard";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
 import type { PokemonGenerations } from "@/types/schema";
-import PageHeader from "../molecules/PageHeader";
 
 type Props = {
 	// 世代データ配列
@@ -16,7 +15,7 @@ type Props = {
  * @param props Props
  * @returns JSX.Element
  */
-function Origin({ data }: Props) {
+export default function Origin({ data }: Props) {
 	// グローバルフォームの状態を取得
 	const { setValue, control } = useGlobalForm();
 	const selectedGame =
@@ -24,12 +23,11 @@ function Origin({ data }: Props) {
 			control,
 			name: "originTitleId",
 			defaultValue: null,
-		}) ?? "";
+		}) ?? 0;
 
 	// 世代選択時のハンドラ
-	const onSelectGeneration = (id: string) => {
-		console.log("Selected:", id);
-		setValue("originTitleId", id, {
+	const onSelectGeneration = (gen: number) => {
+		setValue("originTitleId", gen, {
 			shouldValidate: true,
 			shouldDirty: true,
 			shouldTouch: true,
@@ -37,33 +35,20 @@ function Origin({ data }: Props) {
 	};
 
 	return (
-		<main className="flex-1 px-4 py-8">
-			<div className="max-w-[1024px] mx-auto">
-				<PageHeader
-					title="あなたの冒険はどこから始まりましたか？"
-					description="最初に出会ったポケモンの世界を選択してください"
-					className="mb-12"
-				/>
-
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{data.map((gen) => (
-						<GenerationCard
-							key={gen.id}
-							id={gen.id}
-							name={gen.name}
-							generation={gen.generation}
-							year={gen.year}
-							bgColor={gen.bgColor}
-							selected={selectedGame === gen.id}
-							onClick={onSelectGeneration}
-						/>
-					))}
-				</div>
+		<div className="max-w-6xl mx-auto w-full flex-1">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{data.map((gen) => (
+					<GenerationCard
+						key={gen.gen}
+						gen={gen.gen}
+						name={gen.name}
+						generation={gen.generation}
+						year={gen.year}
+						selected={selectedGame === gen.gen}
+						onClick={onSelectGeneration}
+					/>
+				))}
 			</div>
-		</main>
+		</div>
 	);
 }
-
-Origin.displayName = "Origin";
-
-export default Origin;

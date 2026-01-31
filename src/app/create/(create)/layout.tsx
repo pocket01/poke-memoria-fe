@@ -1,4 +1,4 @@
-import CreateStepper from "@/components/organisms/CreateStepper";
+import CreateTemplate from "@/components/templates/CreateTemplate";
 import { GlobalFormProvider } from "@/context/GlobalFormProvider";
 
 export default async function RootLayout({
@@ -8,7 +8,9 @@ export default async function RootLayout({
 }>) {
 	return (
 		<GlobalFormProvider>
-			<CreateStepper>{children}</CreateStepper>
+			<main className="p-8">
+				<CreateTemplate>{children}</CreateTemplate>
+			</main>
 		</GlobalFormProvider>
 	);
 }
