@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import PageHeader from "../molecules/PageHeader";
 import { StampLegend } from "../molecules/StampLegend";
 import { TimelineItem } from "../molecules/TimelineItem";
 
@@ -13,7 +12,7 @@ export type GameEntry = {
 };
 
 type Props = {
-	timeline: GameEntry[];
+	titles: GameEntry[];
 	// playedGames: Record<string, "release" | "later" | "remake" | null>;
 	// onToggleGame: (
 	// 	gameId: string,
@@ -21,15 +20,13 @@ type Props = {
 	// ) => void;
 };
 
-function History({ timeline }: Props) {
+function History({ titles }: Props) {
+	// プレイ済みタイトルの状態管理
 	const [playedGames, setPlayedGames] = useState<
 		Record<string, "release" | "later" | "remake" | null>
 	>({});
 
-	const playedCount = Object.values(playedGames).filter(
-		(stamp) => stamp !== null,
-	).length;
-
+	// スタンプの切り替えハンドラー
 	const handleToggleGame = (
 		gameId: string,
 		stampType: "release" | "later" | "remake",
@@ -41,37 +38,25 @@ function History({ timeline }: Props) {
 	};
 
 	return (
-		<main className="w-full flex-1 flex flex-col px-6 py-8">
-			<div className="max-w-6xl mx-auto w-full flex-1">
-				<PageHeader
-					title="あなたが旅した地方と作品"
-					description="プレイした作品にスタンプを押してください"
-					playedCount={playedCount}
-					countLabel="作品プレイ済み"
-					className="mb-12"
-				/>
+		<div className="max-w-6xl mx-auto w-full flex-1">
+			<StampLegend className="mb-12" />
+			<div className="relative">
+				<div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-[#B8E3D2] to-[#284CAC]" />
 
-				{/* Stamp Legend */}
-				<StampLegend className="mb-12" />
-				<div className="relative">
-					{/* Vertical line */}
-					<div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-[#B8E3D2] to-[#284CAC]" />
-
-					<div className="space-y-6 ml-8">
-						{timeline.map((game) => (
-							<TimelineItem
-								key={game.id}
-								year={game.year}
-								title={game.title}
-								region={game.region}
-								selectedStamp={playedGames[game.id] || undefined}
-								onStampClick={(type) => handleToggleGame(game.id, type)}
-							/>
-						))}
-					</div>
+				<div className="space-y-6 ml-8">
+					{titles.map((game) => (
+						<TimelineItem
+							key={game.id}
+							year={game.year}
+							title={game.title}
+							region={game.region}
+							selectedStamp={playedGames[game.id] || undefined}
+							onStampClick={(type) => handleToggleGame(game.id, type)}
+						/>
+					))}
 				</div>
 			</div>
-		</main>
+		</div>
 	);
 }
 

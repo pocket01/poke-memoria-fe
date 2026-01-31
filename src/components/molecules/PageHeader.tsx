@@ -27,7 +27,7 @@ export default function PageHeader({
 	className = "",
 }: PageHeaderProps) {
 	return (
-		<div className={`text-center ${className}`}>
+		<div className={`text-center py-8 ${className}`}>
 			<h1 className="text-4xl font-normal mb-4 text-[#0A0A0A] leading-relaxed">
 				{title}
 			</h1>

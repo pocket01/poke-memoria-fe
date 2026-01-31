@@ -3,7 +3,6 @@ import { useWatch } from "react-hook-form";
 import { GenerationCard } from "@/components/molecules/GenerationCard";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
 import type { PokemonGenerations } from "@/types/schema";
-import PageHeader from "../molecules/PageHeader";
 
 type Props = {
 	// 世代データ配列
@@ -37,12 +36,6 @@ export default function Origin({ data }: Props) {
 
 	return (
 		<div className="max-w-6xl mx-auto w-full flex-1">
-			<PageHeader
-				title="あなたの冒険はどこから始まりましたか？"
-				description="最初に出会ったポケモンの世界を選択してください"
-				className="py-8"
-			/>
-
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{data.map((gen) => (
 					<GenerationCard

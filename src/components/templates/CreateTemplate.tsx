@@ -10,23 +10,26 @@ import {
 import { CreateSteps } from "@/constants/routes";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
 import { useMemoriesStore } from "@/stores/memoriesStore";
+import PageHeader from "../molecules/PageHeader";
 import Stepper from "../molecules/Stepper";
 import StepperNavigation from "../molecules/StepperNavigation";
 
 type Props<T> = PropsWithChildren<T>;
 
 /**
- * 履歴書作成ステッパーコンポーネント
+ * 履歴書作成テンプレートコンポーネント
  * @returns
  */
-export default function CreateStepper<T>({ children }: Props<T>) {
+export default function CreateTemplate<T>({ children }: Props<T>) {
 	const path = usePathname();
 	const router = useRouter();
 	const { trigger, getValues } = useGlobalForm();
 	const updateMemories = useMemoriesStore((state) => state.updateMemories);
 
+	/**
+	 * ステッパーのpropsを生成
+	 */
 	const stepperProps = useMemo(() => {
-		// ステッパーのpropsを生成
 		const stepperProps: ComponentProps<typeof Stepper> = {
 			steps: [],
 			activeStep: -1,
@@ -40,6 +43,9 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 		});
 		return stepperProps;
 	}, [path]);
+
+	// 現在のステップ情報
+	const currentStep = CreateSteps[stepperProps.activeStep];
 
 	// 戻るボタンのイベントハンドラ
 	const handleBack = useCallback(() => {
@@ -91,6 +97,7 @@ export default function CreateStepper<T>({ children }: Props<T>) {
 				steps={stepperProps.steps}
 				activeStep={stepperProps.activeStep}
 			/>
+			<PageHeader {...currentStep} />
 			{children}
 			<StepperNavigation
 				steps={stepperProps.steps}

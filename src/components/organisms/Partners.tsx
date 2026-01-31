@@ -8,7 +8,6 @@ import {
 	DialogTitle,
 } from "@/components/atoms/dialog";
 import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
-import PageHeader from "@/components/molecules/PageHeader";
 import { PokemonGrid } from "@/components/organisms/PokemonGrid";
 
 export type Pokemon = {
@@ -97,19 +96,9 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 		}
 	};
 
-	const filledCount = team.filter((p) => p !== null).length;
-
 	return (
 		<main className="w-full flex-1 flex flex-col px-6 py-8">
 			<div className="max-w-6xl mx-auto w-full flex-1">
-				<PageHeader
-					title="手持ちの6匹"
-					description="あなたの最高の相棒たちを選んでください"
-					playedCount={filledCount}
-					countLabel="/ 6匹"
-					className="mb-12"
-				/>
-
 				<div className="mb-8">
 					<PokemonGrid
 						team={team}
