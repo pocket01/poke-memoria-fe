@@ -22,11 +22,11 @@ export function GlobalFormProvider({ children }: GlobalFormProviderProps) {
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			originTitleId: memories.originTitleId || null,
+			history: memories.history,
 			style: memories.style || null,
 			trainerName: memories.trainerName || null,
 			startedYear: memories.startedYear || null,
-			originTitleId: memories.originTitleId || null,
-			history: memories.history,
 			partners: memories.partners,
 			tags: memories.tags,
 			freeMessage: memories.freeMessage,

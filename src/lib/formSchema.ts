@@ -17,24 +17,22 @@ const partnerPokemonSchema = z.object({
 const titleHistorySchema = z.object({
 	/** 作品ID（例: rg, gs, rs） */
 	titleId: z.string(),
-	/** プレイステータス */
-	status: z.enum(["r", "l", "m"]),
 });
 
 /**
  * フォーム全体のスキーマ
  */
 export const formSchema = z.object({
+	/** 原点の作品ID */
+	originTitleId: z.number().min(1).max(9).nullable(),
+	/** プレイ歴の配列 */
+	history: z.array(titleHistorySchema),
 	/** ビジュアルスタイル */
 	style: z.enum(["paper", "neo_gb", "retro_rg"]).nullable(),
 	/** トレーナー名 */
 	trainerName: z.string().nullable(),
 	/** 冒険を始めた年 */
 	startedYear: z.string().nullable(),
-	/** 原点の作品ID */
-	originTitleId: z.number().min(1).max(9).nullable(),
-	/** プレイ歴の配列 */
-	history: z.array(titleHistorySchema),
 	/** 相棒ポケモンの配列（最大6匹） */
 	partners: z.array(partnerPokemonSchema).max(VALIDATION_LIMITS.MAX_PARTNERS),
 	/** タグの配列 */

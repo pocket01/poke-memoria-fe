@@ -1,7 +1,7 @@
 import { getPokemonTitles } from "@/api/history";
-import History, { type GameEntry } from "@/components/organisms/History";
+import History, { type GameRelease } from "@/components/organisms/History";
 
 export default async function HistoryPage() {
-	const titles: GameEntry[] = await getPokemonTitles();
+	const titles: GameRelease[] = await getPokemonTitles();
 	return <History titles={titles} />;
 }

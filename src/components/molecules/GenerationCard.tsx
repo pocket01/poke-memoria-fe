@@ -15,7 +15,7 @@ import {
 import type { PokemonGenerations } from "@/types/schema";
 import { Card, CardDescription, CardTitle } from "../atoms/card";
 
-type GenerationCardProps = Pick<
+type Props = Pick<
 	PokemonGenerations,
 	"gen" | "name" | "generation" | "year"
 > & {
@@ -105,9 +105,9 @@ const genColors = [
 ];
 
 /**
- * ポケモン世代カードコンポーネント（Molecules層）
+ * ポケモン世代カードコンポーネント
  * 各世代の情報を表示するカード
- * @param props GenerationCardProps
+ * @param props Props
  * @returns JSX.Element
  */
 export function GenerationCard({
@@ -118,7 +118,7 @@ export function GenerationCard({
 	selected = false,
 	onClick,
 	className = "",
-}: GenerationCardProps) {
+}: Props) {
 	const genInfo = genColors.find((c) => c.gen === gen);
 	return (
 		<Card
@@ -154,9 +154,7 @@ export function GenerationCard({
 
 			{/* テキスト情報 */}
 			<div className="text-center">
-				<CardTitle className="text-lg font-bold text-[#0A0A0A] mb-2">
-					{name}
-				</CardTitle>
+				<CardTitle className="font-bold text-[#0A0A0A] mb-2">{name}</CardTitle>
 				<CardDescription className="text-sm text-[#4A5565] mb-1">
 					{generation}
 				</CardDescription>

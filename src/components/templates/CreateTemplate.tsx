@@ -77,12 +77,22 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 		if (isValid) {
 			// バリデーション成功時、フォームの値を保存
 			const formValues = getValues();
-			if (currentPath.includes("/origin") && formValues.originTitleId) {
-				updateMemories({
-					originTitleId: formValues.originTitleId,
-				});
+			switch (currentPath) {
+				case "/create/origin":
+					if (formValues.originTitleId)
+						updateMemories({
+							originTitleId: formValues.originTitleId,
+						});
+					break;
+				case "/create/history":
+					updateMemories({
+						history: formValues.history,
+					});
+					break;
+				default:
+					// 他のステップの保存処理は今後追加
+					break;
 			}
-			// 他のステップの保存処理は今後追加
 
 			router.push(CreateSteps[stepperProps.activeStep + 1].page);
 		}

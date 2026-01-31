@@ -36,7 +36,7 @@ export default function StepperNavigation<TStep extends StepperType>({
 	nextVisible = true,
 }: Props<TStep>) {
 	return (
-		<footer className="border-t-2 border-[#B8E3D2] px-8 py-6 bg-[#E3E8EE]">
+		<footer className="px-8 py-6">
 			<div className="max-w-6xl mx-auto flex items-center justify-between gap-6">
 				{backVisible ? (
 					<Button

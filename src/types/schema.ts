@@ -24,8 +24,6 @@ export type PlayStatus = "r" | "l" | "m";
 export type TitleHistory = {
 	/** 作品ID（例: rg, gs, rs） */
 	titleId: string;
-	/** プレイステータス */
-	status: PlayStatus;
 };
 
 /**
@@ -43,16 +41,16 @@ export type PartnerPokemon = {
  * ユーザーが入力した「思い出」の集合体
  */
 export type Memories = {
+	/** 原点の作品ID */
+	originTitleId: number;
+	/** プレイ歴の配列 */
+	history: TitleHistory[];
 	/** ビジュアルスタイル */
 	style: VisualStyle;
 	/** トレーナー名 */
 	trainerName: string;
 	/** 冒険を始めた年 */
 	startedYear: string;
-	/** 原点の作品ID */
-	originTitleId: number;
-	/** プレイ歴の配列 */
-	history: TitleHistory[];
 	/** 相棒ポケモンの配列（最大6匹） */
 	partners: PartnerPokemon[];
 	/** タグの配列 */
