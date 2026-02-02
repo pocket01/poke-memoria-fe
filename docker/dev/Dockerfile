@@ -7,9 +7,6 @@ RUN npm install -g npm@latest
 # ビルドツールエージェントをインストール
 RUN npm install -g pnpm@10.28.2
 
-# CVE脆弱性対応
-RUN npm install -g glob@latest tar@latest
-
 # CI環境変数を設定（pnpmのTTYエラー回避）
 ENV CI=true
 
@@ -27,9 +24,6 @@ RUN pnpm run build
 # 2. 実行ステージ（最小イメージ）
 FROM node:24.13.0-alpine3.23 AS runner
 RUN npm install -g npm@latest
-
-# CVE脆弱性対応
-RUN npm install -g glob@latest tar@latest
 
 WORKDIR /app
 
