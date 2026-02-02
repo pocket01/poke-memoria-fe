@@ -1,6 +1,11 @@
 # 1. ビルドステージ（依存関係インストール + Next.jsビルド）
-FROM node:22.21.1-alpine AS builder
-RUN npm install -g pnpm@10.27.0
+FROM node:24.13.0-alpine3.23 AS builder
+
+# パッケージマネージャーを最新版に
+RUN npm install -g npm@latest
+
+# ビルドツールエージェントをインストール
+RUN npm install -g pnpm@10.28.2
 
 # CI環境変数を設定（pnpmのTTYエラー回避）
 ENV CI=true
@@ -17,7 +22,9 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm run build
 
 # 2. 実行ステージ（最小イメージ）
-FROM node:22.21.1-alpine AS runner
+FROM node:24.13.0-alpine3.23 AS runner
+RUN npm install -g npm@latest
+
 WORKDIR /app
 
 # standaloneビルドの成果物をコピー

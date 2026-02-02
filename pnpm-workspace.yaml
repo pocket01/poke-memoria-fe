@@ -1,5 +1,8 @@
 packages:
   - .
+
 ignoredBuiltDependencies:
+  - esbuild
+  - node
   - sharp
   - unrs-resolver
