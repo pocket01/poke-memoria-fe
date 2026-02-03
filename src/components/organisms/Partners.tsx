@@ -97,7 +97,7 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 	};
 
 	return (
-		<main className="w-full flex-1 flex flex-col px-6 py-8">
+		<>
 			<div className="max-w-6xl mx-auto w-full flex-1">
 				<div className="mb-8">
 					<PokemonGrid
@@ -111,8 +111,6 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 					/>
 				</div>
 			</div>
-
-			{/* Pokemon Selection Dialog */}
 			<Dialog
 				open={selectedSlot !== null}
 				onOpenChange={(open) => !open && handleCloseModal()}
@@ -142,7 +140,7 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 									key={name}
 									type="button"
 									onClick={() => handleSelectPokemon(name)}
-									className="flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
+									className="cursor-pointer flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
 								>
 									<PokemonAvatar variant="filled" size="sm" />
 									<p className="font-medium text-sm">{name}</p>
@@ -158,7 +156,8 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 					</div>
 				</DialogContent>
 			</Dialog>
-		</main>
+			;
+		</>
 	);
 }
 

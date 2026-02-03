@@ -1,5 +1,6 @@
 import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
 import { cn } from "@/lib/utils";
+import { Card } from "../atoms/card";
 
 export interface EmptySlotCardProps {
 	slotNumber: number;
@@ -13,10 +14,9 @@ export function EmptySlotCard({
 	className,
 }: EmptySlotCardProps) {
 	return (
-		<button
-			type="button"
+		<Card
 			className={cn(
-				"p-7 pt-7 pb-1 rounded-2xl border-4 border-dashed border-[#C9DAEB] bg-[#E3E8EE] transition-all duration-300 hover:border-[#284CAC] text-left",
+				"cursor-pointer p-7 pt-7 pb-1 transition-all duration-300 text-left",
 				className,
 			)}
 			onClick={onClick}
@@ -30,6 +30,6 @@ export function EmptySlotCard({
 				</p>
 				<p className="text-xs text-[#9CA3AF] mt-1">クリックして追加</p>
 			</div>
-		</button>
+		</Card>
 	);
 }

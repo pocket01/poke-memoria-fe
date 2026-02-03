@@ -1,7 +1,9 @@
+import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
-import { RemoveButton } from "@/components/atoms/remove-button";
 import { cn } from "@/lib/utils";
+import { Button } from "../atoms/button";
+import { Card } from "../atoms/card";
 
 export interface PokemonCardProps {
 	name: string;
@@ -35,22 +37,28 @@ export function PokemonCard({
 	}, [isEditingComment]);
 
 	const containerClass = cn(
-		"relative p-7 rounded-2xl border-4 border-[#EF4444] bg-[#E3E8EE] shadow-lg transition-all duration-300 text-left",
+		"cursor-pointer bg-[#F000001A] relative p-7 cursor-pointer transition-all duration-300 text-left",
 		className,
 	);
 
 	const content = (
 		<>
 			{/* Remove button */}
-			<RemoveButton
-				onClick={() => {
+			<Button
+				type="button"
+				onClick={(e) => {
+					e.stopPropagation();
 					onRemove?.();
 				}}
-				className="absolute top-3 right-3"
-			/>
+				className={cn(
+					"neu-flat w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors shadow-lg absolute top-3 right-3",
+				)}
+			>
+				<X className="w-4 h-4" />
+			</Button>
 
 			{/* Pokemon display */}
-			<div className="text-center mb-4">
+			<div className="text-center mb-4 cur">
 				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="filled" size="default" />
 				</div>
@@ -88,11 +96,11 @@ export function PokemonCard({
 
 	if (onClick) {
 		return (
-			<button type="button" className={containerClass} onClick={onClick}>
+			<Card className={containerClass} onClick={onClick}>
 				{content}
-			</button>
+			</Card>
 		);
 	}
 
-	return <div className={containerClass}>{content}</div>;
+	return <Card className={containerClass}>{content}</Card>;
 }

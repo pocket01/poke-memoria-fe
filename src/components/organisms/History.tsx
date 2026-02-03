@@ -27,10 +27,6 @@ type Props = {
 };
 
 function History({ titles }: Props) {
-	// // プレイ済みタイトルの状態管理
-	// const [playedGames, setPlayedGames] = useState<
-	// 	Record<string, "release" | "later" | "remake" | null>
-	// >({});
 	// グローバルフォームの状態を取得
 	const { setValue, control } = useGlobalForm();
 	const selectedHistory =
