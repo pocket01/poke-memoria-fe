@@ -89,6 +89,11 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 						history: formValues.history,
 					});
 					break;
+				case "/create/partners":
+					updateMemories({
+						partners: formValues.partners,
+					});
+					break;
 				default:
 					// 他のステップの保存処理は今後追加
 					break;

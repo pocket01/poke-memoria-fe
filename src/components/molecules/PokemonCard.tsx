@@ -1,9 +1,8 @@
 import { X } from "lucide-react";
-import { useEffect, useRef } from "react";
 import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
 import { cn } from "@/lib/utils";
-import { Button } from "../atoms/button";
 import { Card } from "../atoms/card";
+import { Textarea } from "../atoms/textarea";
 
 export interface PokemonCardProps {
 	name: string;
@@ -28,13 +27,13 @@ export function PokemonCard({
 	onClick,
 	className,
 }: PokemonCardProps) {
-	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	// const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-	useEffect(() => {
-		if (isEditingComment && textareaRef.current) {
-			textareaRef.current.focus();
-		}
-	}, [isEditingComment]);
+	// useEffect(() => {
+	// 	if (isEditingComment && textareaRef.current) {
+	// 		textareaRef.current.focus();
+	// 	}
+	// }, [isEditingComment]);
 
 	const containerClass = cn(
 		"cursor-pointer bg-[#F000001A] relative p-7 cursor-pointer transition-all duration-300 text-left",
@@ -44,18 +43,15 @@ export function PokemonCard({
 	const content = (
 		<>
 			{/* Remove button */}
-			<Button
-				type="button"
+			<X
 				onClick={(e) => {
 					e.stopPropagation();
 					onRemove?.();
 				}}
-				className={cn(
+				className={`${cn(
 					"neu-flat w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors shadow-lg absolute top-3 right-3",
-				)}
-			>
-				<X className="w-4 h-4" />
-			</Button>
+				)} w-4 h-4`}
+			/>
 
 			{/* Pokemon display */}
 			<div className="text-center mb-4 cur">
@@ -67,40 +63,20 @@ export function PokemonCard({
 
 			{/* Comment section */}
 			<div className="mt-4">
-				{isEditingComment ? (
-					<textarea
-						ref={textareaRef}
-						defaultValue={comment || ""}
-						onChange={(e) => onCommentChange?.(e.target.value)}
-						onBlur={onCommentBlur}
-						placeholder="思い出を記入..."
-						className="w-full p-2 text-sm border border-[#C9DAEB] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#284CAC] bg-white text-[#0A0A0A]"
-						rows={3}
-						onClick={(e) => e.stopPropagation()}
-					/>
-				) : (
-					<button
-						type="button"
-						className="w-full text-left min-h-[60px] p-2 text-sm text-[#4A5565] bg-white rounded-lg hover:bg-[#F0F2F5] transition-colors border border-[#C9DAEB]"
-						onClick={(e) => {
-							e.stopPropagation();
-							onCommentClick?.();
-						}}
-					>
-						{comment || "思い出を記入..."}
-					</button>
-				)}
+				<Textarea
+					defaultValue={comment || ""}
+					onChange={(e) => onCommentChange?.(e.target.value)}
+					onBlur={onCommentBlur}
+					placeholder="思い出を記入..."
+					className="w-full p-2 text-sm border border-[#C9DAEB] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#284CAC] bg-white text-[#0A0A0A]"
+					rows={3}
+					onClick={(e) => e.stopPropagation()}
+				/>
 			</div>
 		</>
 	);
 
-	if (onClick) {
-		return (
-			<Card className={containerClass} onClick={onClick}>
-				{content}
-			</Card>
-		);
-	}
-
 	return <Card className={containerClass}>{content}</Card>;
+
+	// return <Card className={containerClass}>{content}</Card>;
 }
