@@ -49,3 +49,38 @@ export async function getPokemonList() {
 		"ニャオハ",
 	];
 }
+
+/**
+ * PokeAPIからポケモン一覧を取得
+ * @param limit 取得件数（デフォルト: 20）
+ * @param offset オフセット（デフォルト: 0）
+ * @returns ポケモンの名前のリスト
+ */
+export async function fetchPokemonList(
+	limit: number = 20,
+	offset: number = 0,
+): Promise<string[]> {
+	try {
+		/**
+		 * @todo 日本語名を取得するには詳細なAPIエンドポイントを使用する必要があります
+		 * @note 詳細APIエンドポイント: https://pokeapi.co/api/v2/pokemon-species/{id or name}/
+		 * @note https://pokeapi.co/docs/v2#pokemon
+		 *  */
+
+		const response = await fetch(
+			`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
+		);
+
+		if (!response.ok) {
+			throw new Error(`PokeAPI Error: ${response.status}`);
+		}
+
+		const data = await response.json();
+		return data.results.map(
+			(pokemon: { name: string; url: string }) => pokemon.name,
+		);
+	} catch (error) {
+		console.error("Failed to fetch Pokemon list:", error);
+		throw error;
+	}
+}

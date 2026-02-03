@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { type PropsWithChildren, useEffect, useState } from "react";
-import { getPokemonList } from "@/api/common";
+import { fetchPokemonList, getPokemonList } from "@/api/common";
 import {
 	Dialog,
 	DialogContent,
@@ -56,7 +56,7 @@ export function PokemonSelectDialog({
 	};
 
 	useEffect(() => {
-		getPokemonList().then((data) => setPokemons(data));
+		fetchPokemonList().then((data) => setPokemons(data));
 	}, []);
 
 	return (
