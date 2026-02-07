@@ -37,7 +37,8 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 
 		CreateSteps.forEach((s, i) => {
 			stepperProps.steps.push({ id: i, label: s.label });
-			if (s.page === path) {
+			// 現在のパスとステップのページが前方一致する場合、activeStepを設定
+			if (path?.startsWith(s.page)) {
 				stepperProps.activeStep = i;
 			}
 		});
