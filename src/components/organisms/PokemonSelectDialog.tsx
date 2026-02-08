@@ -1,34 +1,28 @@
+"use client";
 import { Search } from "lucide-react";
-import { type PropsWithChildren, useEffect, useState } from "react";
-import { fetchPokemonList, getPokemonList } from "@/api/common";
+import { type PropsWithChildren, useState } from "react";
+import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { useModalStore } from "@/stores/modalStore";
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogPortal,
 	DialogTitle,
-	DialogTrigger,
 } from "../atoms/dialog";
 import { PokemonAvatar } from "../atoms/pokemon-avatar";
-import type { Pokemon } from "./Partners";
 
 type Props = PropsWithChildren<{
-	// open: boolean;
-	// showDialog: () => void;
-	// closeDialog: () => void;
+	pokemons: string[];
 }>;
 
 /**
  * ポケモン選択ダイアログコンポーネント
  * @returns JSX.Element
  */
-export function PokemonSelectDialog({
-	// open,
-	// showDialog,
-	// closeDialog,
-	children,
-}: Props) {
-	const [pokemons, setPokemons] = useState<string[]>([]);
+export function PokemonSelectDialog({ pokemons }: Props) {
+	const { type, data, isOpen, closeModal } = useModalStore();
+	const { setValue } = useGlobalForm();
 
 	// 検索クエリの状態管理
 	const [searchQuery, setSearchQuery] = useState("");
@@ -37,31 +31,29 @@ export function PokemonSelectDialog({
 	);
 
 	// ポケモンをチームに追加するハンドラー
-	const handleAddPokemon = (slotIndex: number, pokemon: Pokemon) => {
-		// setTeam((prev) => {
-		// 	const newTeam = [...prev];
-		// 	newTeam[slotIndex] = pokemon;
-		// 	return newTeam;
-		// });
-		// closeDialog();
+	const handleAddPokemon = () => {
+		/** @todo 一旦仮 */
+		if (data?.slot)
+			setValue(`partners.${data.slot - 1}`, { pokemonId: 1, comment: "" });
 	};
 	// ポケモン選択時のハンドラー
 	const handleSelectPokemon = (name: string) => {
-		// if (selectedSlot !== null) {
-		// 	handleAddPokemon(selectedSlot, { name, type: "ノーマル" });
-		// 	// setSelectedSlot(null);
-		// 	setSearchQuery("");
-		// }
-		// closeDialog();
+		/** @todo 一旦仮 */
+		console.log(name);
+		handleAddPokemon();
+		closeModal();
 	};
 
-	useEffect(() => {
-		fetchPokemonList().then((data) => setPokemons(data));
-	}, []);
+	// モーダルがポケモン選択モーダルでない場合は何も表示しない
+	if (type !== "pokemonSelect" || !isOpen) return null;
 
 	return (
-		<Dialog>
-			<DialogTrigger>{children}</DialogTrigger>
+		<Dialog
+			open={isOpen}
+			onOpenChange={(isOpen) => {
+				if (!isOpen) closeModal();
+			}}
+		>
 			<DialogPortal>
 				<DialogContent className="max-w-2xl max-h-[80vh] flex flex-col p-6">
 					<DialogHeader>

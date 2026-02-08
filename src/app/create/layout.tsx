@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SingleColumnLayout from "@/components/templates/SingleColumnLayout";
 import { CreateSteps } from "@/constants/routes";
+import { GlobalModalProvider } from "@/context/GlobalModalProvider";
 
 export const metadata: Metadata = {
 	title: "ポケメモリア",
@@ -14,8 +15,10 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<SingleColumnLayout header={undefined} pages={pages}>
-			{children}
-		</SingleColumnLayout>
+		<GlobalModalProvider>
+			<SingleColumnLayout header={undefined} pages={pages}>
+				{children}
+			</SingleColumnLayout>
+		</GlobalModalProvider>
 	);
 }

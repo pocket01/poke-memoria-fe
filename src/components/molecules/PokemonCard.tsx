@@ -19,12 +19,12 @@ export interface PokemonCardProps {
 export function PokemonCard({
 	name,
 	comment,
-	isEditingComment = false,
+	// isEditingComment = false,
 	onRemove,
 	onCommentChange,
 	onCommentBlur,
-	onCommentClick,
-	onClick,
+	// onCommentClick,
+	// onClick,
 	className,
 }: PokemonCardProps) {
 	// const textareaRef = useRef<HTMLTextAreaElement>(null);

@@ -1,8 +1,10 @@
 "use client";
-import { type PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import { useWatch } from "react-hook-form";
-import { PokemonGrid } from "@/components/organisms/PokemonGrid";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { useModalStore } from "@/stores/modalStore";
+import { EmptySlotCard } from "../molecules/EmptySlotCard";
+import { PokemonCard } from "../molecules/PokemonCard";
 
 export type Pokemon = {
 	name: string;
@@ -10,17 +12,20 @@ export type Pokemon = {
 	comment?: string;
 };
 
-type Props = PropsWithChildren<{}>;
+function Partners() {
+	const { openModal } = useModalStore();
 
-function Partners({ children }: Props) {
+	const handleParamChange = (slot: 1 | 2 | 3 | 4 | 5 | 6) => {
+		openModal("pokemonSelect", { slot: slot });
+	};
+
 	const { control, setValue } = useGlobalForm();
 	const { partners } = useWatch({ control });
-	// 選択中のスロット管理
-	const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
 
 	// モーダルを開くハンドラー
 	const handleOpenModal = (index: number) => {
-		setSelectedSlot(index);
+		if (index >= 0 && index <= 5)
+			handleParamChange((index + 1) as 1 | 2 | 3 | 4 | 5 | 6);
 	};
 
 	// コメント編集中のスロット管理
@@ -28,7 +33,7 @@ function Partners({ children }: Props) {
 
 	// ポケモンをチームから削除するハンドラー
 	const handleRemovePokemon = (slotIndex: number) => {
-		setValue(`partners.${slotIndex}`, { pokemonId: null, comment: "" });
+		setValue(`partners.${slotIndex}`, null);
 	};
 
 	// コメント編集のハンドラー
@@ -47,15 +52,38 @@ function Partners({ children }: Props) {
 	return (
 		<div className="max-w-6xl mx-auto w-full flex-1">
 			<div className="mb-8">
-				<PokemonGrid
-					partners={partners}
-					editingComment={editingComment}
-					onSlotClick={(index) => handleOpenModal(index)}
-					onRemovePokemon={handleRemovePokemon}
-					onCommentClick={handleCommentClick}
-					onCommentChange={handleCommentChange}
-					onCommentBlur={handleCommentBlur}
-				/>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{partners?.map((pokemon, index) => {
+						const key = `slot-${index}`;
+
+						// ポケモンが選択されている場合
+						if (pokemon) {
+							return (
+								<PokemonCard
+									key={key}
+									name={pokemon.pokemonId?.toString() ?? ""}
+									comment={pokemon.comment}
+									isEditingComment={editingComment === index}
+									onRemove={() => handleRemovePokemon(index)}
+									onCommentClick={() => handleCommentClick(index)}
+									onCommentChange={(comment) =>
+										handleCommentChange(index, comment)
+									}
+									onCommentBlur={handleCommentBlur}
+								/>
+							);
+						}
+
+						// 空のスロットの場合
+						return (
+							<EmptySlotCard
+								key={key}
+								slotNumber={index}
+								onClick={() => handleOpenModal(index)}
+							/>
+						);
+					})}
+				</div>
 			</div>
 		</div>
 	);
