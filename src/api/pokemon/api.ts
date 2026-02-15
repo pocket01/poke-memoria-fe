@@ -1,3 +1,4 @@
+import pokemonJson from "./pokemon.json";
 import type {
 	PokeAPIListRequest,
 	PokeAPIListResponse,
@@ -17,6 +18,31 @@ import type {
  */
 
 /**
+ * ポケモンのIDを取得する（名前またはIDから）
+ * @param nameOrId ポケモンの名前またはID
+ * @returns ポケモンのID
+ */
+function getPokemonIdByNameOrId(nameOrId: string | number): number {
+	if (typeof nameOrId === "number") {
+		return nameOrId;
+	}
+
+	// 名前から検索
+	const pokemon = pokemonJson.results.find((p) => p.name === nameOrId);
+	if (!pokemon) {
+		throw new Error(`Pokemon not found: ${nameOrId}`);
+	}
+
+	// URLからIDを抽出
+	const match = pokemon.url.match(/\/pokemon\/(\d+)\/$/);
+	if (!match) {
+		throw new Error(`Could not extract ID from Pokemon URL: ${pokemon.url}`);
+	}
+
+	return parseInt(match[1], 10);
+}
+
+/**
  * PokeAPI経由でポケモン一覧を取得する
  * @param limit 取得件数（デフォルト: 151）
  * @param offset オフセット（デフォルト: 0）
@@ -24,19 +50,18 @@ import type {
  * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon?limit={limit}&offset={offset}
  */
 async function fetchPokeAPIPokemonList({
-	limit = 151,
+	/** @todo 現在対応済みは最初の9匹のみ */
+	limit = 9,
 	offset = 0,
 }: PokeAPIListRequest = {}): Promise<PokeAPIListResponse> {
 	try {
-		const response = await fetch(
-			`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
-		);
-
-		if (!response.ok) {
-			throw new Error(`PokeAPI Error: ${response.status}`);
-		}
-
-		return await response.json();
+		pokemonJson;
+		// limitとoffsetを適用してデータを切り取る
+		const slicedResults = pokemonJson.results.slice(offset, offset + limit);
+		return {
+			...pokemonJson,
+			results: slicedResults,
+		};
 	} catch (error) {
 		console.error("Failed to fetch Pokemon list:", error);
 		throw error;
@@ -44,24 +69,18 @@ async function fetchPokeAPIPokemonList({
 }
 
 /**
- * PokeAPI経由でポケモンの詳細情報を取得する
+ * ローカルファイルからポケモンの詳細情報を取得する
  * @param nameOrId ポケモンの名前またはID
  * @returns ポケモンの詳細情報
- * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon/{nameOrId}
+ * @note ローカルファイル: src/api/pokemon/detail/{id}.json
  */
 async function fetchPokeAPIPokemon(
 	nameOrId: string | number,
 ): Promise<PokeAPIPokemonDetail> {
 	try {
-		const response = await fetch(
-			`https://pokeapi.co/api/v2/pokemon/${nameOrId}`,
-		);
-
-		if (!response.ok) {
-			throw new Error(`PokeAPI Error: ${response.status}`);
-		}
-
-		return await response.json();
+		const pokemonId = getPokemonIdByNameOrId(nameOrId);
+		const pokemonDetail = await import(`./detail/${pokemonId}.json`);
+		return pokemonDetail.default as PokeAPIPokemonDetail;
 	} catch (error) {
 		console.error(`Failed to fetch Pokemon detail for ${nameOrId}:`, error);
 		throw error;
@@ -69,24 +88,18 @@ async function fetchPokeAPIPokemon(
 }
 
 /**
- * PokeAPI経由でポケモンの種別情報を取得する（ファイル内部用）
+ * ローカルファイルからポケモンの種別情報を取得する
  * @param idOrName ポケモンのIDまたは名前
- * @returns ポケモンの種別情報（日本語名を含む）
- * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon-species/{idOrName}
+ * @returns ポケモンの種別情報
+ * @note ローカルファイル: src/api/pokemon/species/{id}.json
  */
 async function fetchPokeAPIPokemonSpecies(
 	idOrName: string | number,
 ): Promise<PokeAPIPokemonSpecies> {
 	try {
-		const response = await fetch(
-			`https://pokeapi.co/api/v2/pokemon-species/${idOrName}`,
-		);
-
-		if (!response.ok) {
-			throw new Error(`PokeAPI Error: ${response.status}`);
-		}
-
-		return await response.json();
+		const pokemonId = getPokemonIdByNameOrId(idOrName);
+		const speciesData = await import(`./species/${pokemonId}.json`);
+		return speciesData.default as PokeAPIPokemonSpecies;
 	} catch (error) {
 		console.error(`Failed to fetch Pokemon species for ${idOrName}:`, error);
 		throw error;
@@ -126,17 +139,24 @@ export async function fetchPokemonList({
 						fetchPokeAPIPokemon(pokemon.name),
 						fetchPokeAPIPokemonSpecies(pokemon.name),
 					]);
-
+					// 詳細情報とspecies情報を並列で取得
+					// const detail = await fetchPokeAPIPokemon(pokemon.name);
 					const response = {
 						id: detail.id,
 						name:
 							species.names.find((n) => n.language.name === "ja")?.name ??
 							pokemon.name, // 日本語名を優先
 						enName: pokemon.name, // 英字名
-						url: pokemon.url,
+						// enName: pokemon.name,
 						// 公式アートワークの画像URLを取得
+						// url: pokemon.url,
 						imageUrl:
 							detail.sprites.other?.["official-artwork"]?.front_default ?? "",
+						// id: 1,
+						// name: "",
+						// enName: "",
+						url: "",
+						// imageUrl: "",
 					};
 
 					return response;

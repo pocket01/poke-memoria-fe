@@ -37,7 +37,7 @@ export function PokemonSelectDialog({ pokemons, children }: Props) {
 	};
 
 	return (
-		<Dialog>
+		<Dialog defaultOpen={true}>
 			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent className="max-w-2xl max-h-[80vh] flex flex-col p-6">
 				<DialogHeader>

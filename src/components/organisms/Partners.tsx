@@ -1,17 +1,15 @@
 "use client";
 import { useState } from "react";
 import { useWatch } from "react-hook-form";
-import type { PokemonList } from "@/api/pokemon/type";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
 import { EmptySlotCard } from "../molecules/EmptySlotCard";
 import { PokemonCard } from "../molecules/PokemonCard";
-import { PokemonSelectDialog } from "./PokemonSelectDialog";
 
-type Props = {
-	pokemons: PokemonList;
-};
+// type Props = {
+// 	// pokemons: PokemonList;
+// };
 
-function Partners({ pokemons }: Props) {
+function Partners() {
 	const { control, setValue } = useGlobalForm();
 	const { partners } = useWatch({ control });
 
@@ -46,28 +44,28 @@ function Partners({ pokemons }: Props) {
 						// ポケモンが選択されている場合
 						if (pokemon) {
 							return (
-								<PokemonSelectDialog pokemons={pokemons} key={key}>
-									<PokemonCard
-										name={pokemon.pokemonId?.toString() ?? ""}
-										comment={pokemon.comment}
-										isEditingComment={editingComment === index}
-										onRemove={() => handleRemovePokemon(index)}
-										onCommentClick={() => handleCommentClick(index)}
-										onCommentChange={(comment) =>
-											handleCommentChange(index, comment)
-										}
-										onCommentBlur={handleCommentBlur}
-									/>
-								</PokemonSelectDialog>
+								// <PokemonSelectDialog pokemons={pokemons} key={key}>
+								<PokemonCard
+									name={pokemon.pokemonId?.toString() ?? ""}
+									comment={pokemon.comment}
+									isEditingComment={editingComment === index}
+									onRemove={() => handleRemovePokemon(index)}
+									onCommentClick={() => handleCommentClick(index)}
+									onCommentChange={(comment) =>
+										handleCommentChange(index, comment)
+									}
+									onCommentBlur={handleCommentBlur}
+								/>
+								// </PokemonSelectDialog>
 							);
 						}
 
 						// 空のスロットの場合
 						return (
 							<div key={key}>
-								<PokemonSelectDialog pokemons={pokemons} key={key}>
-									<EmptySlotCard slotNumber={index} />
-								</PokemonSelectDialog>
+								{/* <PokemonSelectDialog pokemons={pokemons} key={key}> */}
+								<EmptySlotCard slotNumber={index} />
+								{/* </PokemonSelectDialog> */}
 							</div>
 						);
 					})}
