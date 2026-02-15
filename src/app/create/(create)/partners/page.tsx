@@ -1,5 +1,7 @@
+import { fetchPokemonList } from "@/api/common";
 import Partners from "@/components/organisms/Partners";
 
 export default async function PartnersPage() {
-	return <Partners />;
+	const pokemons = await fetchPokemonList();
+	return <Partners pokemons={pokemons} />;
 }

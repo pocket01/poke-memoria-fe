@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { useWatch } from "react-hook-form";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
-import { useModalStore } from "@/stores/modalStore";
 import { EmptySlotCard } from "../molecules/EmptySlotCard";
 import { PokemonCard } from "../molecules/PokemonCard";
+import { PokemonSelectDialog } from "./PokemonSelectDialog";
 
 export type Pokemon = {
 	name: string;
@@ -12,21 +12,13 @@ export type Pokemon = {
 	comment?: string;
 };
 
-function Partners() {
-	const { openModal } = useModalStore();
+type Props = {
+	pokemons: string[];
+};
 
-	const handleParamChange = (slot: 1 | 2 | 3 | 4 | 5 | 6) => {
-		openModal("pokemonSelect", { slot: slot });
-	};
-
+function Partners({ pokemons }: Props) {
 	const { control, setValue } = useGlobalForm();
 	const { partners } = useWatch({ control });
-
-	// モーダルを開くハンドラー
-	const handleOpenModal = (index: number) => {
-		if (index >= 0 && index <= 5)
-			handleParamChange((index + 1) as 1 | 2 | 3 | 4 | 5 | 6);
-	};
 
 	// コメント編集中のスロット管理
 	const [editingComment, setEditingComment] = useState<number | null>(null);
@@ -59,28 +51,29 @@ function Partners() {
 						// ポケモンが選択されている場合
 						if (pokemon) {
 							return (
-								<PokemonCard
-									key={key}
-									name={pokemon.pokemonId?.toString() ?? ""}
-									comment={pokemon.comment}
-									isEditingComment={editingComment === index}
-									onRemove={() => handleRemovePokemon(index)}
-									onCommentClick={() => handleCommentClick(index)}
-									onCommentChange={(comment) =>
-										handleCommentChange(index, comment)
-									}
-									onCommentBlur={handleCommentBlur}
-								/>
+								<PokemonSelectDialog pokemons={pokemons} key={key}>
+									<PokemonCard
+										name={pokemon.pokemonId?.toString() ?? ""}
+										comment={pokemon.comment}
+										isEditingComment={editingComment === index}
+										onRemove={() => handleRemovePokemon(index)}
+										onCommentClick={() => handleCommentClick(index)}
+										onCommentChange={(comment) =>
+											handleCommentChange(index, comment)
+										}
+										onCommentBlur={handleCommentBlur}
+									/>
+								</PokemonSelectDialog>
 							);
 						}
 
 						// 空のスロットの場合
 						return (
-							<EmptySlotCard
-								key={key}
-								slotNumber={index}
-								onClick={() => handleOpenModal(index)}
-							/>
+							<div key={key}>
+								<PokemonSelectDialog pokemons={pokemons} key={key}>
+									<EmptySlotCard slotNumber={index} />
+								</PokemonSelectDialog>
+							</div>
 						);
 					})}
 				</div>
