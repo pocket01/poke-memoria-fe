@@ -1,0 +1,188 @@
+import type {
+	PokeAPIListRequest,
+	PokeAPIListResponse,
+	PokeAPIPokemonDetail,
+	PokeAPIPokemonSpecies,
+	PokemonDetail,
+	PokemonListResponse,
+} from "./type";
+
+/**
+ * ============================================================================
+ * PokeAPI専用の関数（ファイル内部用）
+ * ============================================================================
+ * PokeAPIから直接データを取得するための関数。
+ * これらの関数はファイル内部でのみ使用され、アプリケーションコードからは利用しない。
+ */
+
+/**
+ * PokeAPI経由でポケモン一覧を取得する
+ * @param limit 取得件数（デフォルト: 151）
+ * @param offset オフセット（デフォルト: 0）
+ * @returns ポケモンの一覧情報
+ * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon?limit={limit}&offset={offset}
+ */
+async function fetchPokeAPIPokemonList({
+	limit = 151,
+	offset = 0,
+}: PokeAPIListRequest = {}): Promise<PokeAPIListResponse> {
+	try {
+		const response = await fetch(
+			`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
+		);
+
+		if (!response.ok) {
+			throw new Error(`PokeAPI Error: ${response.status}`);
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.error("Failed to fetch Pokemon list:", error);
+		throw error;
+	}
+}
+
+/**
+ * PokeAPI経由でポケモンの詳細情報を取得する
+ * @param nameOrId ポケモンの名前またはID
+ * @returns ポケモンの詳細情報
+ * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon/{nameOrId}
+ */
+async function fetchPokeAPIPokemon(
+	nameOrId: string | number,
+): Promise<PokeAPIPokemonDetail> {
+	try {
+		const response = await fetch(
+			`https://pokeapi.co/api/v2/pokemon/${nameOrId}`,
+		);
+
+		if (!response.ok) {
+			throw new Error(`PokeAPI Error: ${response.status}`);
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.error(`Failed to fetch Pokemon detail for ${nameOrId}:`, error);
+		throw error;
+	}
+}
+
+/**
+ * PokeAPI経由でポケモンの種別情報を取得する（ファイル内部用）
+ * @param idOrName ポケモンのIDまたは名前
+ * @returns ポケモンの種別情報（日本語名を含む）
+ * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon-species/{idOrName}
+ */
+async function fetchPokeAPIPokemonSpecies(
+	idOrName: string | number,
+): Promise<PokeAPIPokemonSpecies> {
+	try {
+		const response = await fetch(
+			`https://pokeapi.co/api/v2/pokemon-species/${idOrName}`,
+		);
+
+		if (!response.ok) {
+			throw new Error(`PokeAPI Error: ${response.status}`);
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.error(`Failed to fetch Pokemon species for ${idOrName}:`, error);
+		throw error;
+	}
+}
+
+/**
+ * ============================================================================
+ * アプリケーション内で利用する関数（export用）
+ * ============================================================================
+ * PokeAPI専用関数を組み合わせ、プロジェクト内で使いやすいように加工したAPI関数。
+ * ui層やfeatures層などから利用される。
+ */
+
+/**
+ * ポケモン一覧を取得する（日本語名対応）
+ * @param limit 取得件数（デフォルト: 151）
+ * @param offset オフセット（デフォルト: 0）
+ * @returns 日本語名を含むポケモン一覧
+ * @note 複数のポケモンのspecies情報を取得するため、通信負荷に注意。
+ *       大量のポケモンを取得する場合はキャッシング推奨
+ */
+export async function fetchPokemonList({
+	limit,
+	offset,
+}: PokeAPIListRequest = {}): Promise<PokemonListResponse> {
+	try {
+		// 基本的なポケモン一覧を取得
+		const pokemonList = await fetchPokeAPIPokemonList({ limit, offset });
+
+		// 各ポケモンの日本語名を取得（並列処理）
+		const results = await Promise.all(
+			pokemonList.results.map(async (pokemon) => {
+				try {
+					const species = await fetchPokeAPIPokemonSpecies(pokemon.name);
+					// 日本語名を取得（名前が見つからない場合は英語名をフォールバック）
+					const name =
+						species.names.find((n) => n.language.name === "ja")?.name ||
+						pokemon.name;
+					return {
+						name, // 日本語名を優先
+						enName: pokemon.name, // 英文字名
+						url: pokemon.url,
+					};
+				} catch {
+					// species取得失敗時は英文字名を使用
+					return {
+						name: pokemon.name,
+						enName: pokemon.name,
+						url: pokemon.url,
+					};
+				}
+			}),
+		);
+
+		return {
+			count: pokemonList.count,
+			next: pokemonList.next,
+			previous: pokemonList.previous,
+			results,
+		};
+	} catch (error) {
+		console.error("Failed to fetch Pokemon list with Japanese names:", error);
+		throw error;
+	}
+}
+
+/**
+ * ポケモンの詳細情報を取得（日本語名対応）
+ * @param nameOrId ポケモンの名前またはID
+ * @returns ポケモンの詳細情報（日本語名を含む）
+ * @note 複数のPokeAPIエンドポイントを呼び出すため、通信負荷に注意
+ */
+export async function fetchPokemonDetail(
+	nameOrId: string | number,
+): Promise<PokemonDetail> {
+	try {
+		const [detail, species] = await Promise.all([
+			fetchPokeAPIPokemon(nameOrId),
+			fetchPokeAPIPokemonSpecies(nameOrId),
+		]);
+
+		// 日本語名を取得（名前が見つからない場合は英語名をフォールバック）
+		const japaneseName =
+			species.names.find((n) => n.language.name === "ja")?.name || detail.name;
+
+		return {
+			...detail,
+			name: japaneseName, // 日本語名を優先
+			enName: detail.name, // 元の英語名をenNameに変更
+			species,
+		};
+	} catch (error) {
+		console.error(
+			`Failed to fetch Pokemon detail with species for ${nameOrId}:`,
+			error,
+		);
+		throw error;
+	}
+}

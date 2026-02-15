@@ -1,4 +1,4 @@
-import { getPokemonGenerations } from "@/api/origin";
+import { getPokemonGenerations } from "@/api/origin/api";
 import Origin from "@/components/organisms/Origin";
 
 export default async function OriginPage() {

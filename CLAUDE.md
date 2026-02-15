@@ -119,3 +119,72 @@ pnpm shadcn:add badge
 2. **Molecules**: 複数のAtomsを組み合わせた機能単位
 3. **Organisms**: ドメイン知識を持つ複雑なUI
 4. **全体のリファクタリング**: 既存コードを新しいAtomic構造に移行
+
+---
+
+# 外部API追加の標準手順
+
+新規の外部API（PokeAPI等）を追加する際は、以下の手順に従うこと。詳細は `doc/gemini/ポケメモリア PokeAPI型定義.md` を参照。
+
+## 手順概要
+
+### ステップ1: ディレクトリ作成
+```bash
+mkdir -p src/api/[エンドポイント名]
+```
+- エンドポイント名は機能や役割に基づく（例：`pokemon-detail`, `history`, `common`）
+
+### ステップ2: type.ts - 型定義ファイル作成
+1. **PokeAPI等の実際のレスポンスを取得**
+   - ブラウザやcurlで、APIのレスポンスJSON全体をコピー
+   
+2. **[JSON to Zod変換ツール](https://transform.tools/json-to-zod)を使用**
+   - 取得したレスポンスJSONを張り付け
+   - 自動生成されたZod Schemaをコピー
+
+3. **型定義ファイルに記載**
+   ```typescript
+   // src/api/[エンドポイント名]/type.ts
+   import { z } from "zod";
+   
+   /**
+    * @description [API説明]
+    * @see https://pokeapi.co/docs/v2#[セクション]
+    */
+   export const [SchemaName] = z.object({
+     // 自動生成されたスキーマ
+   });
+   
+   export type [TypeName] = z.infer<typeof [SchemaName]>;
+   ```
+
+### ステップ3: api.ts - API実装ファイル作成
+1. **type.tsから型をimport**
+   ```typescript
+   import type { [TypeName] } from "./type";
+   ```
+
+2. **外部APIのfetch実装**
+   - エラーハンドリングを必ず実装
+   - PokeAPIのエンドポイントURLをコメントに記載
+
+3. **JSDocコメントを付与**
+   ```typescript
+   /**
+    * [API説明]
+    * @param [パラメータ] [説明]
+    * @returns [戻り値の説明]
+    * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/[パス]
+    */
+   ```
+
+## ベストプラクティス
+- `api.ts`と`type.ts`は常に分離すること
+- 複雑なレスポンスは必ずZoで検証スキーマを定義
+- PokeAPI公式ドキュメントへのリンクを記載
+- エラーハンドリングを必ず実装
+
+## 参考資料
+- `doc/ポケメモリア PokeAPI型定義.md`: 詳細な実装ガイド
+- [PokeAPI公式ドキュメント](https://pokeapi.co/docs/v2)
+- [JSON to Zod変換ツール](https://transform.tools/json-to-zod)

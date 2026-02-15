@@ -1,4 +1,4 @@
-import { getPokemonTitles } from "@/api/history";
+import { getPokemonTitles } from "@/api/history/api";
 import History, { type GameRelease } from "@/components/organisms/History";
 
 export default async function HistoryPage() {

@@ -1,19 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useWatch } from "react-hook-form";
+import type { PokemonList } from "@/api/pokemon/type";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
 import { EmptySlotCard } from "../molecules/EmptySlotCard";
 import { PokemonCard } from "../molecules/PokemonCard";
 import { PokemonSelectDialog } from "./PokemonSelectDialog";
 
-export type Pokemon = {
-	name: string;
-	type: string;
-	comment?: string;
-};
-
 type Props = {
-	pokemons: string[];
+	pokemons: PokemonList;
 };
 
 function Partners({ pokemons }: Props) {

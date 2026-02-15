@@ -1,6 +1,7 @@
 "use client";
 import { Search } from "lucide-react";
 import { type PropsWithChildren, useState } from "react";
+import type { PokemonList } from "@/api/pokemon/type";
 import { Button } from "../atoms/button";
 import {
 	Dialog,
@@ -14,7 +15,7 @@ import {
 import { PokemonAvatar } from "../atoms/pokemon-avatar";
 
 type Props = PropsWithChildren<{
-	pokemons: string[];
+	pokemons: PokemonList;
 }>;
 
 /**
@@ -24,22 +25,14 @@ type Props = PropsWithChildren<{
 export function PokemonSelectDialog({ pokemons, children }: Props) {
 	// 検索クエリの状態管理
 	const [searchQuery, setSearchQuery] = useState("");
-	const filteredPokemon = pokemons.filter((name) =>
-		name.toLowerCase().includes(searchQuery.toLowerCase()),
+	const filteredPokemon = pokemons.filter((pokemon) =>
+		pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()),
 	);
 
-	// ポケモンをチームに追加するハンドラー
-	const handleAddPokemon = () => {
-		// /** @todo 一旦仮 */
-		// if (type === "pokemonSelect")
-		// 	setValue(`partners.${type.slot - 1}`, { pokemonId: 1, comment: "" });
-		// submitModal?.();
-	};
 	// ポケモン選択時のハンドラー
 	const handleSelectPokemon = (name: string) => {
 		/** @todo 一旦仮 */
 		console.log(name);
-		handleAddPokemon();
 		// closeModal();
 	};
 
@@ -66,15 +59,15 @@ export function PokemonSelectDialog({ pokemons, children }: Props) {
 				{/* Pokemon list */}
 				<div className="flex-1 overflow-y-auto">
 					<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-						{filteredPokemon.map((name) => (
+						{filteredPokemon.map((pokemon) => (
 							<button
-								key={name}
+								key={pokemon.name}
 								type="button"
-								onClick={() => handleSelectPokemon(name)}
+								onClick={() => handleSelectPokemon(pokemon.name)}
 								className="cursor-pointer flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
 							>
 								<PokemonAvatar variant="filled" size="sm" />
-								<p className="font-medium text-sm">{name}</p>
+								<p className="font-medium text-sm">{pokemon.name}</p>
 							</button>
 						))}
 					</div>
