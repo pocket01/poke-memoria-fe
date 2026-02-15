@@ -1,5 +1,6 @@
 "use client";
 import { Search } from "lucide-react";
+import Image from "next/image";
 import { type PropsWithChildren, useState } from "react";
 import type { PokemonList } from "@/api/pokemon/type";
 import { Button } from "../atoms/button";
@@ -12,7 +13,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "../atoms/dialog";
-import { PokemonAvatar } from "../atoms/pokemon-avatar";
 
 type Props = PropsWithChildren<{
 	pokemons: PokemonList;
@@ -66,7 +66,17 @@ export function PokemonSelectDialog({ pokemons, children }: Props) {
 								onClick={() => handleSelectPokemon(pokemon.name)}
 								className="cursor-pointer flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
 							>
-								<PokemonAvatar variant="filled" size="sm" />
+								{/**
+								 * @todo 一度に読み込むと時間がかかるため、
+								 * 遅延読み込みやプレースホルダーの導入を検討
+								 */}
+								{/* <PokemonAvatar variant="filled" size="sm" /> */}
+								<Image
+									src={pokemon.imageUrl}
+									alt={pokemon.name}
+									width={64}
+									height={64}
+								/>
 								<p className="font-medium text-sm">{pokemon.name}</p>
 							</button>
 						))}

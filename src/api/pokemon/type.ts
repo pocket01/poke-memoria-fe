@@ -22,8 +22,8 @@ export type PokeAPIListRequest = {
  * @see https://pokeapi.co/docs/v2#pokemon
  */
 const PokeAPIPokemonResultSchema = z.object({
-	name: z.string(),
-	url: z.string(),
+	name: z.string(), // 英語名
+	url: z.string(), // 詳細URL
 });
 
 /**
@@ -76,6 +76,31 @@ const PokeAPIPokemonDetailSchema = z.object({
 		front_female: z.string().nullable(),
 		front_shiny: z.string().nullable(),
 		front_shiny_female: z.string().nullable(),
+		other: z
+			.object({
+				"dream-world": z
+					.object({
+						front_default: z.string().nullable().optional(),
+						front_female: z.string().nullable().optional(),
+					})
+					.optional(),
+				home: z
+					.object({
+						front_default: z.string().nullable().optional(),
+						front_female: z.string().nullable().optional(),
+						front_shiny: z.string().nullable().optional(),
+						front_shiny_female: z.string().nullable().optional(),
+					})
+					.optional(),
+				"official-artwork": z
+					.object({
+						front_default: z.string().nullable().optional(),
+						front_shiny: z.string().nullable().optional(),
+					})
+					.optional(),
+				showdown: z.object({}).optional(),
+			})
+			.optional(),
 	}),
 	stats: z.array(
 		z.object({
@@ -141,8 +166,10 @@ const PokemonListSchema = PokeAPIListResponseSchema.omit({
 }).extend({
 	results: z.array(
 		PokeAPIPokemonResultSchema.omit({ name: true }).extend({
+			id: z.number(), // ID
 			name: z.string(), // 日本語名
 			enName: z.string(), // 英語名
+			imageUrl: z.string(), // 画像URL
 		}),
 	),
 });

@@ -4,6 +4,7 @@ import type {
 	PokeAPIPokemonDetail,
 	PokeAPIPokemonSpecies,
 	PokemonDetail,
+	PokemonList,
 	PokemonListResponse,
 } from "./type";
 
@@ -105,7 +106,7 @@ async function fetchPokeAPIPokemonSpecies(
  * @param limit 取得件数（デフォルト: 151）
  * @param offset オフセット（デフォルト: 0）
  * @returns 日本語名を含むポケモン一覧
- * @note 複数のポケモンのspecies情報を取得するため、通信負荷に注意。
+ * @note 複数のポケモンの詳細情報とspecies情報を取得するため、通信負荷に注意。
  *       大量のポケモンを取得する場合はキャッシング推奨
  */
 export async function fetchPokemonList({
@@ -116,26 +117,41 @@ export async function fetchPokemonList({
 		// 基本的なポケモン一覧を取得
 		const pokemonList = await fetchPokeAPIPokemonList({ limit, offset });
 
-		// 各ポケモンの日本語名を取得（並列処理）
-		const results = await Promise.all(
+		// 各ポケモンの詳細情報と日本語名を取得（並列処理）
+		const results: PokemonList = await Promise.all(
 			pokemonList.results.map(async (pokemon) => {
 				try {
-					const species = await fetchPokeAPIPokemonSpecies(pokemon.name);
-					// 日本語名を取得（名前が見つからない場合は英語名をフォールバック）
-					const name =
-						species.names.find((n) => n.language.name === "ja")?.name ||
-						pokemon.name;
-					return {
-						name, // 日本語名を優先
-						enName: pokemon.name, // 英文字名
+					// 詳細情報とspecies情報を並列で取得
+					const [detail, species] = await Promise.all([
+						fetchPokeAPIPokemon(pokemon.name),
+						fetchPokeAPIPokemonSpecies(pokemon.name),
+					]);
+
+					const response = {
+						id: detail.id,
+						name:
+							species.names.find((n) => n.language.name === "ja")?.name ??
+							pokemon.name, // 日本語名を優先
+						enName: pokemon.name, // 英字名
 						url: pokemon.url,
+						// 公式アートワークの画像URLを取得
+						imageUrl:
+							detail.sprites.other?.["official-artwork"]?.front_default ?? "",
 					};
-				} catch {
-					// species取得失敗時は英文字名を使用
+
+					return response;
+				} catch (error) {
+					// ポケモン取得失敗時はデフォルト値を返す
+					console.warn(
+						`Failed to fetch pokemon details for ${pokemon.name}:`,
+						error,
+					);
 					return {
+						id: 0,
 						name: pokemon.name,
 						enName: pokemon.name,
 						url: pokemon.url,
+						imageUrl: "",
 					};
 				}
 			}),
