@@ -31,10 +31,10 @@ export type TitleHistory = {
  */
 export type PartnerPokemon = {
 	/** ポケモンの図鑑番号（未選択の場合はnull） */
-	pokemonId: number | null;
+	pokemonId: number;
 	/** 相棒へのコメント（最大20文字） */
 	comment: string;
-};
+} | null;
 
 /**
  * 履歴書の全体構造：Memories
@@ -105,4 +105,11 @@ export type PokemonGenerations = {
 	name: string;
 	generation: string;
 	year: string;
+};
+
+/**
+ * ダイアログの開閉状態を管理するための型定義
+ */
+export type DialogOpen = {
+	isOpen: boolean;
 };

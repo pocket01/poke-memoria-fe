@@ -128,9 +128,7 @@ export const DEFAULT_MEMORIES: Memories = {
 	startedYear: "",
 	originTitleId: 0,
 	history: [],
-	partners: Array(6)
-		.fill(null)
-		.map(() => ({ ...DEFAULT_PARTNER })),
+	partners: Array(6).fill(null),
 	tags: [],
 	freeMessage: "",
 };

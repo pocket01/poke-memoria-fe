@@ -1,36 +1,17 @@
-import Partners, { type Pokemon } from "@/components/organisms/Partners";
+import type { SearchParams } from "nuqs";
+import { fetchPokemonList } from "@/api/pokemon/api";
+import Partners from "@/components/organisms/Partners";
+import { searchParamsCache } from "@/lib/searchParams";
 
-// サンプルのポケモンデータ
-const popularPokemon = [
-	"ピカチュウ",
-	"イーブイ",
-	"リザードン",
-	"ミュウツー",
-	"ルカリオ",
-	"ゲッコウガ",
-	"ニンフィア",
-	"ガブリアス",
-	"メタグロス",
-	"サーナイト",
-	"バンギラス",
-	"カイリュー",
-	"ゲンガー",
-	"フシギバナ",
-	"カメックス",
-	"ジュカイン",
-	"バシャーモ",
-	"ラグラージ",
-	"エンペルト",
-	"ゴウカザル",
-	"ドダイトス",
-	"ゾロアーク",
-	"ウルガモス",
-	"ギルガルド",
-	"ニャオハ",
-];
+type Props = {
+	searchParams: SearchParams;
+};
 
-const team: (Pokemon | null)[] = [null, null, null, null, null, null];
+export default async function PartnersPage({ searchParams }: Props) {
+	// APIでポケモン一覧を取得
+	const { results } = await fetchPokemonList();
 
-export default async function PartnersPage() {
-	return <Partners popularPokemon={popularPokemon} defaultTeam={team} />;
+	// クエリパラメータから選択されたポケモンを取得
+	const { selectedPokemons } = await searchParamsCache.parse(searchParams);
+	return <Partners selectedPokemons={selectedPokemons} pokemons={results} />;
 }

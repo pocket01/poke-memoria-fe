@@ -1,70 +1,53 @@
 "use client";
-import { Search } from "lucide-react";
-import { useState } from "react";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/atoms/dialog";
-import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
-import { PokemonGrid } from "@/components/organisms/PokemonGrid";
-
-export type Pokemon = {
-	name: string;
-	type: string;
-	comment?: string;
-};
+import { parseAsBoolean, useQueryState } from "nuqs";
+import { useCallback, useState } from "react";
+import { useWatch } from "react-hook-form";
+import type { PokemonList } from "@/api/pokemon/type";
+import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { EmptySlotCard } from "../molecules/EmptySlotCard";
+import { PokemonCard } from "../molecules/PokemonCard";
 
 type Props = {
-	popularPokemon: string[];
-	defaultTeam: (Pokemon | null)[];
+	pokemons: PokemonList;
+	selectedPokemons?: number[];
 };
 
-function Partners({ popularPokemon, defaultTeam }: Props) {
-	// 選択中のスロット管理
-	const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+function Partners({ pokemons, selectedPokemons }: Props) {
+	const { control, setValue } = useGlobalForm();
 
-	// チームの状態管理
-	const [team, setTeam] = useState<(Pokemon | null)[]>(defaultTeam);
+	// クエリパラメータからダイアログの表示状態を管理
+	const [isDialogOpen, setIsDialogOpen] = useQueryState(
+		"showPokemonDialog",
+		parseAsBoolean.withDefault(false),
+	);
+	const { partners } = useWatch({ control });
+	// クエリパラメータから選択されたポケモンのIDを取得
+	const queryPartners =
+		selectedPokemons?.map((id) => ({ pokemonId: id, comment: "" })) ?? [];
+	// フォームの状態とクエリパラメータの状態をマージしたパートナーデータ
+	const myPartners = partners?.map((partner, index) => {
+		if (partner?.pokemonId) {
+			// フォームの状態が優先される
+			return partner;
+		} else if (queryPartners[index]) {
+			// クエリパラメータの状態を反映
+			return queryPartners[index];
+		} else {
+			// どちらにもない場合は空のスロット
+			return null;
+		}
+	});
+
+	const openPokemonDialog = useCallback(() => {
+		setIsDialogOpen(true);
+	}, [setIsDialogOpen]);
 
 	// コメント編集中のスロット管理
 	const [editingComment, setEditingComment] = useState<number | null>(null);
 
-	// 検索クエリの状態管理
-	const [searchQuery, setSearchQuery] = useState("");
-	const filteredPokemon = popularPokemon.filter((name) =>
-		name.toLowerCase().includes(searchQuery.toLowerCase()),
-	);
-
-	// モーダルを開くハンドラー
-	const handleOpenModal = (index: number) => {
-		setSelectedSlot(index);
-	};
-
-	// モーダルを閉じるハンドラー
-	const handleCloseModal = () => {
-		setSelectedSlot(null);
-		setSearchQuery("");
-	};
-
-	// ポケモンをチームに追加するハンドラー
-	const handleAddPokemon = (slotIndex: number, pokemon: Pokemon) => {
-		setTeam((prev) => {
-			const newTeam = [...prev];
-			newTeam[slotIndex] = pokemon;
-			return newTeam;
-		});
-		handleCloseModal();
-	};
-
 	// ポケモンをチームから削除するハンドラー
 	const handleRemovePokemon = (slotIndex: number) => {
-		setTeam((prev) => {
-			const newTeam = [...prev];
-			newTeam[slotIndex] = null;
-			return newTeam;
-		});
+		setValue(`partners.${slotIndex}`, null);
 	};
 
 	// コメント編集のハンドラー
@@ -73,92 +56,49 @@ function Partners({ popularPokemon, defaultTeam }: Props) {
 	};
 
 	const handleCommentChange = (slotIndex: number, comment: string) => {
-		setTeam((prev) => {
-			const newTeam = [...prev];
-			const pokemon = newTeam[slotIndex];
-			if (pokemon) {
-				newTeam[slotIndex] = { ...pokemon, comment };
-			}
-			return newTeam;
-		});
+		setValue(`partners.${slotIndex}.comment`, comment);
 	};
 
 	const handleCommentBlur = () => {
 		setEditingComment(null);
 	};
 
-	// ポケモン選択時のハンドラー
-	const handleSelectPokemon = (name: string) => {
-		if (selectedSlot !== null) {
-			handleAddPokemon(selectedSlot, { name, type: "ノーマル" });
-			// setSelectedSlot(null);
-			setSearchQuery("");
-		}
-	};
-
 	return (
-		<main className="w-full flex-1 flex flex-col px-6 py-8">
-			<div className="max-w-6xl mx-auto w-full flex-1">
-				<div className="mb-8">
-					<PokemonGrid
-						team={team}
-						editingComment={editingComment}
-						onSlotClick={(index) => handleOpenModal(index)}
-						onRemovePokemon={handleRemovePokemon}
-						onCommentClick={handleCommentClick}
-						onCommentChange={handleCommentChange}
-						onCommentBlur={handleCommentBlur}
-					/>
+		<div className="max-w-6xl mx-auto w-full flex-1">
+			<div className="mb-8">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{myPartners?.map((pokemon, index) => {
+						const key = `slot-${index}`;
+
+						// ポケモンが選択されている場合
+						if (pokemon) {
+							return (
+								<PokemonCard
+									name={
+										pokemons.find((p) => p.id === pokemon.pokemonId)?.name || ""
+									}
+									comment={pokemon.comment}
+									isEditingComment={editingComment === index}
+									onRemove={() => handleRemovePokemon(index)}
+									onCommentClick={() => handleCommentClick(index)}
+									onCommentChange={(comment) =>
+										handleCommentChange(index, comment)
+									}
+									onCommentBlur={handleCommentBlur}
+								/>
+							);
+						}
+
+						// 空のスロットの場合
+						return (
+							<div key={key}>
+								<EmptySlotCard slotNumber={index} onClick={openPokemonDialog} />
+							</div>
+						);
+					})}
 				</div>
 			</div>
-
-			{/* Pokemon Selection Dialog */}
-			<Dialog
-				open={selectedSlot !== null}
-				onOpenChange={(open) => !open && handleCloseModal()}
-			>
-				<DialogContent className="max-w-2xl max-h-[80vh] flex flex-col p-6">
-					<DialogHeader>
-						<DialogTitle>ポケモンを選択</DialogTitle>
-					</DialogHeader>
-
-					{/* Search input */}
-					<div className="relative mb-4">
-						<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-						<input
-							type="text"
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-							placeholder="ポケモン名で検索..."
-							className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-						/>
-					</div>
-
-					{/* Pokemon list */}
-					<div className="flex-1 overflow-y-auto">
-						<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-							{filteredPokemon.map((name) => (
-								<button
-									key={name}
-									type="button"
-									onClick={() => handleSelectPokemon(name)}
-									className="flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
-								>
-									<PokemonAvatar variant="filled" size="sm" />
-									<p className="font-medium text-sm">{name}</p>
-								</button>
-							))}
-						</div>
-
-						{filteredPokemon.length === 0 && (
-							<div className="text-center py-12 text-gray-400">
-								<p>該当するポケモンが見つかりません</p>
-							</div>
-						)}
-					</div>
-				</DialogContent>
-			</Dialog>
-		</main>
+		</div>
 	);
 }
 

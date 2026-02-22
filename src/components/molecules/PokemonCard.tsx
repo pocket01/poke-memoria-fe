@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { X } from "lucide-react";
 import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
-import { RemoveButton } from "@/components/atoms/remove-button";
 import { cn } from "@/lib/utils";
+import { Card } from "../atoms/card";
+import { Textarea } from "../atoms/textarea";
 
 export interface PokemonCardProps {
 	name: string;
@@ -18,39 +19,42 @@ export interface PokemonCardProps {
 export function PokemonCard({
 	name,
 	comment,
-	isEditingComment = false,
+	// isEditingComment = false,
 	onRemove,
 	onCommentChange,
 	onCommentBlur,
-	onCommentClick,
-	onClick,
+	// onCommentClick,
+	// onClick,
 	className,
 }: PokemonCardProps) {
-	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	// const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-	useEffect(() => {
-		if (isEditingComment && textareaRef.current) {
-			textareaRef.current.focus();
-		}
-	}, [isEditingComment]);
+	// useEffect(() => {
+	// 	if (isEditingComment && textareaRef.current) {
+	// 		textareaRef.current.focus();
+	// 	}
+	// }, [isEditingComment]);
 
 	const containerClass = cn(
-		"relative p-7 rounded-2xl border-4 border-[#EF4444] bg-[#E3E8EE] shadow-lg transition-all duration-300 text-left",
+		"cursor-pointer bg-[#F000001A] relative p-7 cursor-pointer transition-all duration-300 text-left",
 		className,
 	);
 
 	const content = (
 		<>
 			{/* Remove button */}
-			<RemoveButton
-				onClick={() => {
+			<X
+				onClick={(e) => {
+					e.stopPropagation();
 					onRemove?.();
 				}}
-				className="absolute top-3 right-3"
+				className={`${cn(
+					"neu-flat w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors shadow-lg absolute top-3 right-3",
+				)} w-4 h-4`}
 			/>
 
 			{/* Pokemon display */}
-			<div className="text-center mb-4">
+			<div className="text-center mb-4 cur">
 				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="filled" size="default" />
 				</div>
@@ -59,40 +63,20 @@ export function PokemonCard({
 
 			{/* Comment section */}
 			<div className="mt-4">
-				{isEditingComment ? (
-					<textarea
-						ref={textareaRef}
-						defaultValue={comment || ""}
-						onChange={(e) => onCommentChange?.(e.target.value)}
-						onBlur={onCommentBlur}
-						placeholder="思い出を記入..."
-						className="w-full p-2 text-sm border border-[#C9DAEB] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#284CAC] bg-white text-[#0A0A0A]"
-						rows={3}
-						onClick={(e) => e.stopPropagation()}
-					/>
-				) : (
-					<button
-						type="button"
-						className="w-full text-left min-h-[60px] p-2 text-sm text-[#4A5565] bg-white rounded-lg hover:bg-[#F0F2F5] transition-colors border border-[#C9DAEB]"
-						onClick={(e) => {
-							e.stopPropagation();
-							onCommentClick?.();
-						}}
-					>
-						{comment || "思い出を記入..."}
-					</button>
-				)}
+				<Textarea
+					defaultValue={comment || ""}
+					onChange={(e) => onCommentChange?.(e.target.value)}
+					onBlur={onCommentBlur}
+					placeholder="思い出を記入..."
+					className="w-full p-2 text-sm border border-[#C9DAEB] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#284CAC] bg-white text-[#0A0A0A]"
+					rows={3}
+					onClick={(e) => e.stopPropagation()}
+				/>
 			</div>
 		</>
 	);
 
-	if (onClick) {
-		return (
-			<button type="button" className={containerClass} onClick={onClick}>
-				{content}
-			</button>
-		);
-	}
+	return <Card className={containerClass}>{content}</Card>;
 
-	return <div className={containerClass}>{content}</div>;
+	// return <Card className={containerClass}>{content}</Card>;
 }
