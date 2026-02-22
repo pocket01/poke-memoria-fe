@@ -50,8 +50,7 @@ function getPokemonIdByNameOrId(nameOrId: string | number): number {
  * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon?limit={limit}&offset={offset}
  */
 async function fetchPokeAPIPokemonList({
-	/** @todo 現在対応済みは最初の9匹のみ */
-	limit = 9,
+	limit = 151,
 	offset = 0,
 }: PokeAPIListRequest = {}): Promise<PokeAPIListResponse> {
 	try {
