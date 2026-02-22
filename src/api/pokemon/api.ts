@@ -47,7 +47,6 @@ function getPokemonIdByNameOrId(nameOrId: string | number): number {
  * @param limit 取得件数（デフォルト: 151）
  * @param offset オフセット（デフォルト: 0）
  * @returns ポケモンの一覧情報
- * @note PokeAPIのエンドポイント: https://pokeapi.co/api/v2/pokemon?limit={limit}&offset={offset}
  */
 async function fetchPokeAPIPokemonList({
 	limit = 151,

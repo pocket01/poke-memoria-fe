@@ -1,6 +1,7 @@
 "use client";
 import { Search } from "lucide-react";
 import Image from "next/image";
+import { parseAsBoolean, useQueryState } from "nuqs";
 import { type PropsWithChildren, useState } from "react";
 import type { PokemonList } from "@/api/pokemon/type";
 import { Button } from "../atoms/button";
@@ -23,21 +24,21 @@ type Props = PropsWithChildren<{
  * @returns JSX.Element
  */
 export function PokemonSelectDialog({ pokemons, children }: Props) {
+	// クエリパラメータからダイアログの表示状態を管理
+	const [isDialogOpen, setIsDialogOpen] = useQueryState(
+		"showPokemonDialog",
+		parseAsBoolean.withDefault(false),
+	);
 	// 検索クエリの状態管理
 	const [searchQuery, setSearchQuery] = useState("");
+
+	// 検索クエリに基づいてポケモンをフィルタリング
 	const filteredPokemon = pokemons.filter((pokemon) =>
 		pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()),
 	);
 
-	// ポケモン選択時のハンドラー
-	const handleSelectPokemon = (name: string) => {
-		/** @todo 一旦仮 */
-		console.log(name);
-		// closeModal();
-	};
-
 	return (
-		<Dialog defaultOpen={true}>
+		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent className="max-w-2xl max-h-[80vh] flex flex-col p-6">
 				<DialogHeader>
@@ -63,7 +64,6 @@ export function PokemonSelectDialog({ pokemons, children }: Props) {
 							<button
 								key={pokemon.name}
 								type="button"
-								onClick={() => handleSelectPokemon(pokemon.name)}
 								className="cursor-pointer flex flex-col items-center bg-white gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-200 text-left"
 							>
 								{/**
