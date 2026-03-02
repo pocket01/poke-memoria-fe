@@ -6,7 +6,7 @@ import {
 	parseAsInteger,
 	useQueryState,
 } from "nuqs";
-import { type PropsWithChildren, useMemo, useState } from "react";
+import { type PropsWithChildren, useEffect, useMemo, useState } from "react";
 import type { Pokemon, PokemonList } from "@/api/pokemon/type";
 import { Button } from "../atoms/button";
 import {
@@ -46,7 +46,10 @@ export function PokemonSelectDialog({
 	// クエリパラメータ：選択ポケモンのID一覧
 	const [querySelectedPokemons, setQuerySelectedPokemons] = useQueryState(
 		"selectedPokemons",
-		parseAsArrayOf(parseAsInteger),
+		{
+			...parseAsArrayOf(parseAsInteger).withDefault([]),
+			clearOnDefault: false,
+		},
 	);
 
 	/** @todo キーワード検索（ローカル用。暫定版） */
@@ -54,7 +57,7 @@ export function PokemonSelectDialog({
 
 	// ダイアログで選択したポケモンIDの一覧
 	const [selectedPokemons, setSelectedPokemons] = useState<number[]>(
-		querySelectedPokemons ?? [],
+		querySelectedPokemons,
 	);
 
 	// 検索クエリに基づいてポケモンをフィルタリング
@@ -85,6 +88,12 @@ export function PokemonSelectDialog({
 	const handleSubmit = () => {
 		setQuerySelectedPokemons(selectedPokemons);
 	};
+
+	useEffect(() => {
+		// クエリパラメータのポケモンIDを選択状態に反映
+		if (querySelectedPokemons.length)
+			setSelectedPokemons(querySelectedPokemons);
+	}, [querySelectedPokemons]);
 
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
