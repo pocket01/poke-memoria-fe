@@ -13,7 +13,6 @@ export default async function PartnersModal() {
 		<PokemonSelectDialog
 			pokemons={data.results}
 			maxSelect={MAX_POKEMON_SELECT}
-			to="/create/partners"
 		/>
 	);
 }

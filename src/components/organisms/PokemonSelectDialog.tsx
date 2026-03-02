@@ -1,8 +1,11 @@
 "use client";
 import { Search } from "lucide-react";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
-import { parseAsBoolean, useQueryState } from "nuqs";
+import {
+	parseAsArrayOf,
+	parseAsBoolean,
+	parseAsInteger,
+	useQueryState,
+} from "nuqs";
 import { type PropsWithChildren, useMemo, useState } from "react";
 import type { Pokemon, PokemonList } from "@/api/pokemon/type";
 import { Button } from "../atoms/button";
@@ -19,7 +22,6 @@ import { PokemonGridList } from "../molecules/PokemonGridList";
 
 type Props = PropsWithChildren<{
 	pokemons: PokemonList;
-	to: Route;
 	maxSelect?: number;
 }>;
 
@@ -32,23 +34,28 @@ type Props = PropsWithChildren<{
  */
 export function PokemonSelectDialog({
 	pokemons,
-	to,
 	maxSelect = 6,
 	children,
 }: Props) {
-	const router = useRouter();
-
-	// クエリパラメータからダイアログの表示状態を管理
+	// クエリパラメータ：ダイアログの表示状態
 	const [isDialogOpen, setIsDialogOpen] = useQueryState(
 		"showPokemonDialog",
 		parseAsBoolean.withDefault(false),
 	);
 
-	// 検索クエリの状態管理
+	// クエリパラメータ：選択ポケモンのID一覧
+	const [querySelectedPokemons, setQuerySelectedPokemons] = useQueryState(
+		"selectedPokemons",
+		parseAsArrayOf(parseAsInteger),
+	);
+
+	/** @todo キーワード検索（ローカル用。暫定版） */
 	const [searchQuery, setSearchQuery] = useState("");
 
-	// 選択状態
-	const [selectedPokemons, setSelectedPokemons] = useState<number[]>([]);
+	// ダイアログで選択したポケモンIDの一覧
+	const [selectedPokemons, setSelectedPokemons] = useState<number[]>(
+		querySelectedPokemons ?? [],
+	);
 
 	// 検索クエリに基づいてポケモンをフィルタリング
 	const filteredPokemon = useMemo(
@@ -76,9 +83,7 @@ export function PokemonSelectDialog({
 	};
 
 	const handleSubmit = () => {
-		// 選択されたポケモンIDを処理するロジックをここに実装
-		console.log("Selected Pokemon IDs:", selectedPokemons);
-		router.push(`${to}?selected=${selectedPokemons.join(",")}`);
+		setQuerySelectedPokemons(selectedPokemons);
 	};
 
 	return (

@@ -1,5 +1,10 @@
 "use client";
-import { parseAsBoolean, useQueryState } from "nuqs";
+import {
+	parseAsArrayOf,
+	parseAsBoolean,
+	parseAsInteger,
+	useQueryState,
+} from "nuqs";
 import { useCallback, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type { PokemonList } from "@/api/pokemon/type";
@@ -9,21 +14,26 @@ import { PokemonCard } from "../molecules/PokemonCard";
 
 type Props = {
 	pokemons: PokemonList;
-	selectedPokemons?: number[];
 };
 
-function Partners({ pokemons, selectedPokemons }: Props) {
+function Partners({ pokemons }: Props) {
 	const { control, setValue } = useGlobalForm();
 
-	// クエリパラメータからダイアログの表示状態を管理
-	const [isDialogOpen, setIsDialogOpen] = useQueryState(
+	// クエリパラメータ：ダイアログの表示状態
+	const [_, setQueryDialogOpen] = useQueryState(
 		"showPokemonDialog",
 		parseAsBoolean.withDefault(false),
 	);
-	const { partners } = useWatch({ control });
-	// クエリパラメータから選択されたポケモンのIDを取得
+	// クエリパラメータ：選択ポケモンのID一覧
+	const [querySelectedPokemons] = useQueryState(
+		"selectedPokemons",
+		parseAsArrayOf(parseAsInteger).withDefault([]),
+	);
 	const queryPartners =
-		selectedPokemons?.map((id) => ({ pokemonId: id, comment: "" })) ?? [];
+		querySelectedPokemons?.map((id) => ({ pokemonId: id, comment: "" })) ?? [];
+
+	const { partners } = useWatch({ control });
+
 	// フォームの状態とクエリパラメータの状態をマージしたパートナーデータ
 	const myPartners = partners?.map((partner, index) => {
 		if (partner?.pokemonId) {
@@ -39,8 +49,8 @@ function Partners({ pokemons, selectedPokemons }: Props) {
 	});
 
 	const openPokemonDialog = useCallback(() => {
-		setIsDialogOpen(true);
-	}, [setIsDialogOpen]);
+		setQueryDialogOpen(true);
+	}, [setQueryDialogOpen]);
 
 	// コメント編集中のスロット管理
 	const [editingComment, setEditingComment] = useState<number | null>(null);
@@ -74,6 +84,7 @@ function Partners({ pokemons, selectedPokemons }: Props) {
 						if (pokemon) {
 							return (
 								<PokemonCard
+									key={key}
 									name={
 										pokemons.find((p) => p.id === pokemon.pokemonId)?.name || ""
 									}
