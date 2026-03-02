@@ -157,6 +157,12 @@ export type PokeAPIPokemonSpecies = z.infer<typeof PokeAPIPokemonSpeciesSchema>;
  * PokeAPi専用型を組み合わせ、プロジェクト内で使いやすいように加工した型定義。
  */
 
+const PokemonSchema = z.object({
+	id: z.number(),
+	name: z.string(), // 日本語名
+	enName: z.string(), // 英語名
+	imageUrl: z.string(), // 画像URL
+});
 /**
  * @description ポケモン一覧取得（日本語名対応）のレスポンス型
  * PokeAPI専用のリストレスポンス型をベースに、日本語名対応したポケモンを返す。
@@ -165,17 +171,13 @@ const PokemonListSchema = PokeAPIListResponseSchema.omit({
 	results: true,
 }).extend({
 	results: z.array(
-		PokeAPIPokemonResultSchema.omit({ name: true }).extend({
-			id: z.number(), // ID
-			name: z.string(), // 日本語名
-			enName: z.string(), // 英語名
-			imageUrl: z.string(), // 画像URL
-		}),
+		PokeAPIPokemonResultSchema.omit({ name: true }).extend(PokemonSchema.shape),
 	),
 });
 
 export type PokemonListResponse = z.infer<typeof PokemonListSchema>;
-export type PokemonList = PokemonListResponse["results"];
+export type PokemonList = z.infer<typeof PokemonSchema>[];
+export type Pokemon = z.infer<typeof PokemonSchema>;
 
 /**
  * @description ポケモン詳細情報型（日本語名対応）
