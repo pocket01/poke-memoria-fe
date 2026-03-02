@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/tailwind.css";
+import { NuqsAdapter } from "nuqs/adapters/next";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -28,7 +29,7 @@ export default function RootLayout({
 				/** @todo 背景色後ほど変更できるようにする */
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				{children}
+				<NuqsAdapter>{children}</NuqsAdapter>
 			</body>
 		</html>
 	);

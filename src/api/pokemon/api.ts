@@ -148,8 +148,7 @@ export async function fetchPokemonList({
 						// enName: pokemon.name,
 						// 公式アートワークの画像URLを取得
 						// url: pokemon.url,
-						imageUrl:
-							detail.sprites.other?.["official-artwork"]?.front_default ?? "",
+						imageUrl: `/pokemons/${String(detail.id).padStart(3, "0")}.png`,
 						// id: 1,
 						// name: "",
 						// enName: "",

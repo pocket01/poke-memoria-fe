@@ -1,29 +1,46 @@
 "use client";
-import { parseAsBoolean, useQueryState } from "nuqs";
-import { useCallback, useState } from "react";
+import {
+	parseAsArrayOf,
+	parseAsBoolean,
+	parseAsInteger,
+	useQueryState,
+} from "nuqs";
+import { useCallback, useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type { PokemonList } from "@/api/pokemon/type";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
+import { useMemoriesStore } from "@/stores/memoriesStore";
 import { EmptySlotCard } from "../molecules/EmptySlotCard";
 import { PokemonCard } from "../molecules/PokemonCard";
 
 type Props = {
 	pokemons: PokemonList;
-	selectedPokemons?: number[];
 };
 
-function Partners({ pokemons, selectedPokemons }: Props) {
+function Partners({ pokemons }: Props) {
+	const { memories } = useMemoriesStore();
 	const { control, setValue } = useGlobalForm();
 
-	// クエリパラメータからダイアログの表示状態を管理
-	const [isDialogOpen, setIsDialogOpen] = useQueryState(
+	// クエリパラメータ：ダイアログの表示状態
+	const [_, setQueryDialogOpen] = useQueryState(
 		"showPokemonDialog",
 		parseAsBoolean.withDefault(false),
 	);
-	const { partners } = useWatch({ control });
-	// クエリパラメータから選択されたポケモンのIDを取得
+	// クエリパラメータ：選択ポケモンのID一覧
+	const [querySelectedPokemons, setQuerySelectedPokemons] = useQueryState(
+		"selectedPokemons",
+		{
+			...parseAsArrayOf(parseAsInteger).withDefault(
+				memories.partners.filter((p) => p !== null).map((p) => p.pokemonId),
+			),
+			clearOnDefault: false,
+		},
+	);
 	const queryPartners =
-		selectedPokemons?.map((id) => ({ pokemonId: id, comment: "" })) ?? [];
+		querySelectedPokemons?.map((id) => ({ pokemonId: id, comment: "" })) ?? [];
+
+	const { partners } = useWatch({ control });
+
 	// フォームの状態とクエリパラメータの状態をマージしたパートナーデータ
 	const myPartners = partners?.map((partner, index) => {
 		if (partner?.pokemonId) {
@@ -39,8 +56,10 @@ function Partners({ pokemons, selectedPokemons }: Props) {
 	});
 
 	const openPokemonDialog = useCallback(() => {
-		setIsDialogOpen(true);
-	}, [setIsDialogOpen]);
+		// クエリパラメータに選択ポケモンIDがない場合、メモリーズのパートナーデータをデフォルトとしてセットする
+		setQuerySelectedPokemons((prev) => prev);
+		setQueryDialogOpen(true);
+	}, [setQuerySelectedPokemons, setQueryDialogOpen]);
 
 	// コメント編集中のスロット管理
 	const [editingComment, setEditingComment] = useState<number | null>(null);
@@ -63,6 +82,17 @@ function Partners({ pokemons, selectedPokemons }: Props) {
 		setEditingComment(null);
 	};
 
+	useEffect(() => {
+		if (querySelectedPokemons.length) {
+			// クエリパラメータの選択ポケモンIDをフォームの状態に反映
+			querySelectedPokemons.forEach((id, index) => {
+				setValue(`partners.${index}`, { pokemonId: id, comment: "" });
+			});
+		} else {
+			setValue("partners", [null, null, null, null, null, null]);
+		}
+	}, [querySelectedPokemons, setValue]);
+
 	return (
 		<div className="max-w-6xl mx-auto w-full flex-1">
 			<div className="mb-8">
@@ -74,6 +104,7 @@ function Partners({ pokemons, selectedPokemons }: Props) {
 						if (pokemon) {
 							return (
 								<PokemonCard
+									key={key}
 									name={
 										pokemons.find((p) => p.id === pokemon.pokemonId)?.name || ""
 									}
