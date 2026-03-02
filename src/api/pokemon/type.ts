@@ -162,6 +162,7 @@ const PokemonSchema = z.object({
 	name: z.string(), // 日本語名
 	enName: z.string(), // 英語名
 	imageUrl: z.string(), // 画像URL
+	url: z.string(), // 詳細URL
 });
 /**
  * @description ポケモン一覧取得（日本語名対応）のレスポンス型
