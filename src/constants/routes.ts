@@ -52,7 +52,7 @@ export const CreateSteps = [
 	{
 		page: "/create/profile",
 		label: "プロフィール",
-		title: "履歴書の仕上げ",
+		title: "プロフィール",
 		description: "あなた自身について教えてください",
 	},
 	// // ステップ５．確認

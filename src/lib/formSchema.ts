@@ -6,7 +6,7 @@ import { VALIDATION_LIMITS } from "@/types/schema";
  */
 const partnerPokemonSchema = z
 	.object({
-		/** ポケモンの図鑑番号（未選択の場合はnull） */
+		/** ポケモンのID（未選択の場合はnull） */
 		pokemonId: z.number(),
 		/** 相棒へのコメント（最大20文字） */
 		comment: z.string().max(VALIDATION_LIMITS.PARTNER_COMMENT_MAX_LENGTH),
@@ -29,18 +29,15 @@ export const formSchema = z.object({
 	originTitleId: z.number().min(1).max(9).nullable(),
 	/** プレイ歴の配列 */
 	history: z.array(titleHistorySchema),
-	/** ビジュアルスタイル */
-	style: z.enum(["paper", "neo_gb", "retro_rg"]).nullable(),
-	/** トレーナー名 */
-	trainerName: z.string().nullable(),
-	/** 冒険を始めた年 */
-	startedYear: z.string().nullable(),
 	/** 相棒ポケモンの配列（最大6匹） */
 	partners: z.array(partnerPokemonSchema).max(VALIDATION_LIMITS.MAX_PARTNERS),
-	/** タグの配列 */
-	tags: z.array(z.string()),
-	/** 自由記述メッセージ（最大200文字） */
-	freeMessage: z.string().max(VALIDATION_LIMITS.FREE_MESSAGE_MAX_LENGTH),
+	/** トレーナープロフィール */
+	profile: z.object({
+		/** トレーナー名 */
+		name: z.string().max(VALIDATION_LIMITS.TRAINER_NAME_MAX_LENGTH),
+		/** 自由記述 */
+		freeMessage: z.string().max(VALIDATION_LIMITS.FREE_MESSAGE_MAX_LENGTH),
+	}),
 });
 
 /**

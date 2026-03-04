@@ -123,12 +123,11 @@ export const DEFAULT_PARTNER = {
  * デフォルトのMemoriesデータ
  */
 export const DEFAULT_MEMORIES: Memories = {
-	style: "paper",
-	trainerName: "",
-	startedYear: "",
 	originTitleId: 0,
 	history: [],
 	partners: Array(6).fill(null),
-	tags: [],
-	freeMessage: "",
+	profile: {
+		name: "",
+		freeMessage: "",
+	},
 };

@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren, useEffect } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { DEFAULT_MEMORIES } from "@/constants/constants";
 import type { FormData } from "@/lib/formSchema";
 import { formSchema } from "@/lib/formSchema";
 import { useMemoriesStore } from "@/stores/memoriesStore";
@@ -17,22 +18,30 @@ type GlobalFormProviderProps = PropsWithChildren;
  * 全ステップのフォームデータを管理
  */
 export function GlobalFormProvider({ children }: GlobalFormProviderProps) {
-	const memories = useMemoriesStore((state) => state.memories);
+	const { memories, isHydrated } = useMemoriesStore();
 
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			originTitleId: memories.originTitleId || null,
-			history: memories.history,
-			style: memories.style || null,
-			trainerName: memories.trainerName || null,
-			startedYear: memories.startedYear || null,
-			partners: memories.partners,
-			tags: memories.tags,
-			freeMessage: memories.freeMessage,
+			originTitleId: memories.originTitleId ?? DEFAULT_MEMORIES.originTitleId,
+			history: memories.history ?? DEFAULT_MEMORIES.history,
+			partners: memories.partners ?? DEFAULT_MEMORIES.partners,
+			profile: memories.profile ?? DEFAULT_MEMORIES.profile,
 		},
 		mode: "onChange",
 	});
+
+	// ローカルストレージからの復旧が完了したタイミングでフォームの状態を更新する
+	useEffect(() => {
+		if (isHydrated) {
+			methods.reset({
+				originTitleId: memories.originTitleId ?? DEFAULT_MEMORIES.originTitleId,
+				history: memories.history ?? DEFAULT_MEMORIES.history,
+				partners: memories.partners ?? DEFAULT_MEMORIES.partners,
+				profile: memories.profile ?? DEFAULT_MEMORIES.profile,
+			});
+		}
+	}, [isHydrated, methods.reset, memories]);
 
 	return <FormProvider {...methods}>{children}</FormProvider>;
 }
