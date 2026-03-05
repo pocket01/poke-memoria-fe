@@ -30,11 +30,21 @@ export type TitleHistory = {
  * 相棒ポケモンの情報
  */
 export type PartnerPokemon = {
-	/** ポケモンの図鑑番号（未選択の場合はnull） */
+	/** ポケモンのID */
 	pokemonId: number;
 	/** 相棒へのコメント（最大20文字） */
 	comment: string;
-} | null;
+};
+
+/**
+ * トレーナープロフィールの情報
+ */
+export type TrainerProfile = {
+	/** トレーナー名 */
+	name: string;
+	/** 自由記述 */
+	freeMessage: string;
+};
 
 /**
  * 履歴書の全体構造：Memories
@@ -45,18 +55,10 @@ export type Memories = {
 	originTitleId: number;
 	/** プレイ歴の配列 */
 	history: TitleHistory[];
-	/** ビジュアルスタイル */
-	style: VisualStyle;
-	/** トレーナー名 */
-	trainerName: string;
-	/** 冒険を始めた年 */
-	startedYear: string;
 	/** 相棒ポケモンの配列（最大6匹） */
-	partners: PartnerPokemon[];
-	/** タグの配列 */
-	tags: string[];
-	/** 自由記述メッセージ（最大200文字） */
-	freeMessage: string;
+	partners: (PartnerPokemon | null)[];
+	/** トレーナープロフィール */
+	profile: TrainerProfile;
 };
 
 /**
@@ -91,10 +93,12 @@ export const URL_PARAM_KEYS = {
 export const VALIDATION_LIMITS = {
 	/** 相棒コメントの最大文字数 */
 	PARTNER_COMMENT_MAX_LENGTH: 20,
-	/** 自由記述メッセージの最大文字数 */
-	FREE_MESSAGE_MAX_LENGTH: 200,
 	/** 相棒ポケモンの最大数 */
 	MAX_PARTNERS: 6,
+	/** トレーナー名の最大文字数 */
+	TRAINER_NAME_MAX_LENGTH: 30,
+	/** 自由記述メッセージの最大文字数 */
+	FREE_MESSAGE_MAX_LENGTH: 200,
 } as const;
 
 /**
