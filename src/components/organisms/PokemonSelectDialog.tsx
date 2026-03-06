@@ -48,7 +48,7 @@ export function PokemonSelectDialog({
 		"selectedPokemons",
 		{
 			...parseAsArrayOf(parseAsInteger).withDefault([]),
-			clearOnDefault: false,
+			clearOnDefault: true,
 		},
 	);
 
@@ -93,7 +93,10 @@ export function PokemonSelectDialog({
 		// クエリパラメータのポケモンIDを選択状態に反映
 		if (querySelectedPokemons.length)
 			setSelectedPokemons(querySelectedPokemons);
-	}, [querySelectedPokemons]);
+
+		// ダイアログを閉じたときにダイアログの選択状態を解除
+		if (!isDialogOpen) setSelectedPokemons([]);
+	}, [querySelectedPokemons, isDialogOpen]);
 
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
