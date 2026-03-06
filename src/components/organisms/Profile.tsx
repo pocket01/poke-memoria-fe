@@ -18,7 +18,9 @@ function Profile() {
 						<Controller
 							control={control}
 							name="profile.name"
-							render={({ field }) => <Input {...field} />}
+							render={({ field }) => (
+								<Input {...field} placeholder="あなたの名前" />
+							)}
 						/>
 					</CardContent>
 				</Card>

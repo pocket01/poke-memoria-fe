@@ -1,4 +1,4 @@
-import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Card } from "../atoms/card";
 
@@ -21,10 +21,13 @@ export function EmptySlotCard({
 			)}
 			onClick={onClick}
 		>
-			<div className="text-center py-8">
-				<div className="flex justify-center mx-auto mb-3">
-					<PokemonAvatar variant="empty" size="default" />
-				</div>
+			<div className="flex flex-col items-center py-8">
+				<Image
+					src="/pokeballs/01.svg"
+					alt={`${slotNumber + 1}匹目`}
+					width={128}
+					height={128}
+				/>
 				<p className="text-[#4A5565] text-base font-medium">
 					{slotNumber + 1}匹目
 				</p>
