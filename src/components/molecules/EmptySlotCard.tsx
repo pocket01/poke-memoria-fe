@@ -31,7 +31,7 @@ export function EmptySlotCard({
 				<p className="text-[#4A5565] text-base font-medium">
 					{slotNumber + 1}匹目
 				</p>
-				<p className="text-xs text-[#9CA3AF] mt-1">クリックして追加</p>
+				<p className="text-xs text-[#9CA3AF] mt-1">相棒を選ぶ</p>
 			</div>
 		</Card>
 	);

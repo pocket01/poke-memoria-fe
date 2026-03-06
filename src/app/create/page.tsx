@@ -15,9 +15,6 @@ export default function CreateIntroPage() {
 									<h2 className="text-2xl font-medium text-[#212D47]">
 										さいしょからはじめる
 									</h2>
-									<p className="text-xs font-normal text-[#999CAA]">
-										New Journey
-									</p>
 								</div>
 							</div>
 						</Card>
