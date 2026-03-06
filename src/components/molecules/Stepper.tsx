@@ -47,7 +47,7 @@ export default function Stepper<
 						/>
 					</div>
 					<span
-						className={`text-xs font-bold mt-2 whitespace-nowrap transition-colors ${
+						className={`text-sm font-bold mt-2 whitespace-nowrap transition-colors ${
 							index <= currentStep ? "text-[#284CAC]" : "text-[#4A5565]"
 						}`}
 					>
