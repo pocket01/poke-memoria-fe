@@ -117,9 +117,12 @@ function Partners({ pokemons }: Props) {
 							return (
 								<PokemonCard
 									key={key}
-									name={
-										pokemons.find((p) => p.id === pokemon.pokemonId)?.name || ""
-									}
+									pokemon={{
+										id: pokemon.pokemonId ?? 0,
+										name:
+											pokemons.find((p) => p.id === pokemon.pokemonId)?.name ??
+											"不明",
+									}}
 									comment={pokemon.comment}
 									isEditingComment={editingComment === index}
 									onRemove={() => handleRemovePokemon(index)}

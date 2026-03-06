@@ -1,11 +1,14 @@
 import { X } from "lucide-react";
-import { PokemonAvatar } from "@/components/atoms/pokemon-avatar";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Card } from "../atoms/card";
 import { Textarea } from "../atoms/textarea";
 
-export interface PokemonCardProps {
-	name: string;
+type Props = {
+	pokemon?: {
+		id: number;
+		name: string;
+	};
 	comment?: string;
 	isEditingComment?: boolean;
 	onRemove?: () => void;
@@ -14,10 +17,10 @@ export interface PokemonCardProps {
 	onCommentClick?: () => void;
 	onClick?: () => void;
 	className?: string;
-}
+};
 
 export function PokemonCard({
-	name,
+	pokemon,
 	comment,
 	// isEditingComment = false,
 	onRemove,
@@ -26,7 +29,7 @@ export function PokemonCard({
 	// onCommentClick,
 	// onClick,
 	className,
-}: PokemonCardProps) {
+}: Props) {
 	// const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	// useEffect(() => {
@@ -56,9 +59,14 @@ export function PokemonCard({
 			{/* ポケモンを表示 */}
 			<div className="text-center mb-4 cur">
 				<div className="flex justify-center mx-auto mb-3">
-					<PokemonAvatar variant="filled" size="default" />
+					<Image
+						src={`/pokemons/${String(pokemon?.id).padStart(3, "0")}.png`}
+						alt={pokemon?.name ?? "未選択"}
+						width={80}
+						height={80}
+					/>
 				</div>
-				<h3 className="font-bold text-xl text-[#0A0A0A]">{name}</h3>
+				<h3 className="font-bold text-xl text-[#0A0A0A]">{pokemon?.name}</h3>
 			</div>
 
 			{/* Comment section */}
