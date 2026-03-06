@@ -42,7 +42,7 @@ export function PokemonCard({
 
 	const content = (
 		<>
-			{/* Remove button */}
+			{/* 選択解除ボタン */}
 			<X
 				onClick={(e) => {
 					e.stopPropagation();
@@ -53,7 +53,7 @@ export function PokemonCard({
 				)} w-4 h-4`}
 			/>
 
-			{/* Pokemon display */}
+			{/* ポケモンを表示 */}
 			<div className="text-center mb-4 cur">
 				<div className="flex justify-center mx-auto mb-3">
 					<PokemonAvatar variant="filled" size="default" />

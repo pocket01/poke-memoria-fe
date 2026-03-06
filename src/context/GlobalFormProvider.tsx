@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type PropsWithChildren, useEffect } from "react";
+import type { PropsWithChildren } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { DEFAULT_MEMORIES } from "@/constants/constants";
 import type { FormData } from "@/lib/formSchema";
@@ -18,7 +18,7 @@ type GlobalFormProviderProps = PropsWithChildren;
  * 全ステップのフォームデータを管理
  */
 export function GlobalFormProvider({ children }: GlobalFormProviderProps) {
-	const { memories, isHydrated } = useMemoriesStore();
+	const { memories } = useMemoriesStore();
 
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
@@ -31,17 +31,18 @@ export function GlobalFormProvider({ children }: GlobalFormProviderProps) {
 		mode: "onChange",
 	});
 
+	/** @todo SSRとの同期問題解決は後ほど要検討 */
 	// ローカルストレージからの復旧が完了したタイミングでフォームの状態を更新する
-	useEffect(() => {
-		if (isHydrated) {
-			methods.reset({
-				originTitleId: memories.originTitleId ?? DEFAULT_MEMORIES.originTitleId,
-				history: memories.history ?? DEFAULT_MEMORIES.history,
-				partners: memories.partners ?? DEFAULT_MEMORIES.partners,
-				profile: memories.profile ?? DEFAULT_MEMORIES.profile,
-			});
-		}
-	}, [isHydrated, methods.reset, memories]);
+	// useEffect(() => {
+	// 	if (isHydrated) {
+	// 		methods.reset({
+	// 			originTitleId: memories.originTitleId ?? DEFAULT_MEMORIES.originTitleId,
+	// 			history: memories.history ?? DEFAULT_MEMORIES.history,
+	// 			partners: memories.partners ?? DEFAULT_MEMORIES.partners,
+	// 			profile: memories.profile ?? DEFAULT_MEMORIES.profile,
+	// 		});
+	// 	}
+	// }, [isHydrated, methods.reset, memories]);
 
 	return <FormProvider {...methods}>{children}</FormProvider>;
 }
