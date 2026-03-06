@@ -5,11 +5,9 @@ import { Card } from "@/components/atoms/card";
 
 export default function CreateIntroPage() {
 	return (
-		<div className="flex-1 flex items-center justify-center min-h-screen p-8">
-			<div className="w-full max-w-5xl grid grid-cols-2 gap-8">
-				{/* 左側：2つのカード */}
-				<div className="flex flex-col gap-6">
-					{/* さいしょからはじめる */}
+		<div className="flex-1 flex items-center justify-center min-h-screen p-4 md:p-8">
+			<div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+				<div className="flex flex-col gap-4 md:gap-6">
 					<Link href="/create/origin" className="block">
 						<Card className="bg-[#E3E8EE] neo-flat hover:neo-hover transition-all cursor-pointer">
 							<div className="flex items-center justify-between gap-6 px-6 py-5">
@@ -21,13 +19,12 @@ export default function CreateIntroPage() {
 										New Journey
 									</p>
 								</div>
-								<div className="w-8 h-8 rounded-full bg-[#284CAC] flex-shrink-0 shadow-md" />
 							</div>
 						</Card>
 					</Link>
 
-					{/* つづきからはじめる */}
-					<Link href="/create/history" className="block">
+					{/** @todo 「つづきからはじめる」は実装中 */}
+					{/* <Link href="/create/history" className="block">
 						<Card className="bg-[#E3E8EE] neo-flat hover:neo-hover transition-all cursor-pointer">
 							<div className="flex items-center justify-between gap-6 px-6 py-5">
 								<div className="flex flex-col gap-0.5">
@@ -43,11 +40,11 @@ export default function CreateIntroPage() {
 								</div>
 							</div>
 						</Card>
-					</Link>
+					</Link> */}
 				</div>
 
-				{/* 右側：SAVE DATA */}
-				<div>
+				{/** @todo 「つづきからはじめる」を選択後に表示する */}
+				{/* <div>
 					<Card className="bg-[#E3E8EE] neo-flat">
 						<div className="px-6 py-6">
 							<h3 className="text-xs font-medium text-[#999CAA] uppercase tracking-widest mb-5">
@@ -55,7 +52,6 @@ export default function CreateIntroPage() {
 							</h3>
 
 							<div className="flex flex-col gap-3">
-								{/* しゅじんこう */}
 								<div className="flex items-center justify-between">
 									<span className="text-xs font-normal text-[#999CAA]">
 										しゅじんこう
@@ -65,10 +61,8 @@ export default function CreateIntroPage() {
 									</span>
 								</div>
 
-								{/* 区切り線 */}
 								<div className="h-px bg-gradient-to-r from-[#D4D9E3] to-transparent" />
 
-								{/* もっているバッジ */}
 								<div className="space-y-1.5">
 									<span className="text-xs font-normal text-[#999CAA]">
 										もっているバッジ
@@ -85,10 +79,8 @@ export default function CreateIntroPage() {
 									</div>
 								</div>
 
-								{/* 区切り線 */}
 								<div className="h-px bg-gradient-to-r from-[#D4D9E3] to-transparent" />
 
-								{/* ポケモンずかん */}
 								<div className="flex items-center justify-between">
 									<span className="text-xs font-normal text-[#999CAA]">
 										ポケモンずかん
@@ -98,10 +90,8 @@ export default function CreateIntroPage() {
 									</span>
 								</div>
 
-								{/* 区切り線 */}
 								<div className="h-px bg-gradient-to-r from-[#D4D9E3] to-transparent" />
 
-								{/* プレイじかん */}
 								<div className="flex items-center justify-between">
 									<span className="text-xs font-normal text-[#999CAA]">
 										プレイじかん
@@ -111,7 +101,6 @@ export default function CreateIntroPage() {
 									</span>
 								</div>
 
-								{/* フッター */}
 								<div className="flex items-center justify-center gap-1.5 mt-3 opacity-50">
 									<div className="w-1 h-1 rounded-full bg-[#284CAC]" />
 									<span className="text-xs font-normal text-[#999CAA] uppercase tracking-widest">
@@ -122,7 +111,7 @@ export default function CreateIntroPage() {
 							</div>
 						</div>
 					</Card>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);
