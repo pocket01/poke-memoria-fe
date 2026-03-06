@@ -26,7 +26,7 @@ export function EmptySlotCard({
 					<PokemonAvatar variant="empty" size="default" />
 				</div>
 				<p className="text-[#4A5565] text-base font-medium">
-					スロット {slotNumber}
+					{slotNumber + 1}匹目
 				</p>
 				<p className="text-xs text-[#9CA3AF] mt-1">クリックして追加</p>
 			</div>
