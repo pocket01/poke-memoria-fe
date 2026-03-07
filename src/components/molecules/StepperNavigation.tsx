@@ -1,8 +1,10 @@
+"use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "../atoms/button";
 import type { StepperType } from "./types/StepperTypes";
 
-type Props<TStep extends StepperType> = {
+type Props<TRoute extends string, TStep extends StepperType<TRoute>> = {
 	// ステップ配列
 	steps: TStep[];
 	// 現在のステップ
@@ -19,6 +21,8 @@ type Props<TStep extends StepperType> = {
 
 /**
  * ステッパーナビゲーションコンポーネント
+ * @description
+ *   ステッパーのステップに応じて、前のステップ、次のステップへの遷移を行うコンポーネント。
  * @param props.steps ステップ配列
  * @param props.activeStep 現在のステップ
  * @param props.handleBack 前のステップへ遷移時のイベントハンドラ
@@ -27,21 +31,29 @@ type Props<TStep extends StepperType> = {
  * @param props.nextVisible 次へボタンを表示するかどうか
  * @returns
  */
-export default function StepperNavigation<TStep extends StepperType>({
+export default function StepperNavigation<
+	TRoute extends string,
+	TStep extends StepperType<TRoute>,
+>({
 	steps,
 	activeStep,
 	handleBack,
 	handleNext,
 	backVisible = true,
 	nextVisible = true,
-}: Props<TStep>) {
+}: Props<TRoute, TStep>) {
+	const router = useRouter();
+
 	return (
 		<footer className="px-8 py-6">
 			<div className="max-w-6xl mx-auto flex items-center justify-between gap-6">
 				{backVisible ? (
 					<Button
 						type="button"
-						onClick={() => handleBack?.(steps[activeStep - 1])}
+						onClick={() => {
+							handleBack?.(steps[activeStep - 1]);
+							router.push(steps[activeStep - 1].url);
+						}}
 						className="bg-[#E3E8EE] text-[#364153] hover:bg-[#D4DDE6] rounded-2xl h-12 px-8 flex items-center gap-2 shadow-md border border-[#C9DAEB] transition-all"
 					>
 						<ChevronLeft size={20} />
@@ -60,7 +72,10 @@ export default function StepperNavigation<TStep extends StepperType>({
 				{nextVisible ? (
 					<Button
 						type="button"
-						onClick={() => handleNext?.(steps[activeStep + 1])}
+						onClick={() => {
+							handleNext?.(steps[activeStep + 1]);
+							router.push(steps[activeStep + 1].url);
+						}}
 						className="bg-[#284CAC] text-white hover:bg-[#1E3A7F] rounded-2xl h-12 px-8 flex items-center gap-2 shadow-lg transition-all"
 					>
 						<span className="font-medium text-sm">次へ</span>

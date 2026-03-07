@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
@@ -20,9 +21,11 @@ type Props<
  * @returns
  */
 export default function Stepper<
+	TRoute extends string,
 	TStep extends {
 		id: number;
 		label: ReactNode;
+		url: Route<TRoute>;
 	},
 >({ steps, activeStep: currentStep }: Props<TStep>) {
 	return (
@@ -30,33 +33,28 @@ export default function Stepper<
 			{steps.map((step, index) => (
 				<div key={step.id} className="flex flex-col items-center w-full">
 					{/* ステップアイテム */}
-					{index >= currentStep && (
-						<div
-							className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all text-sm ${
-								index === currentStep
-									? "neu-flat bg-[#284CAC] text-white"
-									: index < currentStep
-										? "neu-flat bg-[#B8E3D2] text-[#284CAC] "
-										: "neu-pressed bg-[#E3E8EE] text-[#A1A1A1]"
-							}`}
-						>
-							{index + 1}
-						</div>
-					)}
-					{index < currentStep && (
+					<div className="relative">
 						<Image
-							src="/pokeballs/02.svg"
+							src="/pokeballs/01.svg"
+							className={`absolute transition-all  duration-300 ${index < currentStep ? "opacity-0 scale-0" : "opacity-100 scale-100"}`}
 							alt={`ステップ${index + 1}完了`}
 							width={48}
 							height={48}
 						/>
-					)}
+						<Image
+							src="/pokeballs/02.svg"
+							className={`transition-all  duration-300 ${index < currentStep ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
+							alt={`ステップ${index + 1}完了`}
+							width={48}
+							height={48}
+						/>
+					</div>
 					<span
-						className={`text-xs font-bold mt-2 whitespace-nowrap transition-colors ${
+						className={`text-sm font-bold mt-2 whitespace-nowrap transition-colors ${
 							index <= currentStep ? "text-[#284CAC]" : "text-[#4A5565]"
 						}`}
 					>
-						{step.label}
+						{`${index + 1}. ${step.label}`}
 					</span>
 				</div>
 			))}

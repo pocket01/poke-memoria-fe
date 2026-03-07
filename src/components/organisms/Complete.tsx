@@ -1,6 +1,68 @@
+"use client";
+
+import { pdf } from "@react-pdf/renderer";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { fetchPokemonDetail } from "@/api/pokemon/api";
+import type { PokemonDetail } from "@/api/pokemon/type";
+import { useMemoriesStore } from "@/stores/memoriesStore";
 import { Button } from "../atoms/button";
+import { ResumePDF } from "./ResumePDF";
 
 function Complete() {
+	const router = useRouter();
+	const { memories } = useMemoriesStore();
+	const [partnerDetails, setPartnerDetails] = useState<
+		(PokemonDetail | null)[]
+	>([]);
+	const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+	// 相棒ポケモンの詳細情報を取得
+	useEffect(() => {
+		const fetchPartnerDetails = async () => {
+			const details = await Promise.all(
+				memories.partners.map(async (partner) => {
+					if (!partner) return null;
+					try {
+						return await fetchPokemonDetail(partner.pokemonId);
+					} catch (error) {
+						console.error(
+							`Failed to fetch partner Pokemon detail: ${partner.pokemonId}`,
+							error,
+						);
+						return null;
+					}
+				}),
+			);
+			setPartnerDetails(details);
+		};
+
+		fetchPartnerDetails();
+	}, [memories.partners]);
+
+	// 履歴書PDF生成 & 別タブで開く
+	const handleGeneratePDF = async () => {
+		setIsGeneratingPDF(true);
+		try {
+			const doc = (
+				<ResumePDF memories={memories} partnerDetails={partnerDetails} />
+			);
+			const asPdf = pdf(doc);
+			const blob = await asPdf.toBlob();
+			const url = URL.createObjectURL(blob);
+			window.open(url, "_blank");
+		} catch (error) {
+			console.error("Failed to generate PDF:", error);
+		} finally {
+			setIsGeneratingPDF(false);
+		}
+	};
+
+	// ホームに戻る
+	const handleGoHome = () => {
+		router.push("/");
+	};
+
 	return (
 		<div className="text-center space-y-8">
 			<div className="space-y-6 max-w-2xl">
@@ -23,10 +85,17 @@ function Complete() {
 				</div>
 
 				<div className="flex flex-col sm:flex-row gap-4">
-					<Button className="flex-1 bg-[#284CAC] text-white font-bold py-4 rounded-2xl hover:bg-[#1E3A7F] transition-all shadow-lg">
-						履歴書をプレビュー
+					<Button
+						onClick={handleGeneratePDF}
+						disabled={isGeneratingPDF}
+						className="flex-1 bg-[#284CAC] text-white font-bold py-4 rounded-2xl hover:bg-[#1E3A7F] transition-all shadow-lg disabled:opacity-50"
+					>
+						{isGeneratingPDF ? "生成中..." : "履歴書をプレビュー"}
 					</Button>
-					<Button className="flex-1 bg-[#B8E3D2] text-[#284CAC] font-bold py-4 rounded-2xl hover:bg-[#A8D4C2] transition-all shadow-md">
+					<Button
+						onClick={handleGoHome}
+						className="flex-1 bg-[#B8E3D2] text-[#284CAC] font-bold py-4 rounded-2xl hover:bg-[#A8D4C2] transition-all shadow-md"
+					>
 						ホームに戻る
 					</Button>
 				</div>

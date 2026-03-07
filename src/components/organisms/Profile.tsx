@@ -18,7 +18,9 @@ function Profile() {
 						<Controller
 							control={control}
 							name="profile.name"
-							render={({ field }) => <Input {...field} />}
+							render={({ field }) => (
+								<Input {...field} placeholder="あなたの名前を教えてください" />
+							)}
 						/>
 					</CardContent>
 				</Card>
@@ -31,7 +33,12 @@ function Profile() {
 						<Controller
 							control={control}
 							name="profile.freeMessage"
-							render={({ field }) => <Textarea {...field} />}
+							render={({ field }) => (
+								<Textarea
+									{...field}
+									placeholder="自由にメッセージを書いてください"
+								/>
+							)}
 						/>
 					</CardContent>
 				</Card>

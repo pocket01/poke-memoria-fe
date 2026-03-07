@@ -9,7 +9,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type { PokemonList } from "@/api/pokemon/type";
 import { useGlobalForm } from "@/context/GlobalFormProvider";
-import { useMemoriesStore } from "@/stores/memoriesStore";
 import { EmptySlotCard } from "../molecules/EmptySlotCard";
 import { PokemonCard } from "../molecules/PokemonCard";
 
@@ -18,8 +17,10 @@ type Props = {
 };
 
 function Partners({ pokemons }: Props) {
-	const { memories } = useMemoriesStore();
+	// const { memories } = useMemoriesStore();
 	const { control, setValue } = useGlobalForm();
+
+	const { partners } = useWatch({ control });
 
 	// クエリパラメータ：ダイアログの表示状態
 	const [_, setQueryDialogOpen] = useQueryState(
@@ -31,15 +32,15 @@ function Partners({ pokemons }: Props) {
 		"selectedPokemons",
 		{
 			...parseAsArrayOf(parseAsInteger).withDefault(
-				memories.partners.filter((p) => p !== null).map((p) => p.pokemonId),
+				partners?.length
+					? partners.filter((p) => p !== null).map((p) => p.pokemonId ?? 0)
+					: [],
 			),
 			clearOnDefault: false,
 		},
 	);
 	const queryPartners =
 		querySelectedPokemons?.map((id) => ({ pokemonId: id, comment: "" })) ?? [];
-
-	const { partners } = useWatch({ control });
 
 	// フォームの状態とクエリパラメータの状態をマージしたパートナーデータ
 	const myPartners = partners?.map((partner, index) => {
@@ -66,6 +67,13 @@ function Partners({ pokemons }: Props) {
 
 	// ポケモンをチームから削除するハンドラー
 	const handleRemovePokemon = (slotIndex: number) => {
+		// クエリパラメータからも削除
+		setQuerySelectedPokemons((prev) => {
+			const newSelected = [...prev].filter(
+				(selected) => selected !== myPartners?.[slotIndex]?.pokemonId,
+			);
+			return newSelected;
+		});
 		setValue(`partners.${slotIndex}`, null);
 	};
 
@@ -85,9 +93,13 @@ function Partners({ pokemons }: Props) {
 	useEffect(() => {
 		if (querySelectedPokemons.length) {
 			// クエリパラメータの選択ポケモンIDをフォームの状態に反映
+			const newPartners = Array(6).fill(null);
 			querySelectedPokemons.forEach((id, index) => {
-				setValue(`partners.${index}`, { pokemonId: id, comment: "" });
+				if (index < 6) {
+					newPartners[index] = { pokemonId: id, comment: "" };
+				}
 			});
+			setValue("partners", newPartners);
 		} else {
 			setValue("partners", [null, null, null, null, null, null]);
 		}
@@ -105,9 +117,12 @@ function Partners({ pokemons }: Props) {
 							return (
 								<PokemonCard
 									key={key}
-									name={
-										pokemons.find((p) => p.id === pokemon.pokemonId)?.name || ""
-									}
+									pokemon={{
+										id: pokemon.pokemonId ?? 0,
+										name:
+											pokemons.find((p) => p.id === pokemon.pokemonId)?.name ??
+											"不明",
+									}}
 									comment={pokemon.comment}
 									isEditingComment={editingComment === index}
 									onRemove={() => handleRemovePokemon(index)}
