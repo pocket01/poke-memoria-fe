@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
 	experimental: {
 		typedRoutes: true,
 	},
+	// 画面左下のNext.jsアイコンを非表示にする
+	devIndicators: false,
 };
 
 export default nextConfig;
