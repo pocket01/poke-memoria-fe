@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
@@ -20,9 +21,11 @@ type Props<
  * @returns
  */
 export default function Stepper<
+	TRoute extends string,
 	TStep extends {
 		id: number;
 		label: ReactNode;
+		url: Route<TRoute>;
 	},
 >({ steps, activeStep: currentStep }: Props<TStep>) {
 	return (
@@ -35,15 +38,15 @@ export default function Stepper<
 							src="/pokeballs/01.svg"
 							className={`absolute transition-all  duration-300 ${index < currentStep ? "opacity-0 scale-0" : "opacity-100 scale-100"}`}
 							alt={`ステップ${index + 1}完了`}
-							width={64}
-							height={64}
+							width={48}
+							height={48}
 						/>
 						<Image
 							src="/pokeballs/02.svg"
 							className={`transition-all  duration-300 ${index < currentStep ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
 							alt={`ステップ${index + 1}完了`}
-							width={64}
-							height={64}
+							width={48}
+							height={48}
 						/>
 					</div>
 					<span

@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
 	type ComponentProps,
 	type PropsWithChildren,
@@ -22,7 +22,7 @@ type Props<T> = PropsWithChildren<T>;
  */
 export default function CreateTemplate<T>({ children }: Props<T>) {
 	const path = usePathname();
-	const router = useRouter();
+	// const router = useRouter();
 	const { trigger, getValues } = useGlobalForm();
 	const updateMemories = useMemoriesStore((state) => state.updateMemories);
 
@@ -36,7 +36,7 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 		};
 
 		CreateSteps.forEach((s, i) => {
-			stepperProps.steps.push({ id: i, label: s.label });
+			stepperProps.steps.push({ id: i, label: s.label, url: s.page });
 			// 現在のパスとステップのページが前方一致する場合、activeStepを設定
 			if (path?.startsWith(s.page)) {
 				stepperProps.activeStep = i;
@@ -47,11 +47,6 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 
 	// 現在のステップ情報
 	const currentStep = CreateSteps[stepperProps.activeStep];
-
-	// 戻るボタンのイベントハンドラ
-	const handleBack = useCallback(() => {
-		router.push(CreateSteps[stepperProps.activeStep - 1].page);
-	}, [router, stepperProps.activeStep]);
 
 	// 戻るボタンの表示可否
 	const backVisible = stepperProps.activeStep > 0;
@@ -105,9 +100,9 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 					break;
 			}
 
-			router.push(CreateSteps[stepperProps.activeStep + 1].page);
+			// router.push(CreateSteps[stepperProps.activeStep + 1].page);
 		}
-	}, [router, stepperProps.activeStep, trigger, getValues, updateMemories]);
+	}, [stepperProps.activeStep, trigger, getValues, updateMemories]);
 
 	// 次へボタンの表示可否
 	const nextVisible = stepperProps.activeStep < stepperProps.steps.length - 1;
@@ -123,7 +118,6 @@ export default function CreateTemplate<T>({ children }: Props<T>) {
 			<StepperNavigation
 				steps={stepperProps.steps}
 				activeStep={stepperProps.activeStep}
-				handleBack={handleBack}
 				backVisible={backVisible}
 				handleNext={handleNext}
 				nextVisible={nextVisible}
