@@ -31,41 +31,92 @@ type ResumePDFProps = {
 export function ResumePDF({ memories, partnerDetails }: ResumePDFProps) {
 	const styles = StyleSheet.create({
 		page: {
-			padding: 40,
+			padding: 30,
 			fontFamily: "NotoSansJP",
-			backgroundColor: "#FFFFFF",
+			backgroundColor: "#F5F6F8",
 		},
 		container: {
 			display: "flex",
 			flexDirection: "column",
-			gap: 20,
+			gap: 16,
 		},
-		header: {
+		/* ヘッダーセクション */
+		basicInfoSection: {
 			display: "flex",
 			flexDirection: "column",
 			gap: 8,
-			paddingBottom: 15,
-			borderBottom: "2pt solid #0A0A0A",
+			padding: 20,
+			backgroundColor: "#FFFFFF",
+			borderRadius: 16,
+			boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
 		},
-		title: {
-			fontSize: 32,
-			fontWeight: 900,
-			color: "#0A0A0A",
-			textAlign: "center",
-		},
-		trainerName: {
-			fontSize: 24,
-			fontWeight: 700,
-			color: "#284CAC",
-			textAlign: "center",
-		},
-		subtitle: {
-			fontSize: 12,
+		basicInfoLabel: {
+			fontSize: 11,
 			fontWeight: 600,
-			color: "#666666",
-			textAlign: "center",
-			marginTop: 4,
+			color: "#999999",
+			textTransform: "uppercase",
+			letterSpacing: 0.5,
 		},
+		basicInfoValue: {
+			fontSize: 28,
+			fontWeight: 700,
+			color: "#0A0A0A",
+		},
+		/* 原点セクション */
+		originSection: {
+			display: "flex",
+			flexDirection: "column",
+			gap: 8,
+			padding: 20,
+			backgroundColor: "#FFFFFF",
+			borderRadius: 16,
+			boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+		},
+		originLabel: {
+			fontSize: 11,
+			fontWeight: 600,
+			color: "#999999",
+			textTransform: "uppercase",
+		},
+		originValue: {
+			fontSize: 16,
+			fontWeight: 700,
+			color: "#0A0A0A",
+		},
+		/* 軌跡セクション */
+		historySection: {
+			display: "flex",
+			flexDirection: "column",
+			gap: 12,
+			padding: 20,
+			backgroundColor: "#FFFFFF",
+			borderRadius: 16,
+			boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+		},
+		historyLabel: {
+			fontSize: 11,
+			fontWeight: 600,
+			color: "#999999",
+			textTransform: "uppercase",
+		},
+		historyTags: {
+			display: "flex",
+			flexDirection: "row",
+			flexWrap: "wrap",
+			gap: 8,
+		},
+		historyTag: {
+			padding: "8px 12px",
+			backgroundColor: "#F0F4F8",
+			borderRadius: 20,
+			flexGrow: 0,
+		},
+		historyTagText: {
+			fontSize: 11,
+			fontWeight: 600,
+			color: "#0A0A0A",
+		},
+		/* セクション共通 */
 		section: {
 			display: "flex",
 			flexDirection: "column",
@@ -114,25 +165,27 @@ export function ResumePDF({ memories, partnerDetails }: ResumePDFProps) {
 			display: "flex",
 			flexDirection: "row",
 			wrap: true,
-			gap: 12,
+			gap: 16,
+			padding: 24,
+			backgroundColor: "#FFFFFF",
+			borderRadius: 32,
+			boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
 		},
 		partnerCard: {
 			display: "flex",
 			flexDirection: "column",
-			gap: 6,
+			gap: 8,
 			width: "30%",
-			padding: 10,
-			border: "1pt solid #CCCCCC",
-			borderRadius: 4,
+			alignItems: "center",
 		},
 		pokemonImage: {
-			width: 60,
-			height: 60,
+			width: 80,
+			height: 80,
 			alignSelf: "center",
 			marginBottom: 4,
 		},
 		pokemonName: {
-			fontSize: 12,
+			fontSize: 13,
 			fontWeight: 700,
 			color: "#0A0A0A",
 			textAlign: "center",
@@ -147,34 +200,39 @@ export function ResumePDF({ memories, partnerDetails }: ResumePDFProps) {
 			fontWeight: 600,
 			color: "#FFFFFF",
 			backgroundColor: "#284CAC",
-			padding: "2px 6px",
-			borderRadius: 2,
+			padding: "3px 8px",
+			borderRadius: 3,
 			alignSelf: "center",
 			marginTop: 2,
 		},
 		comment: {
-			fontSize: 9,
-			color: "#444444",
+			fontSize: 10,
+			color: "#555555",
 			fontStyle: "italic",
 			marginTop: 4,
 			textAlign: "center",
 		},
+		/* 自由記述セクション */
+		freeMessageSection: {
+			display: "flex",
+			flexDirection: "column",
+			gap: 12,
+			padding: 20,
+			backgroundColor: "#FFFFFF",
+			borderRadius: 16,
+			boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+		},
+		freeMessageLabel: {
+			fontSize: 11,
+			fontWeight: 600,
+			color: "#999999",
+			opacity: 0.8,
+		},
 		freeMessage: {
 			fontSize: 11,
-			color: "#0A0A0A",
+			color: "#333333",
 			lineHeight: 1.6,
 			whitespace: "pre-wrap",
-			padding: 10,
-			backgroundColor: "#F9F9F9",
-			borderRadius: 4,
-		},
-		footer: {
-			fontSize: 9,
-			color: "#999999",
-			textAlign: "center",
-			marginTop: 20,
-			paddingTop: 10,
-			borderTop: "1pt solid #CCCCCC",
 		},
 	});
 
@@ -184,107 +242,97 @@ export function ResumePDF({ memories, partnerDetails }: ResumePDFProps) {
 		<Document>
 			<Page size="A4" style={styles.page}>
 				<View style={styles.container}>
-					{/* ヘッダー: トレーナー名 */}
-					<View style={styles.header}>
-						<Text style={styles.title}>ポケメモリア</Text>
-						<Text style={styles.trainerName}>{memories.profile.name}</Text>
-						<Text style={styles.subtitle}>ポケモン履歴書</Text>
+					{/* 基本情報: トレーナー名 */}
+					<View style={styles.basicInfoSection}>
+						<Text style={styles.basicInfoLabel}>トレーナー名</Text>
+						<Text style={styles.basicInfoValue}>{memories.profile.name}</Text>
 					</View>
 
-					{/* プレイ履歴サマリー */}
-					<View style={styles.section}>
-						<Text style={styles.sectionTitle}>プレイ履歴</Text>
-						<View style={styles.row}>
-							<View style={styles.badge}>
-								<Text style={styles.badgeLabel}>原点作品</Text>
-								<Text style={styles.badgeValue}>
-									ID: {memories.originTitleId}
-								</Text>
-							</View>
-							<View style={styles.badge}>
-								<Text style={styles.badgeLabel}>プレイ作品数</Text>
-								<Text style={styles.badgeValue}>
-									{memories.history.length}作品
-								</Text>
-							</View>
-							<View style={styles.badge}>
-								<Text style={styles.badgeLabel}>相棒ポケモン</Text>
-								<Text style={styles.badgeValue}>{partnerList.length}匹</Text>
+					{/* 原点: 最初のポケモンタイトル */}
+					<View style={styles.originSection}>
+						<Text style={styles.originLabel}>原点</Text>
+						<Text style={styles.originValue}>ポケットモンスター</Text>
+					</View>
+
+					{/* 軌跡: 遊んだ作品 */}
+					{memories.history && memories.history.length > 0 && (
+						<View style={styles.historySection}>
+							<Text style={styles.historyLabel}>軌跡（遊んだ作品）</Text>
+							<View style={styles.historyTags}>
+								{memories.history.map((item) => (
+									<View
+										key={`history-${item.titleId}`}
+										style={styles.historyTag}
+									>
+										<Text style={styles.historyTagText}>{item.titleId}</Text>
+									</View>
+								))}
 							</View>
 						</View>
-					</View>
+					)}
 
 					{/* 相棒ポケモン */}
 					{partnerList.length > 0 && (
-						<View style={styles.section}>
-							<Text style={styles.sectionTitle}>相棒ポケモン</Text>
-							<View style={styles.partnerContainer}>
-								{memories.partners.map((partner, index) => {
-									if (!partner) return null;
-									const detail = partnerDetails[index];
-									return (
-										<View
-											key={`partner-${partner.pokemonId}`}
-											style={styles.partnerCard}
-										>
-											{/* ポケモン画像 */}
-											{detail?.sprites?.other?.["official-artwork"]
-												?.front_default && (
-												<Image
-													source={
-														detail.sprites.other["official-artwork"]
-															.front_default
-													}
-													style={styles.pokemonImage}
-												/>
-											)}
+						<View style={styles.partnerContainer}>
+							{memories.partners.map((partner, index) => {
+								if (!partner) return null;
+								const detail = partnerDetails[index];
+								return (
+									<View
+										key={`partner-${partner.pokemonId}`}
+										style={styles.partnerCard}
+									>
+										{/* ポケモン画像 */}
+										{detail?.sprites?.other?.["official-artwork"]
+											?.front_default && (
+											<Image
+												source={
+													detail.sprites.other["official-artwork"].front_default
+												}
+												style={styles.pokemonImage}
+											/>
+										)}
 
-											{/* ポケモン名 */}
-											<Text style={styles.pokemonName}>
-												{detail?.name || "不明"}
+										{/* ポケモン名 */}
+										<Text style={styles.pokemonName}>
+											{detail?.name || "不明"}
+										</Text>
+
+										{/* ステータス */}
+										{detail && (
+											<Text style={styles.pokemonStats}>
+												H: {detail.height / 10}m | W: {detail.weight / 10}kg
 											</Text>
+										)}
 
-											{/* ステータス */}
-											{detail && (
-												<Text style={styles.pokemonStats}>
-													H: {detail.height / 10}m | W: {detail.weight / 10}kg
-												</Text>
-											)}
+										{/* タイプ */}
+										{detail?.types && detail.types.length > 0 && (
+											<Text style={styles.typeTag}>
+												{detail.types[0].type.name}
+											</Text>
+										)}
 
-											{/* タイプ */}
-											{detail?.types && detail.types.length > 0 && (
-												<Text style={styles.typeTag}>
-													{detail.types[0].type.name}
-												</Text>
-											)}
-
-											{/* コメント */}
-											{partner.comment && (
-												<Text style={styles.comment}>
-													&quot;{partner.comment}&quot;
-												</Text>
-											)}
-										</View>
-									);
-								})}
-							</View>
+										{/* コメント */}
+										{partner.comment && (
+											<Text style={styles.comment}>
+												&quot;{partner.comment}&quot;
+											</Text>
+										)}
+									</View>
+								);
+							})}
 						</View>
 					)}
 
 					{/* 自由記述メッセージ */}
 					{memories.profile.freeMessage && (
-						<View style={styles.section}>
-							<Text style={styles.sectionTitle}>フットプリント</Text>
+						<View style={styles.freeMessageSection}>
+							<Text style={styles.freeMessageLabel}>メッセージ</Text>
 							<Text style={styles.freeMessage}>
 								{memories.profile.freeMessage}
 							</Text>
 						</View>
 					)}
-
-					{/* フッター */}
-					<View style={styles.footer}>
-						<Text>Generated by PokeMemoria</Text>
-					</View>
 				</View>
 			</Page>
 		</Document>
