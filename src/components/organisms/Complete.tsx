@@ -2,51 +2,26 @@
 
 import { pdf } from "@react-pdf/renderer";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { fetchPokemonDetail } from "@/api/pokemon/api";
-import type { PokemonDetail } from "@/api/pokemon/type";
+import { useState } from "react";
+import type { PokemonList } from "@/api/pokemon/type";
 import { useMemoriesStore } from "@/stores/memoriesStore";
 import { Button } from "../atoms/button";
 import { ResumePDF } from "./ResumePDF";
 
-function Complete() {
+type Props = {
+	pokemons: PokemonList;
+};
+
+function Complete({ pokemons }: Props) {
 	const router = useRouter();
 	const { memories } = useMemoriesStore();
-	const [partnerDetails, setPartnerDetails] = useState<
-		(PokemonDetail | null)[]
-	>([]);
 	const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-
-	// 相棒ポケモンの詳細情報を取得
-	useEffect(() => {
-		const fetchPartnerDetails = async () => {
-			const details = await Promise.all(
-				memories.partners.map(async (partner) => {
-					if (!partner) return null;
-					try {
-						return await fetchPokemonDetail(partner.pokemonId);
-					} catch (error) {
-						console.error(
-							`Failed to fetch partner Pokemon detail: ${partner.pokemonId}`,
-							error,
-						);
-						return null;
-					}
-				}),
-			);
-			setPartnerDetails(details);
-		};
-
-		fetchPartnerDetails();
-	}, [memories.partners]);
 
 	// 履歴書PDF生成 & 別タブで開く
 	const handleGeneratePDF = async () => {
 		setIsGeneratingPDF(true);
 		try {
-			const doc = (
-				<ResumePDF memories={memories} partnerDetails={partnerDetails} />
-			);
+			const doc = <ResumePDF memories={memories} pokemons={pokemons} />;
 			const asPdf = pdf(doc);
 			const blob = await asPdf.toBlob();
 			const url = URL.createObjectURL(blob);

@@ -3,22 +3,6 @@
  */
 
 /**
- * ビジュアルスタイルの種別
- * - paper: Authentic Paper（誠実・重厚・公文書）
- * - neo_gb: Neo Gameboy（懐古・モダン・洗練）
- * - retro_rg: Retro Red/Green（冒険・原点・ドット）
- */
-export type VisualStyle = "paper" | "neo_gb" | "retro_rg";
-
-/**
- * プレイステータス
- * - r: release（発売当時に）
- * - l: later（後からプレイ）
- * - m: remake（リメイクで）
- */
-export type PlayStatus = "r" | "l" | "m";
-
-/**
  * 作品ごとのプレイ記録
  */
 export type TitleHistory = {

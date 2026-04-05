@@ -62,11 +62,11 @@ export const CreateSteps = [
 		title: "履歴書の確認",
 		description: "内容を確認して履歴書を完成させましょう",
 	},
-	// // ステップ６．完成
-	// {
-	// 	page: "/create/complete",
-	// 	label: "完成",
-	// 	title: "履歴書が完成しました！",
-	// 	description: "",
-	// },
+	// ステップ６．完成
+	{
+		page: "/create/complete",
+		label: "完成",
+		title: "履歴書が完成しました！",
+		description: "",
+	},
 ] as const satisfies Array<CreateStep>;

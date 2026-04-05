@@ -7,286 +7,288 @@ import {
 	Text,
 	View,
 } from "@react-pdf/renderer";
-import type { PokemonDetail } from "@/api/pokemon/type";
-import type { Memories } from "@/types/schema";
+import type { PokemonList } from "@/api/pokemon/type";
+import { POKEMON_TITLES } from "@/constants/constants";
+import type {
+	Memories,
+	PartnerPokemon,
+	TitleHistory,
+	TrainerProfile,
+} from "@/types/schema";
+import { PokemonArrowBorder } from "../pdf/atoms/PokemonArrowBorder";
+import { PokemonNameBorder } from "../pdf/atoms/PokemonNameBorder";
+import { PokemonBorderContainer } from "../pdf/molecules/PokemonBorderContainer";
 
 /**
- * Noto Sans JP フォントを登録（日本語対応）
- * ローカルフォントファイルを使用
+ * フォント登録
  */
-Font.register({
+// 改行時に挿入される文字を空文字にする
+Font.registerHyphenationCallback((word) =>
+	Array.from(word).flatMap((char) => [char, ""]),
+);
+// ポケモンフォント
+const PkmnFont = {
+	family: "Pkmn",
+	src: "/fonts/PkmnFont/pkmn_s.ttf",
+} as const;
+Font.register(PkmnFont);
+// NotoSans JP（日本語フォント）
+const NotoSansJPFont = {
 	family: "NotoSansJP",
-	src: "/fonts/Noto_Sans_JP/NotoSansJP-VariableFont_wght.ttf",
-});
-
-type ResumePDFProps = {
+	src: "/fonts/Noto_Sans_JP/static/NotoSansJP-Regular.ttf",
+} as const;
+Font.register(NotoSansJPFont);
+type Props = {
 	memories: Memories;
-	partnerDetails: (PokemonDetail | null)[];
+	pokemons: PokemonList;
 };
+
+const styles = StyleSheet.create({
+	page: {
+		padding: 10,
+		fontFamily: PkmnFont.family,
+		backgroundColor: "#FFFFFF",
+		fontSize: 11,
+	},
+	container: {
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		gap: 4,
+	},
+	/* タイトル */
+	titleContainer: {
+		flexDirection: "row",
+		justifyContent: "flex-start",
+		width: "100%",
+	},
+	title: {
+		fontSize: 16,
+		fontWeight: 700,
+		color: "#000000",
+		textAlign: "right",
+	},
+});
 
 /**
  * PDF用履歴書コンポーネント
  * Memories データを PDF レイアウトに変換
  */
-export function ResumePDF({ memories, partnerDetails }: ResumePDFProps) {
-	const styles = StyleSheet.create({
-		page: {
-			padding: 40,
-			fontFamily: "NotoSansJP",
-			backgroundColor: "#FFFFFF",
-		},
-		container: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 20,
-		},
-		header: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 8,
-			paddingBottom: 15,
-			borderBottom: "2pt solid #0A0A0A",
-		},
-		title: {
-			fontSize: 32,
-			fontWeight: 900,
-			color: "#0A0A0A",
-			textAlign: "center",
-		},
-		trainerName: {
-			fontSize: 24,
-			fontWeight: 700,
-			color: "#284CAC",
-			textAlign: "center",
-		},
-		subtitle: {
-			fontSize: 12,
-			fontWeight: 600,
-			color: "#666666",
-			textAlign: "center",
-			marginTop: 4,
-		},
-		section: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 10,
-		},
-		sectionTitle: {
-			fontSize: 16,
-			fontWeight: 700,
-			color: "#0A0A0A",
-			marginBottom: 8,
-			paddingBottom: 4,
-			borderBottom: "1pt solid #CCCCCC",
-		},
-		sectionContent: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 8,
-		},
-		row: {
-			display: "flex",
-			flexDirection: "row",
-			gap: 16,
-			marginBottom: 8,
-		},
-		badge: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 4,
-			padding: "8px 12px",
-			backgroundColor: "#F0F4F8",
-			borderRadius: 4,
-			flex: 1,
-		},
-		badgeLabel: {
-			fontSize: 10,
-			fontWeight: 600,
-			color: "#666666",
-			textTransform: "uppercase",
-		},
-		badgeValue: {
-			fontSize: 14,
-			fontWeight: 700,
-			color: "#0A0A0A",
-		},
-		partnerContainer: {
-			display: "flex",
-			flexDirection: "row",
-			wrap: true,
-			gap: 12,
-		},
-		partnerCard: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 6,
-			width: "30%",
-			padding: 10,
-			border: "1pt solid #CCCCCC",
-			borderRadius: 4,
-		},
-		pokemonImage: {
-			width: 60,
-			height: 60,
-			alignSelf: "center",
-			marginBottom: 4,
-		},
-		pokemonName: {
-			fontSize: 12,
-			fontWeight: 700,
-			color: "#0A0A0A",
-			textAlign: "center",
-		},
-		pokemonStats: {
-			fontSize: 9,
-			color: "#666666",
-			textAlign: "center",
-		},
-		typeTag: {
-			fontSize: 8,
-			fontWeight: 600,
-			color: "#FFFFFF",
-			backgroundColor: "#284CAC",
-			padding: "2px 6px",
-			borderRadius: 2,
-			alignSelf: "center",
-			marginTop: 2,
-		},
-		comment: {
-			fontSize: 9,
-			color: "#444444",
-			fontStyle: "italic",
-			marginTop: 4,
-			textAlign: "center",
-		},
-		freeMessage: {
-			fontSize: 11,
-			color: "#0A0A0A",
-			lineHeight: 1.6,
-			whitespace: "pre-wrap",
-			padding: 10,
-			backgroundColor: "#F9F9F9",
-			borderRadius: 4,
-		},
-		footer: {
-			fontSize: 9,
-			color: "#999999",
-			textAlign: "center",
-			marginTop: 20,
-			paddingTop: 10,
-			borderTop: "1pt solid #CCCCCC",
-		},
+export function ResumePDF({ memories, pokemons }: Props) {
+	// 世代別のゲーム履歴を整理
+	const historyByGeneration = new Map<number, typeof memories.history>();
+	memories.history?.forEach((item) => {
+		const title = POKEMON_TITLES.find((t) => t.id === item.titleId);
+		if (title) {
+			if (!historyByGeneration.has(title.generation)) {
+				historyByGeneration.set(title.generation, []);
+			}
+			historyByGeneration.get(title.generation)?.push(item);
+		}
 	});
-
-	const partnerList = memories.partners.filter((p) => p !== null);
 
 	return (
 		<Document>
 			<Page size="A4" style={styles.page}>
 				<View style={styles.container}>
-					{/* ヘッダー: トレーナー名 */}
-					<View style={styles.header}>
-						<Text style={styles.title}>ポケメモリア</Text>
-						<Text style={styles.trainerName}>{memories.profile.name}</Text>
-						<Text style={styles.subtitle}>ポケモン履歴書</Text>
+					{/* タイトル */}
+					<View style={styles.titleContainer}>
+						<Text style={styles.title}>ポケモンりれきしょ</Text>
 					</View>
 
-					{/* プレイ履歴サマリー */}
-					<View style={styles.section}>
-						<Text style={styles.sectionTitle}>プレイ履歴</Text>
-						<View style={styles.row}>
-							<View style={styles.badge}>
-								<Text style={styles.badgeLabel}>原点作品</Text>
-								<Text style={styles.badgeValue}>
-									ID: {memories.originTitleId}
-								</Text>
-							</View>
-							<View style={styles.badge}>
-								<Text style={styles.badgeLabel}>プレイ作品数</Text>
-								<Text style={styles.badgeValue}>
-									{memories.history.length}作品
-								</Text>
-							</View>
-							<View style={styles.badge}>
-								<Text style={styles.badgeLabel}>相棒ポケモン</Text>
-								<Text style={styles.badgeValue}>{partnerList.length}匹</Text>
-							</View>
-						</View>
-					</View>
+					{/* トレーナープロフィールセクション */}
+					<TrainerProfileSection
+						profile={memories.profile}
+						/** @todo 型要確認 */
+						partners={memories.partners.map((partner) => ({
+							...partner,
+							pokemonId: partner?.pokemonId ?? -1,
+							comment: partner?.comment ?? "",
+							name:
+								pokemons.find((p) => p.id === partner?.pokemonId)?.name ?? "",
+						}))}
+						pokemons={pokemons}
+					/>
 
-					{/* 相棒ポケモン */}
-					{partnerList.length > 0 && (
-						<View style={styles.section}>
-							<Text style={styles.sectionTitle}>相棒ポケモン</Text>
-							<View style={styles.partnerContainer}>
-								{memories.partners.map((partner, index) => {
-									if (!partner) return null;
-									const detail = partnerDetails[index];
-									return (
-										<View
-											key={`partner-${partner.pokemonId}`}
-											style={styles.partnerCard}
-										>
-											{/* ポケモン画像 */}
-											{detail?.sprites?.other?.["official-artwork"]
-												?.front_default && (
-												<Image
-													source={
-														detail.sprites.other["official-artwork"]
-															.front_default
-													}
-													style={styles.pokemonImage}
-												/>
-											)}
-
-											{/* ポケモン名 */}
-											<Text style={styles.pokemonName}>
-												{detail?.name || "不明"}
-											</Text>
-
-											{/* ステータス */}
-											{detail && (
-												<Text style={styles.pokemonStats}>
-													H: {detail.height / 10}m | W: {detail.weight / 10}kg
-												</Text>
-											)}
-
-											{/* タイプ */}
-											{detail?.types && detail.types.length > 0 && (
-												<Text style={styles.typeTag}>
-													{detail.types[0].type.name}
-												</Text>
-											)}
-
-											{/* コメント */}
-											{partner.comment && (
-												<Text style={styles.comment}>
-													&quot;{partner.comment}&quot;
-												</Text>
-											)}
-										</View>
-									);
-								})}
-							</View>
-						</View>
-					)}
-
-					{/* 自由記述メッセージ */}
-					{memories.profile.freeMessage && (
-						<View style={styles.section}>
-							<Text style={styles.sectionTitle}>フットプリント</Text>
-							<Text style={styles.freeMessage}>
-								{memories.profile.freeMessage}
-							</Text>
-						</View>
-					)}
-
-					{/* フッター */}
-					<View style={styles.footer}>
-						<Text>Generated by PokeMemoria</Text>
-					</View>
+					{/* レポートセクション */}
+					<ReportSection histories={memories.history} />
 				</View>
 			</Page>
 		</Document>
 	);
 }
+
+/**
+ * トレーナープロフィールセクション
+ * - トレーナー名
+ * - 相棒ポケモン（最大6匹）
+ * - トレーナーアイコン
+ */
+const trainerProfileStyles = StyleSheet.create({
+	// コンテナ
+	container: {
+		flexDirection: "column",
+		gap: 4,
+		width: "95%",
+		padding: 8,
+	},
+	name: {
+		fontFamily: NotoSansJPFont.family,
+	},
+	freeMessage: {
+		maxWidth: "150pt",
+	},
+	freeMessageText: {
+		fontFamily: NotoSansJPFont.family,
+	},
+	partnersSection: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		flexWrap: "wrap",
+	},
+	pokemonContainer: {
+		flexBasis: "16%",
+		justifyContent: "center",
+		alignItems: "center",
+		flexDirection: "column",
+	},
+	pokemon: {
+		width: 64,
+		height: 64,
+	},
+	pokemonName: {
+		marginBottom: 8,
+	},
+});
+
+type TrainerProfileSectionProps = {
+	profile: TrainerProfile;
+	partners: (({ name: string } & PartnerPokemon) | null)[];
+	pokemons: PokemonList;
+};
+const TrainerProfileSection = ({
+	profile,
+	partners,
+	pokemons,
+}: TrainerProfileSectionProps) => (
+	<View style={trainerProfileStyles.container}>
+		{/* トレーナープロフィール */}
+		<PokemonBorderContainer
+			title="きみのプロフィール"
+			borderProps={{ width: "3xl", height: 8 }}
+			containtsStyle={{
+				flexDirection: "row",
+				justifyContent: "space-between",
+				alignItems: "center",
+				width: "100%",
+			}}
+		>
+			<PokemonNameBorder
+				maxLength={10}
+				name={profile.name}
+				nameStyle={trainerProfileStyles.name}
+			/>
+			<View style={trainerProfileStyles.freeMessage}>
+				{profile.freeMessage && (
+					<Text style={trainerProfileStyles.freeMessageText}>
+						{profile.freeMessage}
+					</Text>
+				)}
+			</View>
+			{/** @todo ユーザアイコン。いったん仮表示。 */}
+			<Image source="/icon.jpg" style={{ width: 64, height: 64 }} />
+		</PokemonBorderContainer>
+
+		{/* 相棒ポケモン */}
+		<PokemonBorderContainer
+			title="きみのパートナー"
+			borderProps={{ width: "3xl", height: 10 }}
+			containtsStyle={trainerProfileStyles.partnersSection}
+		>
+			{Array.from({ length: 6 }).map((_, index) => {
+				const partner = partners[index];
+				if (!partner) return <Text key={`partner-${index.toString()}`}>@</Text>;
+				return (
+					<View
+						key={`partner-${index.toString()}`}
+						style={trainerProfileStyles.pokemonContainer}
+					>
+						<Image
+							source={
+								pokemons.find((p) => p.id === partner.pokemonId)?.imageUrl
+							}
+							style={trainerProfileStyles.pokemon}
+						/>
+						{/** @todo ポケモンの種族名とニックネームを表示する */}
+						<Text style={trainerProfileStyles.pokemonName}>{partner.name}</Text>
+						<Text style={trainerProfileStyles.pokemonName}>
+							{partner.comment}
+						</Text>
+					</View>
+				);
+			})}
+		</PokemonBorderContainer>
+	</View>
+);
+
+/**
+ * レポートセクション
+ * - トレーナー名
+ * - 相棒ポケモン（最大6匹）
+ * - トレーナーアイコン
+ */
+const reportStyles = StyleSheet.create({
+	/* コンテナ */
+	container: {
+		flexDirection: "column",
+		gap: 8,
+		padding: 8,
+	},
+	/** 世代ラベル */
+	genLabel: {
+		width: "100%",
+		fontSize: 12,
+		paddingBottom: 4,
+	},
+	/** タイトルセクション */
+	titleSection: {
+		flexDirection: "row",
+	},
+});
+
+type ReportSectionProps = {
+	histories: TitleHistory[];
+};
+const ReportSection = ({ histories }: ReportSectionProps) => (
+	<PokemonBorderContainer
+		title="きみのレポート"
+		borderProps={{ width: "3xl", height: 46 }}
+	>
+		<View style={reportStyles.container}>
+			{Array.from({ length: 9 }).map((_, index) => {
+				return (
+					<View key={`gen-${index + 1}`}>
+						<PokemonArrowBorder
+							length={39}
+							borderText={`GEN ${index + 1}`}
+							containerStyle={reportStyles.genLabel}
+						/>
+						<View style={reportStyles.titleSection}>
+							{histories.map((history) => {
+								if (`gen${index + 1}` === history.titleId.split("-")[0]) {
+									return (
+										<Text key={`history-${history.titleId}`}>
+											{`${POKEMON_TITLES.find((t) => t.id === history.titleId)?.name} `}
+										</Text>
+									);
+								}
+								return null;
+							})}
+						</View>
+					</View>
+				);
+			})}
+		</View>
+	</PokemonBorderContainer>
+);
