@@ -92,8 +92,8 @@ const A4_WIDTH_CONFIG = {
 >;
 
 type Props = PropsWithChildren<{
-	title: string;
-	containerStyle?: {
+	title?: string;
+	borderProps?: {
 		width?: A4Width;
 		height?: number;
 	};
@@ -105,12 +105,12 @@ type Props = PropsWithChildren<{
  * @returns
  */
 export function PokemonBorderContainer({
-	title,
-	containerStyle,
+	title = "",
+	borderProps,
 	containtsStyle,
 	children,
 }: Props) {
-	const { width = "md", height = 10 } = containerStyle ?? {};
+	const { width = "md", height = 10 } = borderProps ?? {};
 	const titleBorderLength =
 		A4_WIDTH_CONFIG[width].width - title.length < 0
 			? 0
