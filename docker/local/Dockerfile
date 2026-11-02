@@ -1,11 +1,11 @@
 # 1. 依存関係のインストール（開発用）
-FROM node:24.13.0-alpine3.23 AS deps
+FROM node:24.22.2-alpine3.24 AS deps
 
 # パッケージマネージャーを最新版に
 RUN npm install -g npm@latest
 
 # ビルドツールエージェントをインストール
-RUN npm install -g pnpm@10.28.2
+RUN npm install -g pnpm@10.34.9
 
 # CVE脆弱性対応
 RUN npm install -g glob@latest tar@latest
@@ -17,13 +17,13 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # 2. ビルド
-FROM node:24.13.0-alpine3.23 AS builder
+FROM node:24.22.2-alpine3.24 AS builder
 
 # パッケージマネージャーを最新版に
 RUN npm install -g npm@latest
 
 # ビルドツールエージェントをインストール
-RUN npm install -g pnpm@10.28.2
+RUN npm install -g pnpm@10.34.9
 
 # CVE脆弱性対応
 RUN npm install -g glob@latest tar@latest
@@ -36,7 +36,7 @@ COPY . .
 RUN pnpm run build
 
 # 3. 実行用
-FROM node:24.13.0-alpine3.23 AS runner
+FROM node:24.22.2-alpine3.24 AS runner
 
 # CVE脆弱性対応
 RUN npm install -g glob@latest tar@latest
